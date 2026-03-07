@@ -1,0 +1,42 @@
+{
+  "name": "Seguimiento Integral a la MEF",
+  "short_name": "MEF MINSAL",
+  "description": "Sistema integral de seguimiento de Mujeres en Edad Fértil – Planificación Familiar MINSAL El Salvador",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#5c1a6e",
+  "theme_color": "#7b2d8b",
+  "orientation": "portrait-primary",
+  "lang": "es-SV",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "medical"],
+  "shortcuts": [
+    {
+      "name": "Nueva paciente",
+      "short_name": "Nueva",
+      "description": "Registrar nueva ficha MEF",
+      "url": "./index.html#nueva",
+      "icons": [{ "src": "icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Ver alertas",
+      "short_name": "Alertas",
+      "description": "Ver alertas de seguimiento",
+      "url": "./index.html#alertas",
+      "icons": [{ "src": "icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}

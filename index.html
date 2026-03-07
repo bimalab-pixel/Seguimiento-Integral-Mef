@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Seguimiento Integral a la MEF · MINSAL</title>
+<meta name="theme-color" content="#7b2d8b"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Seguimiento Integral MEF"/>
+<meta name="description" content="Sistema integral de seguimiento MEF – Planificación Familiar MINSAL El Salvador"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192x192.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script>
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').then(r=>console.log('[SW]',r.scope)).catch(e=>console.warn('[SW]',e));});}
+let _deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();_deferredPrompt=e;const fb=document.getElementById('fab-install');if(fb)fb.style.display='flex';if(!localStorage.getItem('pwa_pf_shown'))setTimeout(()=>{const b=document.getElementById('install-banner');if(b)b.classList.add('show');},3000);});
+function _hidePwaUI(){
+  const banner=document.getElementById('install-banner');if(banner)banner.classList.remove('show');
+  const fab=document.getElementById('fab-install');if(fab)fab.style.display='none';
+  const sec=document.getElementById('pwa-install-section');if(sec)sec.style.display='none';
+  localStorage.setItem('pwa_pf_shown','1');
+}
+function installPWA(){
+  if(_deferredPrompt){
+    _deferredPrompt.prompt();
+    _deferredPrompt.userChoice.then(r=>{_deferredPrompt=null;if(r.outcome==='accepted')_hidePwaUI();});
+  }else{
+    alert('En iPhone/Safari:\n1. Toca el botón Compartir (📤)\n2. Selecciona "Agregar a pantalla de inicio"');
+  }
+}
+function dismissBanner(){_hidePwaUI();}
+window.addEventListener('appinstalled',()=>{_hidePwaUI&&_hidePwaUI();});
+if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){
+  localStorage.setItem('pwa_pf_shown','1');
+  window.addEventListener('DOMContentLoaded',function(){
+    var sec=document.getElementById('pwa-install-section');if(sec)sec.style.display='none';
+    var fab=document.getElementById('fab-install');if(fab)fab.style.display='none';
+  });
+}
+</script>
+<style>
+:root{
+  --rose:#c2185b;--rose2:#e91e8c;--rose3:#f06292;
+  --purple:#7b2d8b;--purple2:#9c27b0;--purple3:#ce93d8;
+  --teal:#00796b;--teal2:#26a69a;--teal3:#80cbc4;
+  --indigo:#3949ab;--indigo2:#5c6bc0;
+  --amber:#f57c00;--amber2:#ffa726;
+  --green:#2e7d32;--green2:#43a047;
+  --light:#fdf4f9;--light2:#f3e5f5;--border:#e1bee7;
+  --text:#3d1a4a;--muted:#8e6fa0;--white:#fff;
+  --danger:#b71c1c;--danger2:#e53935;--success:#2e7d32;--warn:#e65100;
+  --radius:14px;--shadow:0 6px 32px rgba(123,45,139,.15);--shadow-sm:0 2px 12px rgba(123,45,139,.10);
+  --grad:linear-gradient(145deg,#5c1a6e 0%,#8e2087 45%,#c2185b 100%);
+  --grad-teal:linear-gradient(135deg,#00796b,#26a69a);
+  --grad-indigo:linear-gradient(135deg,#3949ab,#5c6bc0);
+  --grad-amber:linear-gradient(135deg,#e65100,#ffa726);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);font-size:15px}
+
+/* SCREENS */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--light);overflow:hidden;opacity:0;pointer-events:none;transform:translateX(30px);transition:opacity .28s ease,transform .28s ease;z-index:10;}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.screen.slide-out{opacity:0;transform:translateX(-30px)}
+
+/* TOPBAR */
+.topbar{flex-shrink:0;height:56px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 .8rem;gap:.5rem;box-shadow:var(--shadow-sm);z-index:5;}
+.back-btn{display:flex;align-items:center;gap:.3rem;padding:.35rem .65rem;border-radius:8px;border:1.5px solid var(--border);background:var(--white);color:var(--purple2);font-family:inherit;font-size:.74rem;font-weight:800;cursor:pointer;transition:all .2s;flex-shrink:0;text-transform:uppercase;letter-spacing:.05em;}
+.back-btn:hover{background:var(--light2);border-color:var(--purple2)}
+.back-btn svg{width:12px;height:12px}
+.topbar-title{font-family:'Playfair Display',serif;font-size:1rem;color:var(--purple);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-search{position:relative;flex:1;max-width:250px;}
+.topbar-search svg{position:absolute;left:.5rem;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--muted);pointer-events:none}
+.topbar-search input{width:100%;padding:.32rem .5rem .32rem 1.75rem;border:1.5px solid var(--border);border-radius:20px;font-family:inherit;font-size:.77rem;background:var(--light);outline:none;color:var(--text);transition:all .2s;}
+.topbar-search input:focus{border-color:var(--rose2);background:#fff}
+.topbar-btn{padding:.33rem .72rem;border-radius:8px;font-family:inherit;font-size:.74rem;font-weight:800;cursor:pointer;border:none;display:flex;align-items:center;gap:.3rem;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.topbar-btn svg{width:13px;height:13px}
+.topbar-btn.primary{background:var(--grad);color:#fff}.topbar-btn.primary:hover{opacity:.9}
+.topbar-btn.teal{background:var(--teal2);color:#fff}.topbar-btn.teal:hover{background:var(--teal)}
+.topbar-btn.indigo{background:var(--indigo2);color:#fff}.topbar-btn.indigo:hover{background:var(--indigo)}
+.scroller{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem}
+.scroller::-webkit-scrollbar{width:4px}
+.scroller::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* HOME */
+#screen-home{background:linear-gradient(160deg,#4a0e5c 0%,#7b2d8b 50%,#c2185b 100%);}
+#screen-home::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.04);top:-70px;right:-70px;pointer-events:none;z-index:0;}
+#screen-home::after{content:'';position:absolute;width:190px;height:190px;border-radius:50%;background:rgba(255,255,255,.05);bottom:70px;left:-55px;pointer-events:none;z-index:0;}
+.home-header{padding:1.6rem 1.4rem .8rem;display:flex;flex-direction:column;align-items:center;flex-shrink:0;position:relative;z-index:1;}
+.home-logo{width:68px;height:68px;border-radius:16px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;box-shadow:0 8px 24px rgba(0,0,0,.2);overflow:hidden;}
+.home-logo img{width:68px;height:68px;object-fit:cover;border-radius:14px;display:block}
+.home-logo-svg{width:36px;height:36px;display:none}
+.home-title{font-family:'Playfair Display',serif;font-size:1.35rem;color:#fff;text-align:center;line-height:1.2}
+.home-subtitle{font-size:.72rem;color:rgba(255,255,255,.58);margin-top:.28rem;text-align:center;letter-spacing:.04em}
+.home-org{font-size:.58rem;color:rgba(255,255,255,.35);margin-top:.18rem;text-align:center;text-transform:uppercase;letter-spacing:.1em}
+
+.home-scroller{flex:1;overflow-y:auto;padding:.7rem 1.05rem 5rem;position:relative;z-index:1}
+.home-scroller::-webkit-scrollbar{width:0}
+.home-user-bar{display:flex;align-items:center;gap:.7rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:.62rem .9rem;margin-bottom:.85rem;cursor:pointer;transition:all .22s;}
+.home-user-bar:hover{background:rgba(255,255,255,.18)}
+.user-avatar{width:34px;height:34px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--rose2),var(--purple2));color:#fff;font-weight:800;font-size:.88rem;display:flex;align-items:center;justify-content:center;}
+.user-info{flex:1;min-width:0}
+.user-name{font-weight:700;font-size:.84rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:.66rem;color:rgba(255,255,255,.48);margin-top:1px}
+.user-edit-icon{color:rgba(255,255,255,.35);flex-shrink:0}.user-edit-icon svg{width:13px;height:13px}
+
+/* Home month cards */
+.home-section-lbl{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.38);margin-bottom:.48rem;}
+.month-cards-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.48rem;margin-bottom:.9rem}
+.month-card{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:.68rem .85rem;cursor:pointer;transition:all .22s;display:flex;flex-direction:column;}
+.month-card:hover{background:rgba(255,255,255,.18);transform:translateY(-1px)}
+.month-card-name{font-size:.66rem;color:rgba(255,255,255,.6);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.month-card-num{font-family:'Playfair Display',serif;font-size:1.9rem;color:#fff;line-height:1;margin:.1rem 0 .08rem}
+.month-card-sub{font-size:.6rem;color:rgba(255,255,255,.4);font-weight:700}
+
+/* Menu */
+.menu-btn{display:flex;align-items:center;gap:.8rem;width:100%;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);border-radius:12px;padding:.72rem .9rem;margin-bottom:.48rem;cursor:pointer;transition:all .22s;text-align:left;font-family:inherit;color:#fff;}
+.menu-btn:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.28);transform:translateY(-1px)}
+.menu-btn-icon{width:38px;height:38px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.menu-btn-icon svg{width:19px;height:19px}
+.menu-btn-icon.rose{background:rgba(233,30,140,.3)}.menu-btn-icon.purple{background:rgba(156,39,176,.32)}.menu-btn-icon.red{background:rgba(229,57,53,.28)}.menu-btn-icon.indigo{background:rgba(92,107,192,.35)}.menu-btn-icon.teal{background:rgba(38,166,154,.28)}
+.menu-btn-text{flex:1;min-width:0}.menu-btn-text .mbt{font-weight:800;font-size:.88rem;line-height:1.2}.menu-btn-text .mbs{font-size:.68rem;color:rgba(255,255,255,.48);margin-top:1px}
+.menu-btn-arrow{opacity:.4;flex-shrink:0}.menu-btn-arrow svg{width:16px;height:16px}
+.menu-badge{background:var(--danger2);color:#fff;font-size:.6rem;font-weight:800;padding:2px 6px;border-radius:11px;margin-left:.35rem;}
+
+.home-totals{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem;margin-top:.75rem}
+.home-total-chip{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:.5rem .55rem;text-align:center;}
+.home-total-num{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;line-height:1}
+.home-total-lbl{font-size:.56rem;color:rgba(255,255,255,.45);font-weight:800;margin-top:.1rem}
+
+/* Cloud zone */
+.cloud-zone{margin-top:.82rem;padding:.82rem .95rem;border-radius:13px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.15);}
+.cloud-zone-title{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.13em;color:rgba(255,255,255,.4);margin-bottom:.62rem;display:flex;align-items:center;gap:.42rem;}
+.cloud-zone-title svg{width:12px;height:12px;opacity:.7}
+.cloud-btns{display:grid;grid-template-columns:1fr 1fr;gap:.48rem}
+.cloud-btn{display:flex;align-items:center;justify-content:center;gap:.42rem;padding:.56rem .6rem;border-radius:10px;font-family:inherit;font-size:.76rem;font-weight:800;cursor:pointer;border:none;transition:all .22s;}
+.cloud-btn svg{width:14px;height:14px;flex-shrink:0}
+.cloud-btn:disabled{opacity:.35;cursor:not-allowed}
+.cloud-btn.upload{background:rgba(38,166,154,.25);color:#80cbc4;border:1px solid rgba(38,166,154,.38);}
+.cloud-btn.upload:hover:not(:disabled){background:rgba(38,166,154,.4);color:#fff}
+.cloud-btn.download{background:rgba(156,39,176,.25);color:#ce93d8;border:1px solid rgba(156,39,176,.38);}
+.cloud-btn.download:hover:not(:disabled){background:rgba(156,39,176,.4);color:#fff}
+.cloud-status{margin-top:.52rem;font-size:.68rem;text-align:center;min-height:1rem;color:rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;gap:.32rem;line-height:1.4;}
+.cloud-status.ok{color:#80cbc4}.cloud-status.err{color:#ef9a9a}.cloud-status.loading{color:rgba(255,255,255,.65)}
+.cspin{display:inline-block;animation:cspin .75s linear infinite}
+@keyframes cspin{to{transform:rotate(360deg)}}
+
+.danger-zone{margin-top:.82rem;padding:.78rem .92rem;border-radius:12px;background:rgba(183,28,28,.14);border:1px solid rgba(183,28,28,.28);}
+.danger-zone p{font-size:.68rem;color:rgba(255,255,255,.46);margin-bottom:.55rem;}
+.clear-btn{width:100%;padding:.46rem;background:rgba(183,28,28,.23);border:1px solid rgba(183,28,28,.48);color:#ef9a9a;border-radius:8px;font-family:inherit;font-size:.74rem;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.35rem;}
+.clear-btn:hover{background:rgba(183,28,28,.4);color:#fff}
+
+/* DASHBOARD / STATS */
+.dash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-bottom:.85rem}
+.dash-card{background:var(--white);border-radius:12px;padding:.9rem 1rem;box-shadow:var(--shadow-sm);border-top:3px solid var(--rose2);cursor:pointer;transition:all .2s;}
+.dash-card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.dash-card.c-purple{border-top-color:var(--purple2)}.dash-card.c-teal{border-top-color:var(--teal2)}.dash-card.c-amber{border-top-color:var(--amber2)}.dash-card.c-indigo{border-top-color:var(--indigo2)}.dash-card.c-green{border-top-color:var(--green2)}.dash-card.c-danger{border-top-color:var(--danger2)}
+.dash-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--purple);line-height:1}
+.dash-label{font-size:.67rem;color:var(--muted);margin-top:.2rem;font-weight:700;line-height:1.3}
+.dash-sublabel{font-size:.6rem;color:var(--muted);margin-top:.15rem;opacity:.7}
+.dash-wide{grid-column:1/-1}
+
+/* Chart bar */
+.method-bar{margin-bottom:.85rem}
+.method-bar-title{font-size:.68rem;font-weight:800;color:var(--purple);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em}
+.bar-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem}
+.bar-label{font-size:.68rem;color:var(--muted);font-weight:600;width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;height:8px;background:var(--light2);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+.bar-count{font-size:.68rem;font-weight:800;color:var(--text);width:28px;text-align:right;flex-shrink:0}
+
+/* LIST */
+.stats-grid-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:.5rem;margin-bottom:.8rem}
+.stat-card{background:var(--white);border-radius:10px;padding:.72rem .82rem;box-shadow:var(--shadow-sm);border-left:4px solid var(--rose2);}
+.stat-card.c1{border-left-color:#7b1fa2}.stat-card.c2{border-left-color:#512da8}.stat-card.c3{border-left-color:var(--teal2)}.stat-card.c4{border-left-color:#1565c0}.stat-card.c5{border-left-color:var(--amber2)}
+.stat-number{font-family:'Playfair Display',serif;font-size:1.55rem;color:var(--purple);line-height:1}
+.stat-label{font-size:.62rem;color:var(--muted);margin-top:.15rem;font-weight:700}
+.method-filters{display:flex;gap:.36rem;flex-wrap:wrap;margin-bottom:.8rem}
+.mf-pill{padding:.22rem .62rem;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-family:inherit;font-size:.67rem;font-weight:700;cursor:pointer;transition:all .2s;color:var(--muted);}
+.mf-pill.active{background:var(--grad);border-color:transparent;color:#fff}
+.mf-pill:hover:not(.active){background:var(--light2);border-color:var(--purple3)}
+
+.record-card{background:var(--white);border-radius:10px;padding:.72rem .88rem;margin-bottom:.45rem;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:.72rem;border:1px solid var(--border);transition:all .2s;}
+.record-card:hover{box-shadow:var(--shadow);border-color:var(--rose3)}
+.record-card.overdue{border-left:4px solid var(--danger2)}.record-card.due-soon{border-left:4px solid var(--amber2)}.record-card.pap-alert{border-right:3px solid #9c27b0}.record-card.vph-alert{border-right:3px solid #5c6bc0}
+.record-num{width:32px;height:32px;border-radius:7px;flex-shrink:0;background:var(--grad);color:#fff;font-family:'Playfair Display',serif;font-size:.88rem;display:flex;align-items:center;justify-content:center;}
+.record-info{flex:1;min-width:0;cursor:pointer}
+.record-name{font-weight:700;font-size:.83rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.record-meta{font-size:.64rem;color:var(--muted);margin-top:2px;line-height:1.4}
+.method-chip{display:inline-flex;align-items:center;gap:2px;font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:5px;margin-left:.25rem;vertical-align:middle;}
+.method-chip.oral{background:#fce4ec;color:#c2185b}.method-chip.inject-m{background:#f3e5f5;color:#7b1fa2}.method-chip.inject-t{background:#ede7f6;color:#512da8}.method-chip.diu{background:#e8f5e9;color:#2e7d32}.method-chip.implante{background:#e3f2fd;color:#1565c0}.method-chip.esteril{background:#fff3e0;color:#e65100}
+.record-tag{font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:5px;margin-left:.25rem;vertical-align:middle;}
+.record-tag.overdue{background:rgba(183,28,28,.12);color:var(--danger)}.record-tag.soon{background:rgba(230,81,0,.12);color:var(--warn)}.record-tag.pap{background:rgba(156,39,176,.12);color:#7b1fa2}.record-tag.vph{background:rgba(57,73,171,.12);color:#3949ab}.record-tag.arr{background:rgba(183,28,28,.12);color:var(--danger)}
+.record-actions{display:flex;gap:.26rem;flex-shrink:0}
+.icon-btn{width:27px;height:27px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--muted);}
+.icon-btn svg{width:12px;height:12px}
+.icon-btn.view:hover{background:var(--rose2);border-color:var(--rose2);color:#fff}.icon-btn.del:hover{background:var(--danger);border-color:var(--danger);color:#fff}
+.empty-state{text-align:center;padding:2.5rem 1rem;color:var(--muted)}
+.empty-state svg{width:44px;height:44px;margin:0 auto .85rem;opacity:.3}
+.empty-state h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--purple);margin-bottom:.25rem}
+.empty-state p{font-size:.78rem}
+
+/* ALERTS */
+.alert-card{display:flex;align-items:center;gap:.72rem;padding:.68rem .88rem;border-radius:10px;margin-bottom:.45rem;background:#fff0f5;border:1px solid #f8bbd0;border-left:4px solid var(--danger2);cursor:pointer;transition:all .2s;}
+.alert-card:hover{box-shadow:var(--shadow-sm)}
+.alert-card.warn{background:#fff8f0;border-color:#ffe0b2;border-left-color:var(--amber2)}
+.alert-card.pap{background:#f8f0ff;border-color:#e1bee7;border-left-color:var(--purple2)}
+.alert-card.vph{background:#f0f2ff;border-color:#c5cae9;border-left-color:var(--indigo2)}
+.alert-card.arr{background:#fff0f0;border-color:#ffcdd2;border-left-color:var(--danger)}
+.alert-icon{width:31px;height:31px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(229,57,53,.11);}
+.alert-card.warn .alert-icon{background:rgba(255,143,0,.11)}.alert-card.pap .alert-icon{background:rgba(156,39,176,.11)}.alert-card.vph .alert-icon{background:rgba(57,73,171,.11)}.alert-card.arr .alert-icon{background:rgba(183,28,28,.11)}
+.alert-icon svg{width:15px;height:15px;color:var(--danger2)}
+.alert-card.warn .alert-icon svg{color:var(--amber2)}.alert-card.pap .alert-icon svg{color:var(--purple2)}.alert-card.vph .alert-icon svg{color:var(--indigo2)}.alert-card.arr .alert-icon svg{color:var(--danger)}
+.alert-info{flex:1;min-width:0}
+.alert-name{font-weight:800;font-size:.83rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alert-detail{font-size:.67rem;color:var(--danger);font-weight:700;margin-top:1px}
+.alert-card.warn .alert-detail{color:var(--amber)}.alert-card.pap .alert-detail{color:var(--purple2)}.alert-card.vph .alert-detail{color:var(--indigo2)}.alert-card.arr .alert-detail{color:var(--danger)}
+.alert-days{font-size:.64rem;background:rgba(229,57,53,.1);color:var(--danger2);padding:2px 7px;border-radius:9px;font-weight:800;flex-shrink:0;}
+.alert-card.warn .alert-days{background:rgba(255,143,0,.1);color:var(--amber2)}.alert-card.pap .alert-days{background:rgba(156,39,176,.1);color:var(--purple2)}.alert-card.vph .alert-days{background:rgba(57,73,171,.1);color:var(--indigo2)}.alert-card.arr .alert-days{background:rgba(183,28,28,.1);color:var(--danger)}
+.alert-type-chip{font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:5px;margin-top:2px;display:inline-block}
+.alert-type-chip.pf{background:#fce4ec;color:#c2185b}.alert-type-chip.pap{background:#f3e5f5;color:#7b1fa2}.alert-type-chip.vph{background:#e8eaf6;color:#3949ab}.alert-type-chip.arr{background:#ffebee;color:#b71c1c}
+.alert-tabs{display:flex;gap:.35rem;margin-bottom:.8rem;overflow-x:auto;padding-bottom:.25rem}
+.alert-tab{padding:.26rem .72rem;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-family:inherit;font-size:.68rem;font-weight:700;cursor:pointer;transition:all .2s;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+.alert-tab.active{background:var(--danger2);border-color:transparent;color:#fff}
+.alert-tab.t-warn.active{background:var(--amber2);border-color:transparent;color:#fff}
+.alert-tab.t-pap.active{background:var(--purple2);border-color:transparent;color:#fff}
+.alert-tab.t-vph.active{background:var(--indigo2);border-color:transparent;color:#fff}
+.alert-tab.t-arr.active{background:var(--danger);border-color:transparent;color:#fff}
+
+/* MONTH VIEW */
+.month-screen-header{display:flex;align-items:center;gap:.62rem;margin-bottom:.8rem;padding-bottom:.52rem;border-bottom:2px solid var(--border);}
+.month-screen-header h2{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--purple)}
+.month-badge{font-size:.68rem;background:var(--light2);color:var(--muted);padding:2px 8px;border-radius:14px;font-weight:700}
+
+/* FORM */
+.form-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;max-width:880px;margin:0 auto;}
+.form-header{background:var(--grad);color:#fff;padding:.9rem 1.2rem;display:flex;align-items:center;gap:.82rem;}
+.fh-emblem{width:46px;height:46px;border-radius:10px;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fh-emblem svg{width:25px;height:25px}
+.fh-text .fh-sup{font-size:.57rem;letter-spacing:.1em;text-transform:uppercase;opacity:.65}
+.fh-text h2{font-family:'Playfair Display',serif;font-size:.98rem;line-height:1.3;margin:.07rem 0 .1rem}
+.fh-text .fh-num{font-size:.68rem;opacity:.7}
+.form-body{padding:.95rem 1.2rem 1.25rem}
+.fs-title{font-size:.61rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#fff;background:var(--purple2);padding:.26rem .75rem;margin:1rem -1.2rem .72rem;padding-left:1.2rem;}
+.fs-title.teal{background:var(--teal2)}.fs-title.amber{background:var(--amber)}.fs-title.indigo{background:var(--indigo2)}.fs-title.green{background:var(--green2)}
+.fg{display:grid;gap:.6rem}.fg.c2{grid-template-columns:1fr 1fr}.fg.c3{grid-template-columns:1fr 1fr 1fr}.fg.c1{grid-template-columns:1fr}.sp{grid-column:1/-1}
+.f-group{display:flex;flex-direction:column;gap:3px}
+.f-group label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--purple2)}
+.f-group input,.f-group select,.f-group textarea{padding:.42rem .65rem;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.84rem;color:var(--text);background:var(--white);outline:none;transition:all .2s;}
+.f-group input:focus,.f-group select:focus,.f-group textarea:focus{border-color:var(--rose2);box-shadow:0 0 0 3px rgba(233,30,140,.09)}
+.f-group textarea{resize:vertical;min-height:55px;line-height:1.55}
+.f-group select{cursor:pointer}
+.f-check-group{display:flex;align-items:center;gap:.55rem;padding:.55rem .7rem;border:1.5px solid var(--border);border-radius:9px;background:var(--white);cursor:pointer;transition:all .2s;}
+.f-check-group:hover{border-color:var(--purple3);background:var(--light2)}
+.f-check-group input[type=checkbox]{width:15px;height:15px;accent-color:var(--purple2);cursor:pointer;flex-shrink:0;}
+.f-check-group label{font-size:.8rem;font-weight:600;color:var(--text);cursor:pointer;line-height:1.3}
+.f-check-group .f-check-sub{font-size:.63rem;color:var(--muted);margin-top:1px}
+.f-row-checks{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+.risk-card{background:linear-gradient(135deg,#fff8f0,#fff3e0);border:1.5px solid #ffe0b2;border-radius:10px;padding:.72rem .88rem;margin-top:.5rem;}
+.risk-card-title{font-size:.68rem;font-weight:800;color:var(--warn);margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.risk-card-title svg{width:14px;height:14px}
+.risk-indicator{display:flex;align-items:center;gap:.5rem;padding:.35rem .5rem;border-radius:7px;}
+.risk-indicator.high{background:rgba(183,28,28,.08);border:1px solid rgba(183,28,28,.18)}
+.risk-indicator.medium{background:rgba(230,81,0,.08);border:1px solid rgba(230,81,0,.18)}
+.risk-indicator.low{background:rgba(46,125,50,.08);border:1px solid rgba(46,125,50,.18)}
+.risk-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.risk-indicator.high .risk-dot{background:var(--danger2)}.risk-indicator.medium .risk-dot{background:var(--amber2)}.risk-indicator.low .risk-dot{background:var(--green2)}
+.risk-indicator-text{font-size:.75rem;font-weight:700}
+.risk-indicator.high .risk-indicator-text{color:var(--danger)}.risk-indicator.medium .risk-indicator-text{color:var(--warn)}.risk-indicator.low .risk-indicator-text{color:var(--green)}
+
+/* Method selector */
+.method-selector{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.46rem}
+.method-opt{display:flex;align-items:center;gap:.5rem;padding:.52rem .68rem;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .2s;background:var(--white);}
+.method-opt input[type=radio]{display:none}
+.method-opt.selected{border-color:var(--rose2);background:#fff0f7;}
+.method-icon{width:27px;height:27px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+.method-label{font-size:.74rem;font-weight:700;color:var(--text);line-height:1.2}
+.method-sublabel{font-size:.6rem;color:var(--muted);margin-top:1px}
+.alert-preview{display:flex;align-items:center;gap:.62rem;padding:.62rem .85rem;border-radius:9px;background:linear-gradient(135deg,#fff0f7,#f3e5f5);border:1.5px solid #f8bbd0;margin-top:.48rem;}
+.alert-preview svg{width:17px;height:17px;flex-shrink:0;color:var(--rose2)}
+.alert-preview-text{font-size:.77rem;font-weight:700;color:var(--rose)}
+.alert-preview-sub{font-size:.65rem;color:var(--muted);margin-top:1px}
+
+/* Multi-alert previews */
+.multi-alert-preview{margin-top:.48rem}
+.map-item{display:flex;align-items:center;gap:.6rem;padding:.48rem .72rem;border-radius:8px;margin-bottom:.3rem;}
+.map-item.pf{background:#fff0f7;border:1px solid #f8bbd0}.map-item.pap{background:#f8f0ff;border:1px solid #e1bee7}.map-item.vph{background:#f0f2ff;border:1px solid #c5cae9}
+.map-item svg{width:14px;height:14px;flex-shrink:0}
+.map-item.pf svg{color:var(--rose2)}.map-item.pap svg{color:var(--purple2)}.map-item.vph svg{color:var(--indigo2)}
+.map-text{font-size:.74rem;font-weight:700}.map-sub{font-size:.62rem;color:var(--muted);margin-top:1px}
+
+.form-actions{display:flex;gap:.42rem;flex-wrap:wrap;padding:.72rem 1.2rem;border-top:1.5px solid var(--light2);background:var(--light);}
+.btn{display:flex;align-items:center;gap:.36rem;padding:.45rem .9rem;border-radius:8px;font-family:inherit;font-size:.78rem;font-weight:800;border:none;cursor:pointer;transition:all .2s;}
+.btn svg{width:13px;height:13px}
+.btn.save{background:var(--grad);color:#fff}.btn.save:hover{opacity:.9}
+.btn.danger{background:var(--danger2);color:#fff}.btn.danger:hover{background:var(--danger)}
+.btn.secondary{background:var(--white);color:var(--purple2);border:1.5px solid var(--border)}.btn.secondary:hover{background:var(--light2)}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(61,26,74,.52);backdrop-filter:blur(4px);z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .22s;}
+.modal-bg.show{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:16px;padding:1.2rem;width:100%;max-width:400px;box-shadow:0 16px 48px rgba(61,26,74,.25);transform:translateY(12px);transition:transform .22s;}
+.modal-bg.show .modal{transform:translateY(0)}
+.modal h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--purple);margin-bottom:.82rem;display:flex;align-items:center;gap:.42rem}
+.modal p{font-size:.83rem;color:var(--muted);margin-bottom:.82rem;line-height:1.6}
+.modal-btns{display:flex;gap:.42rem;margin-top:.82rem}
+.profile-field{margin-bottom:.68rem}
+.profile-field label{font-size:.63rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--purple2);display:block;margin-bottom:3px}
+.profile-field input{width:100%;padding:.44rem .65rem;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.83rem;color:var(--text);outline:none;transition:all .2s;}
+.profile-field input:focus{border-color:var(--rose2);box-shadow:0 0 0 3px rgba(233,30,140,.09)}
+.profile-save-btn{width:100%;padding:.52rem;background:var(--grad);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.83rem;font-weight:800;cursor:pointer;margin-top:.26rem;transition:all .2s;}
+.profile-save-btn:hover{opacity:.9}
+
+/* TOAST */
+.toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);background:var(--text);color:#fff;padding:.52rem 1.05rem;border-radius:20px;font-size:.78rem;font-weight:700;z-index:999;box-shadow:var(--shadow);white-space:nowrap;}
+.toast.success{background:var(--success)}.toast.error{background:var(--danger2)}.toast.warn{background:var(--amber)}
+
+/* FAB */
+#fab-install{position:fixed;bottom:1.2rem;right:1.2rem;z-index:200;width:48px;height:48px;border-radius:50%;background:var(--grad);color:#fff;border:none;display:none;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(123,45,139,.4);cursor:pointer;transition:all .25s;}
+#fab-install:hover{transform:scale(1.1)}
+#fab-install svg{width:20px;height:20px}
+
+/* BANNER */
+#install-banner{position:fixed;bottom:-160px;left:50%;transform:translateX(-50%);width:calc(100% - 1.4rem);max-width:480px;background:var(--grad);border:1px solid rgba(255,255,255,.2);border-radius:18px;box-shadow:0 10px 40px rgba(61,26,74,.45);display:flex;align-items:center;gap:.78rem;padding:.82rem .92rem;z-index:9999;transition:bottom .45s cubic-bezier(.34,1.56,.64,1);}
+#install-banner.show{bottom:.9rem}
+.ib-icon{width:48px;height:48px;border-radius:11px;flex-shrink:0;overflow:hidden;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;}
+.ib-icon img{width:48px;height:48px;object-fit:cover;border-radius:9px;display:block}
+.ib-icon svg{width:25px;height:25px;display:none}
+.ib-text{flex:1;min-width:0}
+.ib-text strong{display:block;font-size:.84rem;color:#fff;font-weight:800;line-height:1.2}
+.ib-text span{font-size:.68rem;color:rgba(255,255,255,.54);margin-top:1px;display:block}
+.ib-btn{padding:.4rem .82rem;background:rgba(255,255,255,.22);color:#fff;border:1px solid rgba(255,255,255,.32);border-radius:8px;font-family:inherit;font-size:.76rem;font-weight:800;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.ib-btn:hover{background:rgba(255,255,255,.32)}
+.ib-close{width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;flex-shrink:0;transition:all .2s;line-height:1;}
+.ib-close:hover{background:rgba(255,255,255,.22);color:#fff}
+
+/* SECTION DIVIDER */
+.section-divider{display:flex;align-items:center;gap:.5rem;margin:.8rem 0 .6rem}
+.section-divider span{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);white-space:nowrap}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+
+/* ══ ALERT FOLDERS ══ */
+.alert-summary-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.9rem}
+.asb-card{border-radius:11px;padding:.62rem .72rem;text-align:center;cursor:default}
+.asb-card.danger{background:rgba(229,57,53,.1);border:1.5px solid rgba(229,57,53,.22)}
+.asb-card.warn{background:rgba(255,143,0,.1);border:1.5px solid rgba(255,143,0,.22)}
+.asb-card.ok{background:rgba(46,125,50,.1);border:1.5px solid rgba(46,125,50,.18)}
+.asb-num{font-family:'Playfair Display',serif;font-size:1.55rem;line-height:1}
+.asb-card.danger .asb-num{color:var(--danger2)}
+.asb-card.warn .asb-num{color:var(--amber2)}
+.asb-card.ok .asb-num{color:var(--green2)}
+.asb-lbl{font-size:.6rem;font-weight:800;margin-top:.18rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+
+.folder{border-radius:13px;margin-bottom:.62rem;overflow:hidden;box-shadow:var(--shadow-sm);}
+.folder-header{display:flex;align-items:center;gap:.72rem;padding:.72rem .9rem;cursor:pointer;transition:all .22s;user-select:none;}
+.folder-header:hover{filter:brightness(1.04)}
+.folder.pf .folder-header{background:linear-gradient(135deg,#c2185b,#e91e8c)}
+.folder.pap .folder-header{background:linear-gradient(135deg,#6a1b9a,#9c27b0)}
+.folder.vph .folder-header{background:linear-gradient(135deg,#283593,#3949ab)}
+.folder.promotor .folder-header{background:linear-gradient(135deg,#00695c,#00897b)}
+.folder.arr .folder-header{background:linear-gradient(135deg,#b71c1c,#e53935)}
+.folder-icon{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.folder-icon svg{width:18px;height:18px;color:#fff}
+.folder-header-text{flex:1;min-width:0}
+.folder-title{font-weight:800;font-size:.88rem;color:#fff;line-height:1.2}
+.folder-subtitle{font-size:.66rem;color:rgba(255,255,255,.65);margin-top:2px}
+.folder-badge{background:rgba(255,255,255,.25);color:#fff;font-size:.65rem;font-weight:800;padding:3px 9px;border-radius:20px;flex-shrink:0;border:1px solid rgba(255,255,255,.3)}
+.folder-badge.red-badge{background:rgba(183,28,28,.55);border-color:rgba(255,255,255,.25)}
+.folder-chevron{color:rgba(255,255,255,.7);flex-shrink:0;transition:transform .25s}
+.folder-chevron svg{width:16px;height:16px}
+.folder.open .folder-chevron{transform:rotate(90deg)}
+.folder-body{background:var(--white);border-top:none;max-height:0;overflow:hidden;transition:max-height .35s ease}
+.folder.open .folder-body{max-height:9999px}
+.folder-empty{padding:1.1rem;text-align:center;color:var(--muted);font-size:.8rem}
+.folder-empty svg{width:32px;height:32px;margin:0 auto .5rem;opacity:.25;display:block}
+
+.falert{display:flex;align-items:center;gap:.62rem;padding:.65rem .9rem;border-bottom:1px solid var(--light2);cursor:pointer;transition:background .18s}
+.falert:last-child{border-bottom:none}
+.falert:hover{background:var(--light)}
+.falert-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.falert-dot.overdue{background:var(--danger2)}
+.falert-dot.soon{background:var(--amber2)}
+.falert-dot.ok{background:var(--green2)}
+.falert-dot.arr{background:var(--danger)}
+.falert-info{flex:1;min-width:0}
+.falert-name{font-weight:700;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.falert-detail{font-size:.66rem;color:var(--muted);margin-top:1px}
+.falert-badge{font-size:.63rem;font-weight:800;padding:2px 7px;border-radius:9px;flex-shrink:0;white-space:nowrap}
+.falert-badge.overdue{background:rgba(229,57,53,.12);color:var(--danger2)}
+.falert-badge.soon{background:rgba(255,143,0,.12);color:var(--amber2)}
+.falert-badge.ok{background:rgba(46,125,50,.12);color:var(--green2)}
+.falert-badge.arr{background:rgba(183,28,28,.12);color:var(--danger)}
+
+
+/* ══ LIST FOLDERS ══ */
+.list-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;margin-bottom:.85rem}
+.ls-card{border-radius:12px;padding:.72rem .85rem;border:1.5px solid transparent;cursor:default}
+.ls-card.total{background:linear-gradient(135deg,#f3e5f5,#fce4ec);border-color:#e1bee7}
+.ls-card.ent{background:linear-gradient(135deg,#fff3e0,#fbe9e7);border-color:#ffccbc}
+.ls-card.precon{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border-color:#c8e6c9}
+.ls-card.arr{background:linear-gradient(135deg,#ffebee,#fce4ec);border-color:#ffcdd2}
+.ls-card-num{font-family:'Playfair Display',serif;font-size:1.75rem;line-height:1;font-weight:700}
+.ls-card.total .ls-card-num{color:#7b2d8b}
+.ls-card.ent .ls-card-num{color:#e65100}
+.ls-card.precon .ls-card-num{color:#2e7d32}
+.ls-card.arr .ls-card-num{color:#c62828}
+.ls-card-lbl{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:.2rem}
+.ls-card-sub{font-size:.6rem;color:var(--muted);margin-top:.08rem;opacity:.75}
+
+.list-folder{border-radius:13px;margin-bottom:.58rem;overflow:hidden;box-shadow:var(--shadow-sm)}
+.list-folder-header{display:flex;align-items:center;gap:.68rem;padding:.68rem .88rem;cursor:pointer;transition:filter .2s;user-select:none}
+.list-folder-header:hover{filter:brightness(1.04)}
+.list-folder .list-folder-header{background:var(--lf-grad,var(--grad))}
+.list-folder-icon{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+.list-folder-text{flex:1;min-width:0}
+.list-folder-title{font-weight:800;font-size:.86rem;color:#fff;line-height:1.2}
+.list-folder-sub{font-size:.63rem;color:rgba(255,255,255,.6);margin-top:1px}
+.list-folder-badge{background:rgba(255,255,255,.22);color:#fff;font-size:.65rem;font-weight:800;padding:3px 9px;border-radius:20px;flex-shrink:0;border:1px solid rgba(255,255,255,.28)}
+.list-folder-chevron{color:rgba(255,255,255,.65);flex-shrink:0;transition:transform .25s}
+.list-folder-chevron svg{width:15px;height:15px}
+.list-folder.open .list-folder-chevron{transform:rotate(90deg)}
+.list-folder-body{background:var(--white);max-height:0;overflow:hidden;transition:max-height .35s ease}
+.list-folder.open .list-folder-body{max-height:9999px}
+.list-folder-empty{padding:1rem;text-align:center;color:var(--muted);font-size:.78rem}
+
+.lf-item{display:flex;align-items:center;gap:.65rem;padding:.62rem .88rem;border-bottom:1px solid var(--light2);transition:background .15s}
+.lf-item:last-child{border-bottom:none}
+.lf-item:hover{background:var(--light)}
+.lf-item-num{width:26px;height:26px;border-radius:6px;background:var(--grad);color:#fff;font-family:'Playfair Display',serif;font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.lf-item-info{flex:1;min-width:0;cursor:pointer}
+.lf-item-name{font-weight:700;font-size:.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lf-item-meta{font-size:.63rem;color:var(--muted);margin-top:1px;line-height:1.4}
+.lf-item-tags{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:2px}
+.lf-item-actions{display:flex;gap:.22rem;flex-shrink:0}
+.lf-icon-btn{width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;color:var(--muted);flex-shrink:0}
+.lf-icon-btn svg{width:12px;height:12px}
+.lf-icon-btn.edit:hover{background:var(--purple2);border-color:var(--purple2);color:#fff}
+.lf-icon-btn.print:hover{background:var(--teal2);border-color:var(--teal2);color:#fff}
+.lf-icon-btn.del:hover{background:var(--danger2);border-color:var(--danger2);color:#fff}
+
+/* ══ PROMOTOR MONTH ALERT in folders ══ */
+.promotor-month-highlight{background:linear-gradient(135deg,#e0f2f1,#b2dfdb);border:1.5px solid #80cbc4;border-radius:9px;padding:.6rem .82rem;margin:.5rem .88rem;display:flex;align-items:center;gap:.55rem}
+.promotor-month-highlight svg{width:16px;height:16px;color:var(--teal);flex-shrink:0}
+.promotor-month-highlight-text{font-size:.74rem;font-weight:700;color:var(--teal);flex:1}
+.promotor-month-highlight-count{background:var(--teal2);color:#fff;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:11px}
+@media(max-width:640px){
+  .fg.c2,.fg.c3{grid-template-columns:1fr}.dash-grid{grid-template-columns:repeat(2,1fr)}.home-title{font-size:1.2rem}.scroller{padding:.75rem}.form-body{padding:.82rem}.fs-title{margin-left:-.82rem;padding-left:.82rem}.method-selector{grid-template-columns:1fr 1fr}.month-cards-grid{grid-template-columns:repeat(2,1fr)}.topbar{gap:.36rem}.topbar-btn span{display:none}.f-row-checks{grid-template-columns:1fr}
+}
+@media(max-width:380px){
+  .month-cards-grid{grid-template-columns:1fr}.method-selector{grid-template-columns:1fr}.dash-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Banner PWA -->
+<div id="install-banner">
+  <div class="ib-icon">
+    <img src="icon-192x192.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+  </div>
+  <div class="ib-text"><strong>Seguimiento Integral MEF</strong><span>Instalar en pantalla de inicio</span></div>
+  <button class="ib-btn" onclick="installPWA()">Instalar</button>
+  <div class="ib-close" onclick="dismissBanner()">✕</div>
+</div>
+<button id="fab-install" onclick="installPWA()" title="Instalar app">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+</button>
+
+<!-- ════════════ HOME ════════════ -->
+<div class="screen active" id="screen-home">
+  <div class="home-header">
+    <div class="home-logo" style="font-size:2.4rem;line-height:1;">🩺</div>
+    <div class="home-title">Seguimiento Integral a la MEF</div>
+    <div class="home-subtitle">Mujeres en Edad Fértil · 18–49 años</div>
+    <div class="home-org">MINSAL · El Salvador</div>
+  </div>
+  <div class="home-scroller">
+    <div class="home-user-bar" onclick="openProfileModal()">
+      <div class="user-avatar" id="user-avatar">?</div>
+      <div class="user-info"><div class="user-name" id="user-name-display">Toca aquí para configurar tu nombre</div><div class="user-role" id="user-cargo-display">Personal de salud · MINSAL</div></div>
+      <div class="user-edit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+    </div>
+
+    <div class="home-section-lbl">📅 Registros por mes</div>
+    <div class="month-cards-grid" id="home-month-cards">
+      <div class="month-card" style="opacity:.35;cursor:default"><div class="month-card-name">Sin datos</div><div class="month-card-num">0</div><div class="month-card-sub">Agrega pacientes</div></div>
+    </div>
+
+    <div class="home-section-lbl" style="margin-top:.1rem">Acciones</div>
+    <button class="menu-btn" onclick="goTo('screen-form','new')">
+      <div class="menu-btn-icon rose"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+      <div class="menu-btn-text"><div class="mbt">Nueva paciente</div><div class="mbs">Ficha completa MEF</div></div>
+      <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </button>
+    <button class="menu-btn" onclick="goTo('screen-list')">
+      <div class="menu-btn-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+      <div class="menu-btn-text"><div class="mbt">Ver todas las pacientes</div><div class="mbs">Listado con filtros e impresión</div></div>
+      <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </button>
+    <button class="menu-btn" onclick="goTo('screen-alerts')">
+      <div class="menu-btn-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+      <div class="menu-btn-text"><div class="mbt">Alertas de seguimiento <span class="menu-badge" id="home-badge-alerts" style="display:none">0</span></div><div class="mbs">PF, Citología, VPH y Riesgo Reproductivo</div></div>
+      <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </button>
+    <button class="menu-btn" onclick="goTo('screen-stats')">
+      <div class="menu-btn-icon indigo"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+      <div class="menu-btn-text"><div class="mbt">Estadísticas y análisis</div><div class="mbs">Indicadores de salud comunitaria</div></div>
+      <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </button>
+
+    <div class="home-totals">
+      <div class="home-total-chip"><div class="home-total-num" id="hs-total">0</div><div class="home-total-lbl">Total</div></div>
+      <div class="home-total-chip"><div class="home-total-num" id="hs-active">0</div><div class="home-total-lbl">Con método</div></div>
+      <div class="home-total-chip" id="hs-alert-card"><div class="home-total-num" id="hs-alerts">0</div><div class="home-total-lbl">Alertas</div></div>
+    </div>
+
+    <div class="cloud-zone">
+      <div class="cloud-zone-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></svg>Sincronización en la nube</div>
+      <div class="cloud-btns">
+        <button class="cloud-btn upload" id="btn-upload" onclick="confirmUpload()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>Subir a la nube</button>
+        <button class="cloud-btn download" id="btn-download" onclick="confirmDownload()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>Bajar de la nube</button>
+      </div>
+      <div class="cloud-status" id="cloud-status">Sin actividad reciente</div>
+    </div>
+
+    <div id="pwa-install-section" style="padding:.5rem 0 .2rem">
+      <button id="btn-install-main" onclick="installPWA()" style="
+        display:flex;align-items:center;justify-content:center;gap:.65rem;
+        width:100%;padding:.9rem 1rem;border-radius:14px;border:none;cursor:pointer;
+        background:linear-gradient(135deg,#00796b,#26a69a);
+        color:#fff;font-family:inherit;font-size:.95rem;font-weight:800;
+        box-shadow:0 6px 20px rgba(0,121,107,.35);letter-spacing:.02em;
+        transition:all .22s;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" style="width:22px;height:22px;flex-shrink:0">
+          <polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/>
+          <path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/>
+        </svg>
+        📲 Instalar aplicación en este dispositivo
+      </button>
+      <p style="text-align:center;font-size:.65rem;color:var(--muted);margin-top:.4rem;opacity:.7">
+        Funciona sin internet · Acceso rápido desde pantalla de inicio
+      </p>
+    </div>
+
+    <div class="danger-zone">
+      <p>⚠ Esta acción eliminará todas las fichas guardadas en este dispositivo permanentemente.</p>
+      <button class="clear-btn" onclick="confirmClearAll()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:12px;height:12px"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Limpiar memoria del dispositivo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ LISTADO ════════════ -->
+<div class="screen" id="screen-list">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Inicio</button>
+    <div class="topbar-title">Pacientes MEF</div>
+    <div class="topbar-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="search-input" placeholder="Buscar nombre o DUI…" oninput="renderList()"/></div>
+    <button class="topbar-btn primary" onclick="goTo('screen-form','new')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Nueva</span></button>
+    <button class="topbar-btn teal" onclick="printListado()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>Imprimir</span></button>
+  </div>
+  <div class="scroller" id="list-scroller">
+    <div id="list-summary-cards"></div>
+    <div id="list-container"></div>
+  </div>
+</div>
+
+<!-- ════════════ ALERTAS ════════════ -->
+<div class="screen" id="screen-alerts">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Inicio</button>
+    <div class="topbar-title">Alertas de Seguimiento</div>
+  </div>
+  <div class="scroller" id="alerts-container"></div>
+</div>
+
+<!-- ════════════ ESTADÍSTICAS ════════════ -->
+<div class="screen" id="screen-stats">
+  <div class="topbar">
+    <button class="back-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Inicio</button>
+    <div class="topbar-title">Estadísticas MEF</div>
+    <button class="topbar-btn teal" onclick="printStats()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>Imprimir</span></button>
+  </div>
+  <div class="scroller" id="stats-container"></div>
+</div>
+
+<!-- ════════════ DETALLE MES ════════════ -->
+<div class="screen" id="screen-month-view">
+  <div class="topbar">
+    <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Atrás</button>
+    <div class="topbar-title" id="month-view-title-bar">—</div>
+    <button class="topbar-btn teal" onclick="printMonthView()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>Imprimir</span></button>
+  </div>
+  <div class="scroller">
+    <div class="month-screen-header"><h2 id="month-view-h2">—</h2><span class="month-badge" id="month-view-count">0 fichas</span></div>
+    <div id="month-view-container"></div>
+  </div>
+</div>
+
+<!-- ════════════ FORMULARIO ════════════ -->
+<div class="screen" id="screen-form">
+  <div class="topbar">
+    <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Atrás</button>
+    <div class="topbar-title" id="form-topbar-title">Nueva Paciente</div>
+  </div>
+  <div class="scroller">
+   <div class="form-card">
+    <div class="form-header">
+      <div class="fh-emblem"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      <div class="fh-text"><div class="fh-sup">Control MEF · MINSAL El Salvador</div><h2>Ficha de Seguimiento Integral</h2><div class="fh-num" id="fh-num-display">Nueva ficha</div></div>
+    </div>
+    <div class="form-body">
+
+      <!-- SECCIÓN 1: IDENTIFICACIÓN -->
+      <div class="fs-title">1. Identificación de la paciente</div>
+      <div class="fg c2">
+        <div class="f-group sp"><label>Nombre completo *</label><input type="text" id="f-nombre" placeholder="Apellidos y nombres completos" maxlength="100"/></div>
+        <div class="f-group"><label>DUI / Documento</label><input type="text" id="f-dui" placeholder="Ej: 12345678-9" maxlength="30"/></div>
+        <div class="f-group"><label>N° de vivienda</label><input type="text" id="f-vivienda" placeholder="Ej: 126" maxlength="20"/></div>
+        <div class="f-group"><label>Fecha de nacimiento</label><input type="date" id="f-nacimiento" onchange="calcEdad()"/></div>
+        <div class="f-group"><label>Edad (años)</label><input type="number" id="f-edad" min="18" max="49" placeholder="18–49" oninput="calcRiesgo()"/></div>
+        <div class="f-group sp"><label>Dirección / Comunidad / Cantón</label><input type="text" id="f-direccion" placeholder="Colonia, municipio, cantón…" maxlength="150"/></div>
+        <div class="f-group"><label>Teléfono</label><input type="tel" id="f-telefono" placeholder="7XXX-XXXX" maxlength="20"/></div>
+        <div class="f-group"><label>Fecha de registro</label><input type="date" id="f-fecha"/></div>
+        <div class="f-group"><label>Vida sexual activa</label>
+          <select id="f-vida-sexual">
+            <option value="">— Seleccionar —</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+            <option value="nr">No refiere</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 2: CONDICIÓN DE SALUD -->
+      <div class="fs-title teal">2. Condición de salud</div>
+      <div class="fg c2">
+        <div class="f-group"><label>Atención Preconcepcional activa</label>
+          <select id="f-preconcepcional" onchange="calcRiesgo()">
+            <option value="">— Seleccionar —</option>
+            <option value="si">Sí recibe</option>
+            <option value="no">No recibe</option>
+          </select>
+        </div>
+        <div class="f-group"><label>Alto Riesgo Reproductivo</label>
+          <select id="f-arr" onchange="calcRiesgo()">
+            <option value="">— Seleccionar —</option>
+            <option value="si">Sí — recibe atención</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="f-group"><label>Fecha de atención preventiva (promotor)</label><input type="date" id="f-atencion-preventiva"/></div>
+        <div class="f-group"><label>Próxima atención preventiva</label><input type="text" id="f-prox-preventiva" readonly placeholder="Un año desde la atención" style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
+      </div>
+
+      <!-- ENT y Discapacidad -->
+      <div class="section-divider"><span>ENT / Discapacidad</span></div>
+      <div class="fg c2">
+        <div class="f-group"><label>Padece ENT (Enf. No Transmisible)</label>
+          <select id="f-ent" onchange="toggleENT();calcRiesgo()">
+            <option value="">— Seleccionar —</option>
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+          </select>
+        </div>
+        <div class="f-group" id="f-ent-especifica-wrap" style="display:none"><label>Especifique ENT *</label><input type="text" id="f-ent-especifica" placeholder="Ej: HTA, Diabetes, Obesidad…"/></div>
+        <div class="f-group"><label>Padece discapacidad</label>
+          <select id="f-discapacidad" onchange="toggleDiscapacidad()">
+            <option value="">— Seleccionar —</option>
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+          </select>
+        </div>
+        <div class="f-group" id="f-discap-especifica-wrap" style="display:none"><label>Especifique discapacidad *</label><input type="text" id="f-discap-especifica" placeholder="Ej: Visual, Motora, Auditiva…"/></div>
+        <div class="f-group" id="f-fecha-ent-wrap" style="display:none"><label>Fecha de control ENT/Discapacidad</label><input type="date" id="f-fecha-ent"/></div>
+      </div>
+
+      <!-- SECCIÓN 3: PLANIFICACIÓN FAMILIAR -->
+      <div class="fs-title">3. Método anticonceptivo</div>
+      <div class="fg c1"><div class="f-group"><label>Selecciona el método *</label>
+        <div class="method-selector" id="method-selector">
+          <label class="method-opt" onclick="selectMethod('oral')"><input type="radio" name="metodo" value="oral"/><div class="method-icon" style="background:#fce4ec">💊</div><div><div class="method-label">ACO Orales</div><div class="method-sublabel">Blister 28 días</div></div></label>
+          <label class="method-opt" onclick="selectMethod('inject-m')"><input type="radio" name="metodo" value="inject-m"/><div class="method-icon" style="background:#f3e5f5">💉</div><div><div class="method-label">Inyectable Mensual</div><div class="method-sublabel">Cada 30 días</div></div></label>
+          <label class="method-opt" onclick="selectMethod('inject-t')"><input type="radio" name="metodo" value="inject-t"/><div class="method-icon" style="background:#ede7f6">💉</div><div><div class="method-label">Inyectable Trimestral</div><div class="method-sublabel">Cada 3 meses</div></div></label>
+          <label class="method-opt" onclick="selectMethod('diu')"><input type="radio" name="metodo" value="diu"/><div class="method-icon" style="background:#e8f5e9">🔷</div><div><div class="method-label">DIU</div><div class="method-sublabel">Control anual</div></div></label>
+          <label class="method-opt" onclick="selectMethod('implante')"><input type="radio" name="metodo" value="implante"/><div class="method-icon" style="background:#e3f2fd">🔬</div><div><div class="method-label">Implante Intradérmico</div><div class="method-sublabel">Control anual</div></div></label>
+          <label class="method-opt" onclick="selectMethod('esteril')"><input type="radio" name="metodo" value="esteril"/><div class="method-icon" style="background:#fff3e0">✅</div><div><div class="method-label">Esterilización Femenina</div><div class="method-sublabel">Control anual</div></div></label>
+          <label class="method-opt" onclick="selectMethod('ninguno')"><input type="radio" name="metodo" value="ninguno"/><div class="method-icon" style="background:#f5f5f5">🚫</div><div><div class="method-label">Ninguno</div><div class="method-sublabel">Sin método actual</div></div></label>
+        </div>
+      </div></div>
+
+      <div id="method-details" style="display:none">
+        <div class="fg c2" id="detail-oral" style="display:none">
+          <div class="f-group"><label>Blisters entregados *</label><input type="number" id="f-blisters" min="1" max="12" placeholder="Ej: 3" oninput="recalcAlerta()"/></div>
+          <div class="f-group"><label>Fecha inicio primer blister *</label><input type="date" id="f-inicio-oral" onchange="recalcAlerta()"/></div>
+        </div>
+        <div class="fg c2" id="detail-inject" style="display:none">
+          <div class="f-group"><label>Fecha de aplicación *</label><input type="date" id="f-inicio-inject" onchange="recalcAlerta()"/></div>
+          <div class="f-group"><label>Próxima cita calculada</label><input type="text" id="f-prox-inject" readonly style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
+        </div>
+        <div class="fg c2" id="detail-anual" style="display:none">
+          <div class="f-group"><label>Fecha de colocación / procedimiento *</label><input type="date" id="f-inicio-anual" onchange="recalcAlerta()"/></div>
+          <div class="f-group"><label>Próximo control calculado</label><input type="text" id="f-prox-anual" readonly style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
+        </div>
+        <div id="multi-alert-preview" class="multi-alert-preview"></div>
+      </div>
+
+      <!-- SECCIÓN 4: CITOLOGÍA Y VPH -->
+      <div class="fs-title indigo">4. Prevención de Cáncer Cérvico Uterino</div>
+      <div class="fg c2">
+        <div class="f-group"><label>Última citología (PAP)</label><input type="date" id="f-pap-fecha" onchange="recalcAlerta()"/></div>
+        <div class="f-group"><label>Próxima citología (calculada)</label><input type="text" id="f-pap-prox" readonly placeholder="Un año desde la última" style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
+        <div class="f-group"><label>Último VPH / vacuna</label><input type="date" id="f-vph-fecha" onchange="recalcAlerta()"/></div>
+        <div class="f-group"><label>Próximo VPH (calculado)</label><input type="text" id="f-vph-prox" readonly placeholder="5 años desde el último" style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
+        <div class="f-group"><label>Resultado PAP / VPH</label>
+          <select id="f-pap-resultado">
+            <option value="">— Sin resultado —</option>
+            <option value="normal">Normal</option>
+            <option value="atipia">Atipia de células escamosas</option>
+            <option value="lsil">LSIL</option>
+            <option value="hsil">HSIL</option>
+            <option value="positivo">VPH positivo</option>
+            <option value="pendiente">Pendiente de resultado</option>
+          </select>
+        </div>
+        <div class="f-group"><label>Referida a segundo nivel</label>
+          <select id="f-referida">
+            <option value="">— Seleccionar —</option>
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SECCIÓN 5: RIESGO REPRODUCTIVO -->
+      <div class="fs-title amber">5. Riesgo Reproductivo</div>
+      <div class="fg c1">
+        <div class="f-group"><label>Factores de riesgo reproductivo presentes</label>
+          <div class="f-row-checks">
+            <div class="f-check-group"><input type="checkbox" id="rr-menor20" onchange="calcRiesgo()"/><label for="rr-menor20"><span>Menor de 20 años</span><div class="f-check-sub">Embarazo adolescente</div></label></div>
+            <div class="f-check-group"><input type="checkbox" id="rr-mayor35" onchange="calcRiesgo()"/><label for="rr-mayor35"><span>Mayor de 35 años</span><div class="f-check-sub">Riesgo por edad</div></label></div>
+            <div class="f-check-group"><input type="checkbox" id="rr-ent" onchange="calcRiesgo()"/><label for="rr-ent"><span>Padece ENT</span><div class="f-check-sub">HTA, DM, Obesidad, etc.</div></label></div>
+            <div class="f-check-group"><input type="checkbox" id="rr-gesta" onchange="calcRiesgo()"/><label for="rr-gesta"><span>Gran multípara (≥4 partos)</span><div class="f-check-sub">Alto número de embarazos</div></label></div>
+            <div class="f-check-group"><input type="checkbox" id="rr-espacio" onchange="calcRiesgo()"/><label for="rr-espacio"><span>Período intergenésico corto</span><div class="f-check-sub">Menos de 2 años entre partos</div></label></div>
+            <div class="f-check-group"><input type="checkbox" id="rr-aborto" onchange="calcRiesgo()"/><label for="rr-aborto"><span>Antecedente de aborto</span><div class="f-check-sub">Uno o más abortos previos</div></label></div>
+            <div class="f-check-group"><input type="checkbox" id="rr-cesarea" onchange="calcRiesgo()"/><label for="rr-cesarea"><span>Cesárea anterior</span><div class="f-check-sub">Cirugía uterina previa</div></label></div>
+            <div class="f-check-group"><input type="checkbox" id="rr-discap" onchange="calcRiesgo()"/><label for="rr-discap"><span>Discapacidad</span><div class="f-check-sub">Física, mental, sensorial</div></label></div>
+          </div>
+        </div>
+        <div id="riesgo-display" style="display:none"></div>
+        <div class="f-group"><label>Número de gestaciones previas</label><input type="number" id="f-gestaciones" min="0" max="20" placeholder="0" style="max-width:160px"/></div>
+        <div class="f-group"><label>Número de partos</label><input type="number" id="f-partos" min="0" max="20" placeholder="0" style="max-width:160px"/></div>
+      </div>
+
+      <!-- SECCIÓN 6: OBSERVACIONES -->
+      <div class="fs-title green">6. Observaciones y responsable</div>
+      <div class="fg c1">
+        <div class="f-group"><label>Observaciones clínicas</label><textarea id="f-observaciones" placeholder="Antecedentes relevantes, alergias, seguimientos especiales, notas del promotor…" rows="3"></textarea></div>
+        <div class="f-group"><label>Personal de salud responsable</label><input type="text" id="f-personal" placeholder="Nombre, cargo y UCSF"/></div>
+      </div>
+
+    </div><!-- /form-body -->
+    <div class="form-actions">
+      <button class="btn save" onclick="saveRecord()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar ficha</button>
+      <button class="btn danger" id="btn-delete" onclick="deleteCurrentRecord()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Eliminar</button>
+      <button class="btn secondary" onclick="goBack()" style="margin-left:auto">Volver</button>
+    </div>
+   </div>
+  </div>
+</div>
+
+<!-- MODALES -->
+<div class="modal-bg" id="profile-modal-bg" onclick="if(event.target===this)closeProfileModal()">
+  <div class="modal" style="max-width:355px">
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="var(--rose2)" stroke-width="2" stroke-linecap="round" style="width:18px;height:18px"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Mi perfil</h3>
+    <div class="profile-field"><label>Nombre completo</label><input type="text" id="profile-nombre" placeholder="Ej: María González" maxlength="80"/></div>
+    <div class="profile-field"><label>Cargo / Especialidad</label><input type="text" id="profile-cargo" placeholder="Ej: Promotora de Salud" maxlength="60"/></div>
+    <div class="profile-field"><label>UCSF / Unidad de salud</label><input type="text" id="profile-ucsf" placeholder="Ej: UCSF San Marcos" maxlength="60"/></div>
+    <button class="profile-save-btn" onclick="saveProfile()">✓ Guardar perfil</button>
+    <button class="btn secondary" onclick="closeProfileModal()" style="width:100%;margin-top:.42rem;justify-content:center">Cancelar</button>
+  </div>
+</div>
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h3 id="modal-title">¿Confirmar?</h3>
+    <p id="modal-msg"></p>
+    <div class="modal-btns"><button class="btn secondary" onclick="closeModal()">Cancelar</button><button class="btn danger" id="modal-confirm-btn">Confirmar</button></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════ CONSTANTES ═══════════════ */
+const METODO_LABELS={'oral':'ACO Orales','inject-m':'Inyectable Mensual','inject-t':'Inyectable Trimestral','diu':'DIU','implante':'Implante Intradérmico','esteril':'Esterilización Femenina','ninguno':'Sin método'};
+const METODO_ORDER=['oral','inject-m','inject-t','diu','implante','esteril','ninguno'];
+const MONTHS_ES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const METODO_COLORS={'oral':'#c2185b','inject-m':'#7b1fa2','inject-t':'#512da8','diu':'#2e7d32','implante':'#1565c0','esteril':'#e65100','ninguno':'#9e9e9e'};
+const LS_KEY='minsal_pf_v2';
+const LS_PROFILE='minsal_pf_perfil_v1';
+let records=[],editingId=null,_currentFilter='all';
+
+function loadRecords(){try{records=JSON.parse(localStorage.getItem(LS_KEY))||[];}catch(e){records=[];}}
+function saveRecords(){localStorage.setItem(LS_KEY,JSON.stringify(records));if(typeof window!=='undefined')window.records=records;}
+
+/* ═══ NAV ═══ */
+let currentScreen='screen-home',_navHistory=[];
+function goTo(sid,mode){
+  if(sid===currentScreen)return;
+  const cur=document.getElementById(currentScreen),next=document.getElementById(sid);
+  if(!cur||!next)return;
+  _navHistory.push(currentScreen);
+  cur.classList.remove('active');cur.classList.add('slide-out');setTimeout(()=>cur.classList.remove('slide-out'),300);
+  next.classList.add('active');currentScreen=sid;
+  const s=next.querySelector('.scroller');if(s)s.scrollTop=0;
+  if(sid==='screen-list')renderList();
+  if(sid==='screen-alerts')renderAlerts();
+  if(sid==='screen-stats')renderStats();
+  if(sid==='screen-form'){if(mode==='new')initNewForm();document.getElementById('form-topbar-title').textContent=mode==='new'?'Nueva Paciente':'Editar Paciente';}
+  if(sid==='screen-home'){updateHomeStats();_navHistory=[];}
+}
+function goHome(){
+  const cur=document.getElementById(currentScreen),next=document.getElementById('screen-home');
+  if(cur){cur.classList.remove('active');cur.classList.add('slide-out');setTimeout(()=>cur.classList.remove('slide-out'),300);}
+  if(next)next.classList.add('active');
+  currentScreen='screen-home';_navHistory=[];updateHomeStats();
+}
+function goBack(){
+  if(_navHistory.length===0){goHome();return;}
+  const target=_navHistory.pop(),cur=document.getElementById(currentScreen),next=document.getElementById(target);
+  if(!next){goHome();return;}
+  cur.classList.remove('active');cur.classList.add('slide-out');setTimeout(()=>cur.classList.remove('slide-out'),300);
+  next.classList.add('active');currentScreen=target;
+  const s=next.querySelector('.scroller');if(s)s.scrollTop=0;
+  if(target==='screen-list')renderList();
+  if(target==='screen-alerts')renderAlerts();
+  if(target==='screen-stats')renderStats();
+  if(target==='screen-home'){updateHomeStats();_navHistory=[];}
+}
+
+/* ═══ DATE UTILS ═══ */
+function addDays(ds,d){const x=new Date(ds+'T12:00:00');x.setDate(x.getDate()+d);return x.toISOString().split('T')[0];}
+function addMonths(ds,m){const x=new Date(ds+'T12:00:00');x.setMonth(x.getMonth()+m);return x.toISOString().split('T')[0];}
+function addYears(ds,y){const x=new Date(ds+'T12:00:00');x.setFullYear(x.getFullYear()+y);return x.toISOString().split('T')[0];}
+function formatDate(ds){if(!ds)return'—';const d=new Date(ds+'T12:00:00');return d.toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});}
+function formatDateShort(ds){if(!ds)return'—';const d=new Date(ds+'T12:00:00');return d.toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'});}
+function diffDays(ds){const today=new Date();today.setHours(0,0,0,0);const d=new Date(ds+'T12:00:00');d.setHours(0,0,0,0);return Math.round((d-today)/(1000*60*60*24));}
+function isThisMonth(ds){if(!ds)return false;const d=new Date(ds+'T12:00:00');const t=new Date();return d.getMonth()===t.getMonth()&&d.getFullYear()===t.getFullYear();}
+
+/* ═══ CÁLCULO DE CITAS ═══ */
+function calcNextDate(rec){
+  const m=rec.metodo;
+  if(m==='oral'){if(!rec.inicioOral||!rec.blisters)return null;return addDays(rec.inicioOral,parseInt(rec.blisters)*28);}
+  if(m==='inject-m'){if(!rec.inicioInject)return null;return addMonths(rec.inicioInject,1);}
+  if(m==='inject-t'){if(!rec.inicioInject)return null;return addMonths(rec.inicioInject,3);}
+  if(['diu','implante','esteril'].includes(m)){if(!rec.inicioAnual)return null;return addYears(rec.inicioAnual,1);}
+  return null;
+}
+function calcPapNext(rec){if(!rec.papFecha)return null;return addYears(rec.papFecha,1);}
+function calcVphNext(rec){if(!rec.vphFecha)return null;return addYears(rec.vphFecha,5);}
+
+/* ═══ ALERTAS MÚLTIPLES ═══ */
+function getAllAlerts(){
+  const byFolder={pf:[],pap:[],vph:[],promotor:[],arr:[]};
+  records.forEach(r=>{
+    // PF — planificación familiar
+    if(r.nextDate){const d=diffDays(r.nextDate);if(d<=60)byFolder.pf.push({rec:r,type:'pf',date:r.nextDate,diff:d,label:'Próximo seguimiento PF'});}
+    // PAP anual
+    const papNext=calcPapNext(r);
+    if(papNext){const d=diffDays(papNext);if(d<=60)byFolder.pap.push({rec:r,type:'pap',date:papNext,diff:d,label:'Citología PAP (anual)'});}
+    // VPH cada 5 años
+    const vphNext=calcVphNext(r);
+    if(vphNext){const d=diffDays(vphNext);if(d<=60)byFolder.vph.push({rec:r,type:'vph',date:vphNext,diff:d,label:'VPH (cada 5 años)'});}
+    // Seguimiento anual promotor
+    if(r.atencionPreventiva){const apNext=addYears(r.atencionPreventiva,1);const d=diffDays(apNext);if(d<=60)byFolder.promotor.push({rec:r,type:'promotor',date:apNext,diff:d,label:'Atención preventiva promotor (anual)',thisMonth:isThisMonth(apNext)});}
+    // ARR — siempre visible si está activo
+    if(r.arr==='si')byFolder.arr.push({rec:r,type:'arr',date:null,diff:0,label:'Alto Riesgo Reproductivo activo'});
+  });
+  Object.keys(byFolder).forEach(k=>byFolder[k].sort((a,b)=>(a.diff??999)-(b.diff??999)));
+  return byFolder;
+}
+function getAllAlertsFlat(){
+  const f=getAllAlerts();return Object.values(f).flat();
+}
+function getAlerts(){return getAllAlertsFlat();}
+
+/* ═══ METHOD SELECTOR ═══ */
+let _selectedMethod='';
+function selectMethod(val){
+  _selectedMethod=val;
+  document.querySelectorAll('.method-opt').forEach(el=>el.classList.remove('selected'));
+  const r=document.querySelector(`input[name="metodo"][value="${val}"]`);if(r){r.checked=true;r.closest('.method-opt').classList.add('selected');}
+  const md=document.getElementById('method-details');
+  md.style.display=val&&val!=='ninguno'?'':'none';
+  document.getElementById('detail-oral').style.display=val==='oral'?'':'none';
+  document.getElementById('detail-inject').style.display=(val==='inject-m'||val==='inject-t')?'':'none';
+  document.getElementById('detail-anual').style.display=['diu','implante','esteril'].includes(val)?'':'none';
+  recalcAlerta();
+}
+function recalcAlerta(){
+  const m=_selectedMethod;let pfDate=null;
+  if(m==='oral'){const b=parseInt(document.getElementById('f-blisters').value)||0,i=document.getElementById('f-inicio-oral').value;if(b>0&&i)pfDate=addDays(i,b*28);}
+  else if(m==='inject-m'){const i=document.getElementById('f-inicio-inject').value;if(i){pfDate=addMonths(i,1);document.getElementById('f-prox-inject').value=formatDate(pfDate);}}
+  else if(m==='inject-t'){const i=document.getElementById('f-inicio-inject').value;if(i){pfDate=addMonths(i,3);document.getElementById('f-prox-inject').value=formatDate(pfDate);}}
+  else if(['diu','implante','esteril'].includes(m)){const i=document.getElementById('f-inicio-anual').value;if(i){pfDate=addYears(i,1);document.getElementById('f-prox-anual').value=formatDate(pfDate);}}
+  // PAP
+  const papFecha=document.getElementById('f-pap-fecha').value;
+  const papProx=papFecha?addYears(papFecha,1):null;
+  if(papProx)document.getElementById('f-pap-prox').value=formatDate(papProx);
+  // VPH
+  const vphFecha=document.getElementById('f-vph-fecha').value;
+  const vphProx=vphFecha?addYears(vphFecha,5):null;
+  if(vphProx)document.getElementById('f-vph-prox').value=formatDate(vphProx);
+  // Multi-alert preview
+  const mapDiv=document.getElementById('multi-alert-preview');
+  let mapHTML='';
+  if(pfDate)mapHTML+=`<div class="map-item pf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><div><div class="map-text">Planificación Familiar: ${formatDate(pfDate)}</div><div class="map-sub">Alerta 7 días antes</div></div></div>`;
+  if(papProx)mapHTML+=`<div class="map-item pap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><div><div class="map-text">Citología PAP: ${formatDate(papProx)}</div><div class="map-sub">Alerta 30 días antes</div></div></div>`;
+  if(vphProx)mapHTML+=`<div class="map-item vph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><div><div class="map-text">VPH: ${formatDate(vphProx)}</div><div class="map-sub">Alerta 30 días antes</div></div></div>`;
+  mapDiv.innerHTML=mapHTML;
+  // Atención preventiva
+  const apFecha=document.getElementById('f-atencion-preventiva').value;
+  if(apFecha)document.getElementById('f-prox-preventiva').value=formatDate(addYears(apFecha,1));
+}
+function toggleENT(){
+  const v=document.getElementById('f-ent').value;
+  document.getElementById('f-ent-especifica-wrap').style.display=v==='si'?'':'none';
+  document.getElementById('f-fecha-ent-wrap').style.display=v==='si'?'':'none';
+}
+function toggleDiscapacidad(){
+  const v=document.getElementById('f-discapacidad').value;
+  document.getElementById('f-discap-especifica-wrap').style.display=v==='si'?'':'none';
+}
+function calcEdad(){
+  const nac=document.getElementById('f-nacimiento').value;
+  if(!nac)return;
+  const d=new Date(nac+'T12:00:00'),t=new Date();
+  let a=t.getFullYear()-d.getFullYear();const mo=t.getMonth()-d.getMonth();if(mo<0||(mo===0&&t.getDate()<d.getDate()))a--;
+  document.getElementById('f-edad').value=a;calcRiesgo();
+}
+function calcRiesgo(){
+  const checks=['rr-menor20','rr-mayor35','rr-ent','rr-gesta','rr-espacio','rr-aborto','rr-cesarea','rr-discap'];
+  const checked=checks.filter(id=>document.getElementById(id)?.checked).length;
+  const arr=document.getElementById('f-arr')?.value;
+  const ent=document.getElementById('f-ent')?.value;
+  // Sincronizar ENT checkbox
+  if(ent==='si'&&document.getElementById('rr-ent'))document.getElementById('rr-ent').checked=true;
+  let level='low',label='Bajo',txt='Sin factores de riesgo significativos';
+  if(arr==='si'||checked>=3){level='high';label='Alto';txt=`${checked} factores de riesgo + atención ARR`;}
+  else if(checked>=1||ent==='si'){level='medium';label='Moderado';txt=`${checked} factor(es) de riesgo detectado(s)`;}
+  const disp=document.getElementById('riesgo-display');
+  if(disp){disp.style.display=checked>0||arr==='si'?'':'none';disp.innerHTML=`<div class="risk-card"><div class="risk-card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:14px;height:14px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Clasificación de riesgo reproductivo</div><div class="risk-indicator ${level}"><div class="risk-dot"></div><div class="risk-indicator-text">Riesgo ${label}: ${txt}</div></div></div>`;}
+}
+
+/* ═══ FORM INIT / LOAD ═══ */
+function initNewForm(){
+  editingId=null;_selectedMethod='';
+  const textFields=['f-nombre','f-dui','f-vivienda','f-direccion','f-telefono','f-observaciones','f-personal','f-nacimiento','f-inicio-oral','f-inicio-inject','f-inicio-anual','f-prox-inject','f-prox-anual','f-pap-prox','f-vph-prox','f-prox-preventiva','f-ent-especifica','f-discap-especifica'];
+  textFields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const dateFields=['f-pap-fecha','f-vph-fecha','f-atencion-preventiva','f-fecha-ent'];
+  dateFields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const numFields=['f-blisters','f-edad','f-gestaciones','f-partos'];
+  numFields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const selects=['f-vida-sexual','f-preconcepcional','f-arr','f-ent','f-discapacidad','f-pap-resultado','f-referida'];
+  selects.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  const checks=['rr-menor20','rr-mayor35','rr-ent','rr-gesta','rr-espacio','rr-aborto','rr-cesarea','rr-discap'];
+  checks.forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
+  document.getElementById('f-fecha').value=new Date().toISOString().split('T')[0];
+  document.querySelectorAll('.method-opt').forEach(el=>el.classList.remove('selected'));
+  document.querySelectorAll('input[name="metodo"]').forEach(r=>r.checked=false);
+  document.getElementById('method-details').style.display='none';
+  document.getElementById('multi-alert-preview').innerHTML='';
+  document.getElementById('btn-delete').style.display='none';
+  document.getElementById('fh-num-display').textContent='Nueva ficha';
+  document.getElementById('riesgo-display').style.display='none';
+  document.getElementById('f-ent-especifica-wrap').style.display='none';
+  document.getElementById('f-discap-especifica-wrap').style.display='none';
+  document.getElementById('f-fecha-ent-wrap').style.display='none';
+  const p=loadProfile();if(p.nombre)document.getElementById('f-personal').value=[p.nombre,p.cargo].filter(Boolean).join(' · ');
+}
+function loadFormFromRecord(rec){
+  _selectedMethod=rec.metodo||'';
+  const setV=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||'';};
+  setV('f-nombre',rec.nombre);setV('f-dui',rec.dui);setV('f-vivienda',rec.vivienda);
+  setV('f-nacimiento',rec.nacimiento);setV('f-edad',rec.edad);setV('f-direccion',rec.direccion);
+  setV('f-telefono',rec.telefono);setV('f-fecha',rec.fecha);setV('f-vida-sexual',rec.vidaSexual);
+  setV('f-preconcepcional',rec.preconcepcional);setV('f-arr',rec.arr);
+  setV('f-atencion-preventiva',rec.atencionPreventiva);
+  setV('f-ent',rec.ent);setV('f-ent-especifica',rec.entEspecifica);
+  setV('f-discapacidad',rec.discapacidad);setV('f-discap-especifica',rec.discapEspecifica);
+  setV('f-fecha-ent',rec.fechaEnt);
+  setV('f-blisters',rec.blisters);setV('f-inicio-oral',rec.inicioOral);
+  setV('f-inicio-inject',rec.inicioInject);setV('f-inicio-anual',rec.inicioAnual);
+  setV('f-pap-fecha',rec.papFecha);setV('f-pap-resultado',rec.papResultado);
+  setV('f-vph-fecha',rec.vphFecha);setV('f-referida',rec.referida);
+  setV('f-gestaciones',rec.gestaciones);setV('f-partos',rec.partos);
+  setV('f-observaciones',rec.observaciones);setV('f-personal',rec.personal);
+  const checks=['rr-menor20','rr-mayor35','rr-ent','rr-gesta','rr-espacio','rr-aborto','rr-cesarea','rr-discap'];
+  checks.forEach(id=>{const el=document.getElementById(id);if(el)el.checked=!!(rec.riesgos&&rec.riesgos.includes(id));});
+  document.getElementById('fh-num-display').textContent=`Ficha #${String(rec.num||0).padStart(3,'0')}`;
+  document.getElementById('btn-delete').style.display='flex';
+  editingId=rec.id;
+  toggleENT();toggleDiscapacidad();calcRiesgo();
+  if(_selectedMethod)selectMethod(_selectedMethod);
+  recalcAlerta();
+}
+
+/* ═══ SAVE / DELETE ═══ */
+function saveRecord(){
+  const nombre=document.getElementById('f-nombre').value.trim();
+  if(!nombre){showToast('⚠ Ingresa el nombre de la paciente','error');return;}
+  if(!_selectedMethod){showToast('⚠ Selecciona un método anticonceptivo','error');return;}
+  const checks=['rr-menor20','rr-mayor35','rr-ent','rr-gesta','rr-espacio','rr-aborto','rr-cesarea','rr-discap'];
+  const riesgos=checks.filter(id=>document.getElementById(id)?.checked);
+  const getV=id=>(document.getElementById(id)?.value||'').trim();
+  const papFecha=getV('f-pap-fecha');
+  const vphFecha=getV('f-vph-fecha');
+  const inicioInject=getV('f-inicio-inject');
+  const inicioAnual=getV('f-inicio-anual');
+  const inicioOral=getV('f-inicio-oral');
+  const nd=calcNextDate({metodo:_selectedMethod,blisters:getV('f-blisters'),inicioOral,inicioInject,inicioAnual});
+  const papNext=papFecha?addYears(papFecha,1):null;
+  const vphNext=vphFecha?addYears(vphFecha,5):null;
+  const rec={
+    id:editingId||Date.now().toString(36)+Math.random().toString(36).slice(2),
+    num:editingId?(records.find(r=>r.id===editingId)?.num||records.length+1):records.length+1,
+    nombre,dui:getV('f-dui'),vivienda:getV('f-vivienda'),
+    nacimiento:getV('f-nacimiento'),edad:getV('f-edad'),
+    direccion:getV('f-direccion'),telefono:getV('f-telefono'),
+    fecha:getV('f-fecha'),vidaSexual:getV('f-vida-sexual'),
+    preconcepcional:getV('f-preconcepcional'),arr:getV('f-arr'),
+    atencionPreventiva:getV('f-atencion-preventiva'),
+    ent:getV('f-ent'),entEspecifica:getV('f-ent-especifica'),
+    discapacidad:getV('f-discapacidad'),discapEspecifica:getV('f-discap-especifica'),
+    fechaEnt:getV('f-fecha-ent'),metodo:_selectedMethod,
+    blisters:getV('f-blisters'),inicioOral,inicioInject,inicioAnual,
+    papFecha,papResultado:getV('f-pap-resultado'),papNext,
+    vphFecha,vphNext,referida:getV('f-referida'),
+    gestaciones:getV('f-gestaciones'),partos:getV('f-partos'),
+    riesgos,observaciones:getV('f-observaciones'),personal:getV('f-personal'),
+    nextDate:nd,updatedAt:new Date().toISOString(),
+  };
+  if(editingId){const i=records.findIndex(r=>r.id===editingId);if(i>-1)records[i]=rec;else records.push(rec);}
+  else records.push(rec);
+  editingId=rec.id;saveRecords();updateHomeStats();
+  showToast('✓ Ficha guardada correctamente','success');
+  document.getElementById('btn-delete').style.display='flex';
+  document.getElementById('fh-num-display').textContent=`Ficha #${String(rec.num).padStart(3,'0')}`;
+}
+function deleteCurrentRecord(){
+  if(!editingId)return;
+  const rec=records.find(r=>r.id===editingId);
+  showModal('Eliminar ficha',`¿Eliminar la ficha de <strong>${rec?.nombre||'esta paciente'}</strong>?`,()=>{records=records.filter(r=>r.id!==editingId);saveRecords();updateHomeStats();goHome();showToast('Ficha eliminada.','error');});
+}
+function confirmDelete(id){
+  const rec=records.find(r=>r.id===id);
+  showModal('Eliminar ficha',`¿Eliminar la ficha de <strong>${rec?.nombre||'?'}</strong>?`,()=>{records=records.filter(r=>r.id!==id);saveRecords();updateHomeStats();renderList();showToast('Ficha eliminada.','error');});
+}
+function openRecord(id){const rec=records.find(r=>r.id===id);if(!rec)return;loadFormFromRecord(rec);goTo('screen-form','edit');}
+
+/* ═══ HOME STATS ═══ */
+function updateHomeStats(){
+  const alerts=getAllAlertsFlat();
+  const uniqAlerts=new Set(alerts.map(a=>a.rec.id));
+  document.getElementById('hs-total').textContent=records.length;
+  document.getElementById('hs-active').textContent=records.filter(r=>r.metodo&&r.metodo!=='ninguno'&&r.nextDate).length;
+  document.getElementById('hs-alerts').textContent=uniqAlerts.size;
+  const hba=document.getElementById('home-badge-alerts');
+  if(uniqAlerts.size>0){hba.textContent=uniqAlerts.size;hba.style.display='';}else hba.style.display='none';
+  document.getElementById('hs-alert-card').style.background=uniqAlerts.size>0?'rgba(229,57,53,.22)':'';
+  renderHomeMonthCards();
+}
+
+function renderHomeMonthCards(){
+  const byMonth={};
+  records.forEach(r=>{if(!r.fecha)return;const d=new Date(r.fecha+'T12:00:00');const k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;const lbl=`${MONTHS_ES[d.getMonth()]} ${d.getFullYear()}`;if(!byMonth[k])byMonth[k]={label:lbl,count:0};byMonth[k].count++;});
+  const keys=Object.keys(byMonth).sort((a,b)=>b.localeCompare(a));
+  const c=document.getElementById('home-month-cards');
+  if(keys.length===0){c.innerHTML=`<div class="month-card" style="opacity:.35;cursor:default"><div class="month-card-name">Sin datos</div><div class="month-card-num">0</div><div class="month-card-sub">Agrega pacientes</div></div>`;return;}
+  c.innerHTML=keys.slice(0,6).map(k=>{const m=byMonth[k];const pts=m.label.split(' ');return `<div class="month-card" onclick="openMonthFromHome('${escAttr(m.label)}')"><div class="month-card-name">${escHtml(pts[0])} ${pts[1]||''}</div><div class="month-card-num">${m.count}</div><div class="month-card-sub">paciente${m.count!==1?'s':''} · ver →</div></div>`;}).join('');
+}
+function openMonthFromHome(lbl){_navHistory.push(currentScreen);showMonthDetail(lbl);}
+function showMonthDetail(monthLabel){
+  document.getElementById('month-view-title-bar').textContent=monthLabel;
+  document.getElementById('month-view-h2').textContent=monthLabel;
+  const recs=records.filter(r=>{if(!r.fecha)return false;const d=new Date(r.fecha+'T12:00:00');return `${MONTHS_ES[d.getMonth()]} ${d.getFullYear()}`===monthLabel;}).sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+  document.getElementById('month-view-count').textContent=`${recs.length} ficha${recs.length!==1?'s':''}`;
+  const cur=document.getElementById(currentScreen),next=document.getElementById('screen-month-view');
+  cur.classList.remove('active');cur.classList.add('slide-out');setTimeout(()=>cur.classList.remove('slide-out'),300);
+  next.classList.add('active');currentScreen='screen-month-view';
+  const s=next.querySelector('.scroller');if(s)s.scrollTop=0;
+  document.getElementById('month-view-container').innerHTML=recs.length===0?`<div class="empty-state"><h3>Sin fichas</h3></div>`:recs.map(r=>recordCardHTML(r)).join('');
+}
+
+/* ═══ ALERTAS EN CARPETAS ═══ */
+function renderAlerts(){
+  const byF=getAllAlerts();
+  const cont=document.getElementById('alerts-container');
+  // Summary bar totals
+  const flat=Object.values(byF).flat();
+  const overdue=flat.filter(a=>a.date&&a.diff<0).length;
+  const soon=flat.filter(a=>a.date&&a.diff>=0&&a.diff<=7).length;
+  const total=flat.length;
+
+  const folders=[
+    {key:'pf',    label:'Planificación Familiar', sub:'Seguimiento del método anticonceptivo',   cls:'pf',
+     icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>`},
+    {key:'pap',   label:'Citología PAP',           sub:'Control anual de cáncer cérvico uterino', cls:'pap',
+     icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`},
+    {key:'vph',   label:'VPH',                     sub:'Control cada 5 años',                     cls:'vph',
+     icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`},
+    {key:'promotor',label:'Atención Preventiva',   sub:'Seguimiento anual por Promotor de Salud', cls:'promotor',
+     icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`},
+    {key:'arr',   label:'Alto Riesgo Reproductivo',sub:'Pacientes con ARR activo',                cls:'arr',
+     icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`},
+  ];
+
+  const summaryHTML=`<div class="alert-summary-bar">
+    <div class="asb-card danger"><div class="asb-num">${overdue}</div><div class="asb-lbl">Vencidas</div></div>
+    <div class="asb-card warn"><div class="asb-num">${soon}</div><div class="asb-lbl">Esta semana</div></div>
+    <div class="asb-card ok"><div class="asb-num">${total}</div><div class="asb-lbl">Total alertas</div></div>
+  </div>`;
+
+  const foldersHTML=folders.map(f=>{
+    const items=byF[f.key]||[];
+    const venc=items.filter(a=>a.date&&a.diff<0).length;
+    const badgeTxt=venc>0?`${venc} vencida${venc>1?'s':''}`:items.length>0?`${items.length}`:'0';
+    const badgeCls=venc>0?'red-badge':'';
+    const bodyHTML=items.length===0
+      ?`<div class="folder-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Sin alertas pendientes · todo al día ✓</div>`
+      :items.map((a,i,arr)=>{
+        const r=a.rec;
+        let dotCls='ok',badgeTxt2='Al día',badgeCls2='ok';
+        if(f.key==='arr'){dotCls='arr';badgeTxt2='ARR activo';badgeCls2='arr';}
+        else if(a.diff<0){dotCls='overdue';badgeTxt2=`Vencido ${Math.abs(a.diff)}d`;badgeCls2='overdue';}
+        else if(a.diff===0){dotCls='soon';badgeTxt2='Hoy';badgeCls2='soon';}
+        else if(a.diff<=7){dotCls='soon';badgeTxt2=`En ${a.diff}d`;badgeCls2='soon';}
+        else{dotCls='ok';badgeTxt2=`En ${a.diff}d`;badgeCls2='ok';}
+        const dateStr=a.date?formatDateShort(a.date):'';
+        // Promotor: insert month header before first thisMonth item
+        let monthBanner='';
+        if(f.key==='promotor'&&a.thisMonth&&(i===0||!arr[i-1].thisMonth)){
+          const thisMonthCount=arr.filter(x=>x.thisMonth).length;
+          monthBanner=`<div class="promotor-month-highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="promotor-month-highlight-text">📅 Seguimiento este mes — programar visitas</div><span class="promotor-month-highlight-count">${thisMonthCount}</span></div>`;
+        }
+        return monthBanner+`<div class="falert" onclick="openRecord('${r.id}')"><div class="falert-dot ${dotCls}"></div><div class="falert-info"><div class="falert-name">${escHtml(r.nombre||'—')}${a.thisMonth&&f.key==='promotor'?' <span style=\'background:#e0f2f1;color:#00695c;font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:4px;\'>Este mes</span>':''}</div><div class="falert-detail">${dateStr?dateStr+' · ':''} ${escHtml(r.metodo?METODO_LABELS[r.metodo]||r.metodo:'')}</div></div><span class="falert-badge ${badgeCls2}">${badgeTxt2}</span></div>`;
+      }).join('');
+
+    return `<div class="folder ${f.cls}" id="folder-${f.key}">
+      <div class="folder-header" onclick="toggleFolder('${f.key}')">
+        <div class="folder-icon">${f.icon}</div>
+        <div class="folder-header-text"><div class="folder-title">${f.label}</div><div class="folder-subtitle">${f.sub}</div></div>
+        <span class="folder-badge ${badgeCls}">${badgeTxt}</span>
+        <div class="folder-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </div>
+      <div class="folder-body">${bodyHTML}</div>
+    </div>`;
+  }).join('');
+
+  cont.innerHTML=summaryHTML+foldersHTML;
+  // auto-open folders with overdue items
+  folders.forEach(f=>{
+    const items=byF[f.key]||[];
+    if(items.some(a=>a.date&&a.diff<0)||f.key==='arr'&&items.length>0){
+      document.getElementById('folder-'+f.key)?.classList.add('open');
+    }
+  });
+}
+function toggleFolder(key){
+  const el=document.getElementById('folder-'+key);
+  if(el)el.classList.toggle('open');
+}
+
+/* ═══ PRINT INDIVIDUAL FICHA ═══ */
+function printFicha(id){
+  const r=records.find(x=>x.id===id);if(!r)return;
+  const profile=loadProfile();
+  const ucsf=profile.ucsf||'UCSF';
+  const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'}):'—';
+  const fmts=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+  const yesno=v=>v==='si'?'Sí':v==='no'?'No':'—';
+  const riesgosLabels={'rr-menor20':'Menor de 20 años','rr-mayor35':'Mayor de 35 años','rr-ent':'Padece ENT','rr-gesta':'Gran multípara','rr-espacio':'PIG corto','rr-aborto':'Antec. aborto','rr-cesarea':'Cesárea anterior','rr-discap':'Discapacidad'};
+  const rrList=(r.riesgos||[]).map(k=>riesgosLabels[k]||k).join(', ')||'Ninguno';
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>Ficha MEF · ${r.nombre||''}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>@page{size:Letter portrait;margin:12mm 14mm}*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:'Nunito',sans-serif;font-size:9.5px;color:#2d1a3a}
+  .ph{background:linear-gradient(135deg,#5c1a6e,#c2185b);color:#fff;padding:8px 12px;border-radius:6px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+  .ph-title{font-size:13px;font-weight:800;line-height:1.2}.ph-sub{font-size:8px;opacity:.75;margin-top:2px}
+  .ph-num{background:rgba(255,255,255,.2);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:800;margin-left:auto;white-space:nowrap}
+  .section{margin-bottom:9px}.section-title{background:#f3e5f5;color:#5c1a6e;font-size:7.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:4px;margin-bottom:5px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 10px}
+  .field{display:flex;flex-direction:column;gap:1px}.field label{font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#8e6fa0}.field span{font-size:9px;font-weight:600;color:#2d1a3a;border-bottom:1px solid #e1bee7;padding-bottom:1px;min-height:14px}
+  .badge{display:inline-block;border-radius:3px;padding:1px 5px;font-size:7.5px;font-weight:800}
+  .badge.met{background:#f3e5f5;color:#7b1fa2}.badge.arr{background:#ffebee;color:#b71c1c}.badge.ok{background:#e8f5e9;color:#2e7d32}.badge.warn{background:#fff3e0;color:#e65100}
+  .alert-row{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
+  .alert-item{border-radius:6px;padding:4px 7px;font-size:8px;font-weight:700;border:1px solid}
+  .alert-item.pf{background:#fce4ec;border-color:#f48fb1;color:#880e4f}
+  .alert-item.pap{background:#f3e5f5;border-color:#ce93d8;color:#4a148c}
+  .alert-item.vph{background:#e8eaf6;border-color:#9fa8da;color:#283593}
+  .footer{margin-top:10px;padding-top:5px;border-top:1px solid #e1bee7;display:flex;justify-content:space-between;font-size:7px;color:#8e6fa0}
+  .firma-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px}
+  .firma{border-top:1px solid #9e9e9e;padding-top:3px;font-size:7.5px;color:#666;text-align:center}
+  </style></head><body>
+  <div class="ph">
+    <div><div class="ph-title">Ficha de Seguimiento MEF · MINSAL El Salvador</div><div class="ph-sub">${escHtml(ucsf)} · ${escHtml(profile.nombre||'Personal de salud')}</div></div>
+    <div class="ph-num">Ficha #${String(r.num||0).padStart(3,'0')}</div>
+  </div>
+  <div class="section"><div class="section-title">1. Identificación</div>
+    <div class="grid3">
+      <div class="field" style="grid-column:1/3"><label>Nombre completo</label><span>${escHtml(r.nombre||'—')}</span></div>
+      <div class="field"><label>N° Vivienda</label><span>${escHtml(r.vivienda||'—')}</span></div>
+      <div class="field"><label>DUI / Documento</label><span>${escHtml(r.dui||'—')}</span></div>
+      <div class="field"><label>F. Nacimiento</label><span>${fmt(r.nacimiento)}</span></div>
+      <div class="field"><label>Edad</label><span>${r.edad||'—'} años</span></div>
+      <div class="field" style="grid-column:1/3"><label>Dirección / Comunidad / Cantón</label><span>${escHtml(r.direccion||'—')}</span></div>
+      <div class="field"><label>Teléfono</label><span>${escHtml(r.telefono||'—')}</span></div>
+      <div class="field"><label>Fecha de registro</label><span>${fmt(r.fecha)}</span></div>
+      <div class="field"><label>Vida sexual activa</label><span>${yesno(r.vidaSexual)}</span></div>
+    </div>
+  </div>
+  <div class="section"><div class="section-title">2. Condición de salud</div>
+    <div class="grid">
+      <div class="field"><label>Atención Preconcepcional</label><span>${yesno(r.preconcepcional)}</span></div>
+      <div class="field"><label>Alto Riesgo Reproductivo</label><span>${r.arr==='si'?'<span class="badge arr">SÍ — ARR activo</span>':yesno(r.arr)}</span></div>
+      <div class="field"><label>ENT</label><span>${r.ent==='si'?escHtml(r.entEspecifica||'Sí'):yesno(r.ent)}</span></div>
+      <div class="field"><label>Discapacidad</label><span>${r.discapacidad==='si'?escHtml(r.discapEspecifica||'Sí'):yesno(r.discapacidad)}</span></div>
+      <div class="field"><label>Últ. atención preventiva (promotor)</label><span>${fmt(r.atencionPreventiva)}</span></div>
+      <div class="field"><label>Próx. atención preventiva</label><span>${r.atencionPreventiva?fmt(addYears(r.atencionPreventiva,1)):'—'}</span></div>
+    </div>
+  </div>
+  <div class="section"><div class="section-title">3. Planificación Familiar</div>
+    <div class="grid">
+      <div class="field"><label>Método</label><span><span class="badge met">${METODO_LABELS[r.metodo]||r.metodo||'—'}</span></span></div>
+      <div class="field"><label>Próximo seguimiento PF</label><span>${r.nextDate?`<span class="badge ${diffDays(r.nextDate)<0?'arr':diffDays(r.nextDate)<=7?'warn':'ok'}">${fmt(r.nextDate)}</span>`:'—'}</span></div>
+      <div class="field"><label>Fecha inicio / aplicación</label><span>${fmt(r.inicioOral||r.inicioInject||r.inicioAnual||'')}</span></div>
+      ${r.metodo==='oral'?`<div class="field"><label>Blisters entregados</label><span>${r.blisters||'—'}</span></div>`:''}
+    </div>
+  </div>
+  <div class="section"><div class="section-title">4. Prevención Cáncer Cérvico Uterino</div>
+    <div class="grid">
+      <div class="field"><label>Última citología PAP</label><span>${fmt(r.papFecha)}</span></div>
+      <div class="field"><label>Próxima PAP (1 año)</label><span>${r.papNext?`<span class="badge ${diffDays(r.papNext)<0?'arr':'ok'}">${fmt(r.papNext)}</span>`:'—'}</span></div>
+      <div class="field"><label>Último VPH</label><span>${fmt(r.vphFecha)}</span></div>
+      <div class="field"><label>Próximo VPH (5 años)</label><span>${r.vphNext?`<span class="badge ${diffDays(r.vphNext)<0?'arr':'ok'}">${fmt(r.vphNext)}</span>`:'—'}</span></div>
+      <div class="field"><label>Resultado PAP/VPH</label><span>${escHtml(r.papResultado||'—')}</span></div>
+      <div class="field"><label>Referida a 2° nivel</label><span>${yesno(r.referida)}</span></div>
+    </div>
+  </div>
+  <div class="section"><div class="section-title">5. Riesgo Reproductivo</div>
+    <div class="grid">
+      <div class="field"><label>Factores identificados</label><span>${escHtml(rrList)}</span></div>
+      <div class="field"><label>Gestaciones / Partos</label><span>${r.gestaciones||'0'} gest. · ${r.partos||'0'} partos</span></div>
+    </div>
+  </div>
+  <div class="section"><div class="section-title">6. Observaciones</div>
+    <div class="field"><label>Notas clínicas</label><span style="min-height:24px">${escHtml(r.observaciones||'—')}</span></div>
+    <div class="field" style="margin-top:4px"><label>Personal responsable</label><span>${escHtml(r.personal||'—')}</span></div>
+  </div>
+  <div class="firma-row">
+    <div class="firma">Firma del Promotor / Enfermera</div>
+    <div class="firma">Firma de la Paciente / Responsable</div>
+  </div>
+  <div class="footer"><span>Control MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>Impreso: ${new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'})}</span></div>
+  </body></html>`;
+  const w=window.open('','_blank','width=820,height=950');if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
+}
+
+/* ═══ LIST FOLDERS ═══ */
+function lfItemHTML(r){
+  const today=new Date();today.setHours(0,0,0,0);
+  let tags='';
+  if(r.nextDate){const d=new Date(r.nextDate+'T12:00:00');d.setHours(0,0,0,0);const diff=Math.round((d-today)/(1000*60*60*24));if(diff<0)tags+=`<span class="record-tag overdue">PF vencido</span>`;else if(diff<=7)tags+=`<span class="record-tag soon">PF ${diff}d</span>`;}
+  if(r.papNext){const pd=diffDays(r.papNext);if(pd<=30)tags+=`<span class="record-tag pap">PAP${pd<0?' venc':' '+pd+'d'}</span>`;}
+  if(r.arr==='si')tags+=`<span class="record-tag arr">ARR</span>`;
+  if(r.ent==='si')tags+=`<span class="record-tag" style="background:#fff3e0;color:#e65100">ENT</span>`;
+  if(r.preconcepcional==='si')tags+=`<span class="record-tag" style="background:#e8f5e9;color:#2e7d32">Precon.</span>`;
+  const meta=`${r.edad?r.edad+' a.':''} · ${r.direccion?escHtml(r.direccion.slice(0,30)):'Sin dirección'}`;
+  const pf=r.nextDate?formatDateShort(r.nextDate):'—';
+  return `<div class="lf-item">
+    <div class="lf-item-num">${String(r.num||0).padStart(2,'0')}</div>
+    <div class="lf-item-info" onclick="openRecord('${r.id}')">
+      <div class="lf-item-name">${escHtml(r.nombre||'—')}</div>
+      <div class="lf-item-meta">${meta} · Próx.PF: ${pf}</div>
+      ${tags?`<div class="lf-item-tags">${tags}</div>`:''}
+    </div>
+    <div class="lf-item-actions">
+      <button class="lf-icon-btn edit" title="Editar" onclick="openRecord('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+      <button class="lf-icon-btn print" title="Imprimir ficha" onclick="printFicha('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
+      <button class="lf-icon-btn del" title="Eliminar" onclick="confirmDelete('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+    </div>
+  </div>`;
+}
+
+function renderList(){
+  const q=(document.getElementById('search-input')?.value||'').toLowerCase().trim();
+  const n=records.length;
+  const entCount   =records.filter(r=>r.ent==='si').length;
+  const preconCount=records.filter(r=>r.preconcepcional==='si').length;
+  const arrCount   =records.filter(r=>r.arr==='si').length;
+
+  // Tarjetas resumen
+  const summEl=document.getElementById('list-summary-cards');
+  if(summEl){summEl.innerHTML='<div class="list-summary">'
+    +'<div class="ls-card total"><div class="ls-card-num">'+n+'</div><div class="ls-card-lbl">Total MEF</div><div class="ls-card-sub">mujeres registradas</div></div>'
+    +'<div class="ls-card arr"><div class="ls-card-num">'+arrCount+'</div><div class="ls-card-lbl">Alto Riesgo</div><div class="ls-card-sub">ARR activo</div></div>'
+    +'<div class="ls-card ent"><div class="ls-card-num">'+entCount+'</div><div class="ls-card-lbl">Enf. Crónica ENT</div><div class="ls-card-sub">HTA, DM, otras</div></div>'
+    +'<div class="ls-card precon"><div class="ls-card-num">'+preconCount+'</div><div class="ls-card-lbl">Atenc. Preconcepcional</div><div class="ls-card-sub">reciben atención</div></div>'
+    +'</div>';}
+
+  const cont=document.getElementById('list-container');
+  if(n===0){
+    cont.innerHTML='<div class="empty-state"><h3>Sin pacientes</h3><p>Agrega la primera paciente tocando Nueva.</p></div>';
+    return;
+  }
+
+  const folderDefs=[
+    {key:'all',      label:'Todas las pacientes',         icon:'👥', grad:'linear-gradient(135deg,#5c1a6e,#9c27b0)',  filter:function(r){return true;}},
+    {key:'oral',     label:'ACO Orales',                  icon:'💊', grad:'linear-gradient(135deg,#880e4f,#c2185b)',  filter:function(r){return r.metodo==='oral';}},
+    {key:'inject-m', label:'Inyectable Mensual',          icon:'💉', grad:'linear-gradient(135deg,#4a148c,#7b1fa2)',  filter:function(r){return r.metodo==='inject-m';}},
+    {key:'inject-t', label:'Inyectable Trimestral',       icon:'💉', grad:'linear-gradient(135deg,#311b92,#512da8)',  filter:function(r){return r.metodo==='inject-t';}},
+    {key:'diu',      label:'DIU',                         icon:'🔷', grad:'linear-gradient(135deg,#1b5e20,#2e7d32)',  filter:function(r){return r.metodo==='diu';}},
+    {key:'implante', label:'Implante Intradérmico',       icon:'🔬', grad:'linear-gradient(135deg,#0d47a1,#1565c0)',  filter:function(r){return r.metodo==='implante';}},
+    {key:'esteril',  label:'Esterilización Femenina',     icon:'✅', grad:'linear-gradient(135deg,#bf360c,#e64a19)',  filter:function(r){return r.metodo==='esteril';}},
+    {key:'ninguno',  label:'Sin método anticonceptivo',   icon:'🚫', grad:'linear-gradient(135deg,#424242,#616161)',  filter:function(r){return !r.metodo||r.metodo==='ninguno';}},
+    {key:'arr',      label:'Alto Riesgo Reproductivo',    icon:'&#9888;',grad:'linear-gradient(135deg,#b71c1c,#e53935)',filter:function(r){return r.arr==='si';}},
+    {key:'pap-alert',label:'PAP pendiente',               icon:'🔬', grad:'linear-gradient(135deg,#6a1b9a,#ab47bc)',  filter:function(r){return !!(r.papNext&&diffDays(r.papNext)<=30);}},
+    {key:'ent',      label:'Enfermedad Crónica (ENT)',    icon:'🩺', grad:'linear-gradient(135deg,#bf360c,#f4511e)',  filter:function(r){return r.ent==='si';}},
+    {key:'precon',   label:'Atención Preconcepcional',    icon:'🤰', grad:'linear-gradient(135deg,#1b5e20,#388e3c)',  filter:function(r){return r.preconcepcional==='si';}},
+    {key:'vph',      label:'Seguimiento VPH',             icon:'💉', grad:'linear-gradient(135deg,#1a237e,#3949ab)',  filter:function(r){return !!r.vphFecha;}},
+    {key:'vph-alert',label:'VPH pendiente',               icon:'🔴', grad:'linear-gradient(135deg,#880e4f,#ad1457)',  filter:function(r){return !!(r.vphNext&&diffDays(r.vphNext)<=30);}},
+  ];
+
+  var html='';
+  folderDefs.forEach(function(fd){
+    var recs=records.filter(fd.filter);
+    if(q)recs=recs.filter(function(r){return (r.nombre||'').toLowerCase().includes(q)||(r.dui||'').toLowerCase().includes(q);});
+    recs.sort(function(a,b){return (a.nombre||'').localeCompare(b.nombre||'','es');});
+
+    var bodyHTML=recs.length===0
+      ?'<div class="list-folder-empty">Sin pacientes en esta categoría</div>'
+      :recs.map(function(r){return lfItemHTML(r);}).join('');
+
+    var autoOpen='';
+    html+='<div class="list-folder '+autoOpen+'" id="lf-'+fd.key+'" style="--lf-grad:'+fd.grad+'">'
+      +'<div class="list-folder-header" data-fkey="'+fd.key+'">'
+      +'<div class="list-folder-icon">'+fd.icon+'</div>'
+      +'<div class="list-folder-text">'
+      +'<div class="list-folder-title">'+fd.label+'</div>'
+      +'<div class="list-folder-sub">'+recs.length+' paciente'+(recs.length!==1?'s':'')+'</div>'
+      +'</div>'
+      +'<span class="list-folder-badge">'+recs.length+'</span>'
+      +'<div class="list-folder-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>'
+      +'</div>'
+      +'<div class="list-folder-body">'+bodyHTML+'</div>'
+      +'</div>';
+  });
+  cont.innerHTML=html;
+}
+function toggleListFolder(key){
+  document.getElementById('lf-'+key)?.classList.toggle('open');
+}
+// Event delegation for list folder headers (avoids onclick quoting issues)
+document.addEventListener('click',function(e){
+  var hdr=e.target.closest('.list-folder-header[data-fkey]');
+  if(hdr){toggleListFolder(hdr.getAttribute('data-fkey'));}
+});
+// Keep setFilter for compatibility (now reuses renderList with search)
+function setFilter(f,el){renderList();}
+function recordCardHTML(r){return lfItemHTML(r);}
+
+/* ═══ ESTADÍSTICAS ═══ */
+function renderStats(){
+  const c=document.getElementById('stats-container');if(!c)return;
+  const n=records.length;if(n===0){c.innerHTML=`<div class="empty-state"><h3>Sin datos</h3><p>Registra pacientes para ver estadísticas.</p></div>`;return;}
+  const byMetodo={};METODO_ORDER.forEach(m=>{byMetodo[m]=0;});records.forEach(r=>{if(byMetodo[r.metodo]!==undefined)byMetodo[r.metodo]++;});
+  const arrCount=records.filter(r=>r.arr==='si').length;
+  const entCount=records.filter(r=>r.ent==='si').length;
+  const papOk=records.filter(r=>r.papFecha).length;
+  const papAlert=records.filter(r=>{if(!r.papNext)return false;return diffDays(r.papNext)<=30;}).length;
+  const vphOk=records.filter(r=>r.vphFecha).length;
+  const vphAlert=records.filter(r=>{if(!r.vphNext)return false;return diffDays(r.vphNext)<=30;}).length;
+  const precon=records.filter(r=>r.preconcepcional==='si').length;
+  const sinMetodo=records.filter(r=>!r.metodo||r.metodo==='ninguno').length;
+  const vidaActiva=records.filter(r=>r.vidaSexual==='si').length;
+  const edades=[18,20,25,30,35,40,45,50];
+  const edadGrupos={'18-19':0,'20-24':0,'25-29':0,'30-34':0,'35-39':0,'40-44':0,'45-49':0};
+  records.forEach(r=>{const e=parseInt(r.edad)||0;if(e>=18&&e<=19)edadGrupos['18-19']++;else if(e>=20&&e<=24)edadGrupos['20-24']++;else if(e>=25&&e<=29)edadGrupos['25-29']++;else if(e>=30&&e<=34)edadGrupos['30-34']++;else if(e>=35&&e<=39)edadGrupos['35-39']++;else if(e>=40&&e<=44)edadGrupos['40-44']++;else if(e>=45&&e<=49)edadGrupos['45-49']++;});
+  const factRiesgos={'Menor 20 años':'rr-menor20','Mayor 35 años':'rr-mayor35','ENT':'rr-ent','Gran multípara':'rr-gesta','PIG corto':'rr-espacio','Antec. aborto':'rr-aborto','Cesárea previa':'rr-cesarea','Discapacidad':'rr-discap'};
+  const frCounts={};Object.keys(factRiesgos).forEach(k=>{frCounts[k]=records.filter(r=>r.riesgos&&r.riesgos.includes(factRiesgos[k])).length;});
+  const maxM=Math.max(...Object.values(byMetodo),1);
+  const maxEd=Math.max(...Object.values(edadGrupos),1);
+  const maxFr=Math.max(...Object.values(frCounts),1);
+  const pct=(v,max)=>Math.round((v/max)*100);
+  const barRow=(label,val,max,color)=>`<div class="bar-row"><div class="bar-label">${escHtml(label)}</div><div class="bar-track"><div class="bar-fill" style="width:${pct(val,max)}%;background:${color}"></div></div><div class="bar-count">${val}</div></div>`;
+  c.innerHTML=`
+    <div class="section-divider"><span>Resumen general</span></div>
+    <div class="dash-grid">
+      <div class="dash-card"><div class="dash-num">${n}</div><div class="dash-label">Total MEF registradas</div></div>
+      <div class="dash-card c-danger"><div class="dash-num">${arrCount}</div><div class="dash-label">Alto Riesgo Reproductivo</div><div class="dash-sublabel">${n?Math.round(arrCount/n*100):0}% del total</div></div>
+      <div class="dash-card c-teal"><div class="dash-num">${papOk}</div><div class="dash-label">Con citología PAP registrada</div><div class="dash-sublabel">${n?Math.round(papOk/n*100):0}% cobertura</div></div>
+      <div class="dash-card c-indigo"><div class="dash-num">${vphOk}</div><div class="dash-label">Con VPH registrado</div><div class="dash-sublabel">${n?Math.round(vphOk/n*100):0}% cobertura</div></div>
+      <div class="dash-card c-purple"><div class="dash-num">${papAlert}</div><div class="dash-label">Alertas citología PAP</div><div class="dash-sublabel">Vencidas o próximas 30d</div></div>
+      <div class="dash-card c-amber"><div class="dash-num">${vphAlert}</div><div class="dash-label">Alertas VPH</div><div class="dash-sublabel">Vencidas o próximas 30d</div></div>
+      <div class="dash-card c-green"><div class="dash-num">${precon}</div><div class="dash-label">Atención Preconcepcional</div><div class="dash-sublabel">${n?Math.round(precon/n*100):0}% del total</div></div>
+      <div class="dash-card"><div class="dash-num">${entCount}</div><div class="dash-label">Padecen ENT</div><div class="dash-sublabel">Enf. No Transmisibles</div></div>
+      <div class="dash-card c-danger"><div class="dash-num">${sinMetodo}</div><div class="dash-label">Sin método anticonceptivo</div><div class="dash-sublabel">Requieren orientación</div></div>
+      <div class="dash-card c-teal"><div class="dash-num">${vidaActiva}</div><div class="dash-label">Vida sexual activa</div><div class="dash-sublabel">${n?Math.round(vidaActiva/n*100):0}% del total</div></div>
+    </div>
+
+    <div class="section-divider"><span>Métodos anticonceptivos</span></div>
+    <div class="method-bar">
+      ${Object.entries(byMetodo).filter(([m])=>m!=='ninguno').map(([m,v])=>barRow(METODO_LABELS[m]||m,v,maxM,METODO_COLORS[m]||'#9c27b0')).join('')}
+      ${byMetodo['ninguno']>0?barRow('Sin método',byMetodo['ninguno'],maxM,'#9e9e9e'):''}
+    </div>
+
+    <div class="section-divider"><span>Grupos de edad</span></div>
+    <div class="method-bar">
+      ${Object.entries(edadGrupos).map(([g,v])=>barRow(g+' años',v,maxEd,'#7b2d8b')).join('')}
+    </div>
+
+    <div class="section-divider"><span>Factores de riesgo reproductivo</span></div>
+    <div class="method-bar">
+      ${Object.entries(frCounts).map(([k,v])=>barRow(k,v,maxFr,'#e53935')).join('')}
+    </div>
+  `;
+}
+
+/* ═══ IMPRIMIR ═══ */
+function buildPrintDoc(title,subtitle,recsGrouped){
+  const profile=loadProfile();
+  const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const ucsf=profile.ucsf||'UCSF';const personal=profile.nombre?`${profile.nombre}${profile.cargo?' · '+profile.cargo:''}`:'Personal de salud';
+  const today2=new Date();today2.setHours(0,0,0,0);
+  let html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>${escHtml(title)}</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/><style>@page{size:Letter landscape;margin:10mm 12mm}*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:'Nunito',sans-serif;font-size:9px;color:#2d1a3a}.ph{text-align:center;border-bottom:2.5px solid #7b2d8b;padding-bottom:.5rem;margin-bottom:.75rem}.ph h1{font-size:12px;font-weight:800;color:#5c1a6e}.ph p{font-size:7.5px;color:#8e6fa0;margin-top:2px}.st{background:linear-gradient(135deg,#5c1a6e,#c2185b);color:#fff;padding:3px 8px;border-radius:4px;font-size:8px;font-weight:800;text-transform:uppercase;margin:9px 0 4px;display:flex;align-items:center;justify-content:space-between}.sc{background:rgba(255,255,255,.25);border-radius:8px;padding:1px 5px;font-size:7.5px}table{width:100%;border-collapse:collapse;margin-bottom:3px}th{background:#f3e5f5;color:#5c1a6e;font-size:7px;font-weight:800;text-transform:uppercase;padding:3px 3px;border-bottom:1.5px solid #e1bee7;text-align:left}td{font-size:7.5px;padding:3px 3px;border-bottom:1px solid #f0e6f6;vertical-align:top}tr:nth-child(even) td{background:#fdf4f9}.bv{display:inline-block;border-radius:3px;padding:1px 4px;font-size:6.5px;font-weight:800}.bo{background:#fce4e4;color:#b71c1c}.bs{background:#fff3e0;color:#e65100}.bk{background:#e8f5e9;color:#2e7d32}.ba{background:#fce4ec;color:#c2185b}.ft{margin-top:8px;padding-top:5px;border-top:1px solid #e1bee7;display:flex;justify-content:space-between;font-size:7px;color:#8e6fa0}</style></head><body><div class="ph"><h1>${escHtml(title)}</h1><p>${escHtml(subtitle)} · ${todayStr} · Responsable: ${escHtml(personal)}</p></div>`;
+  METODO_ORDER.forEach(m=>{
+    const mrs=(recsGrouped[m]||[]).sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+    if(!mrs.length)return;
+    html+=`<div class="st">${METODO_LABELS[m]||m}<span class="sc">${mrs.length}</span></div>`;
+    html+=`<table><thead><tr><th>#</th><th>Nombre</th><th>DUI</th><th>Edad</th><th>Tel.</th><th>F.Reg.</th><th>Inicio</th><th>Próx.PF</th><th>PAP</th><th>VPH</th><th>ARR</th><th>ENT</th><th>Estado</th></tr></thead><tbody>`;
+    mrs.forEach((r,i)=>{
+      let estado='—',bc='';
+      if(r.nextDate){const d=new Date(r.nextDate+'T12:00:00');d.setHours(0,0,0,0);const diff=Math.round((d-today2)/(1000*60*60*24));if(diff<0){estado=`Venc.${Math.abs(diff)}d`;bc='bo';}else if(diff===0){estado='Hoy';bc='bs';}else if(diff<=7){estado=`En ${diff}d`;bc='bs';}else{estado='Al día';bc='bk';}}
+      const ini=r.inicioOral||r.inicioInject||r.inicioAnual||'';
+      const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+      const arrBadge=r.arr==='si'?`<span class="bv ba">ARR</span>`:'No';
+      html+=`<tr><td>${i+1}</td><td><strong>${escHtml(r.nombre||'—')}</strong></td><td>${escHtml(r.dui||'—')}</td><td>${r.edad||'—'}</td><td>${escHtml(r.telefono||'—')}</td><td>${fmt(r.fecha)}</td><td>${fmt(ini)}</td><td>${fmt(r.nextDate)}</td><td>${fmt(r.papNext)}</td><td>${fmt(r.vphNext)}</td><td>${arrBadge}</td><td>${r.ent==='si'?escHtml(r.entEspecifica||'Sí'):'No'}</td><td>${bc?`<span class="bv ${bc}">${estado}</span>`:estado}</td></tr>`;
+    });
+    html+=`</tbody></table>`;
+  });
+  html+=`<div class="ft"><span>Control MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>Total: ${Object.values(recsGrouped).flat().length} registros · ${todayStr}</span></div></body></html>`;
+  return html;
+}
+function printListado(){
+  const byM={};METODO_ORDER.forEach(m=>{byM[m]=[];});records.forEach(r=>{if(byM[r.metodo])byM[r.metodo].push(r);else byM['ninguno']=(byM['ninguno']||[]).concat(r);});
+  const profile=loadProfile();const html=buildPrintDoc(`Control MEF · ${profile.ucsf||'UCSF'}`,`Listado completo — ${records.length} pacientes`,byM);
+  const w=window.open('','_blank','width=1000,height=700');if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
+}
+function printMonthView(){
+  const monthLabel=document.getElementById('month-view-h2').textContent;
+  const recs=records.filter(r=>{if(!r.fecha)return false;const d=new Date(r.fecha+'T12:00:00');return `${MONTHS_ES[d.getMonth()]} ${d.getFullYear()}`===monthLabel;});
+  const byM={};METODO_ORDER.forEach(m=>{byM[m]=[];});recs.forEach(r=>{if(byM[r.metodo])byM[r.metodo].push(r);else byM['ninguno']=(byM['ninguno']||[]).concat(r);});
+  const profile=loadProfile();const html=buildPrintDoc(`Control MEF · ${monthLabel} · ${profile.ucsf||'UCSF'}`,`${recs.length} pacientes en ${monthLabel}`,byM);
+  const w=window.open('','_blank','width=1000,height=700');if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
+}
+function printStats(){
+  const profile=loadProfile();const ucsf=profile.ucsf||'UCSF';const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const n=records.length;const byMetodo={};METODO_ORDER.forEach(m=>{byMetodo[m]=0;});records.forEach(r=>{if(byMetodo[r.metodo]!==undefined)byMetodo[r.metodo]++;});
+  const arrCount=records.filter(r=>r.arr==='si').length;const entCount=records.filter(r=>r.ent==='si').length;const papOk=records.filter(r=>r.papFecha).length;const vphOk=records.filter(r=>r.vphFecha).length;const precon=records.filter(r=>r.preconcepcional==='si').length;const sinM=records.filter(r=>!r.metodo||r.metodo==='ninguno').length;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Estadísticas MEF · ${ucsf}</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"/><style>*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:'Nunito',sans-serif;font-size:11px;color:#2d1a3a;padding:15mm}h1{font-size:16px;font-weight:800;color:#5c1a6e;margin-bottom:4px}p.sub{font-size:9px;color:#8e6fa0;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}.card{border:1px solid #e1bee7;border-radius:8px;padding:10px;border-top:3px solid #7b2d8b}.num{font-size:22px;font-weight:800;color:#5c1a6e;line-height:1}.lbl{font-size:8px;color:#8e6fa0;font-weight:700;margin-top:3px}.bar{margin-bottom:6px}.bar-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}.bar-lbl{font-size:8px;color:#5c1a6e;width:140px;font-weight:600}.bar-track{flex:1;height:7px;background:#f3e5f5;border-radius:4px;overflow:hidden}.bar-fill{height:100%;border-radius:4px}.bar-cnt{font-size:8px;font-weight:800;color:#3d1a4a;width:22px;text-align:right}h2{font-size:11px;font-weight:800;color:#7b2d8b;margin:10px 0 5px;text-transform:uppercase;letter-spacing:.06em}footer{margin-top:14px;border-top:1px solid #e1bee7;padding-top:6px;font-size:8px;color:#8e6fa0;display:flex;justify-content:space-between}</style></head><body><h1>Estadísticas MEF · ${escHtml(ucsf)}</h1><p class="sub">Indicadores de Salud Comunitaria · ${todayStr} · ${escHtml(profile.nombre||'Personal de salud')}</p><h2>Indicadores generales</h2><div class="grid"><div class="card"><div class="num">${n}</div><div class="lbl">Total MEF</div></div><div class="card" style="border-top-color:#e53935"><div class="num">${arrCount}</div><div class="lbl">Alto Riesgo Reproductivo (${n?Math.round(arrCount/n*100):0}%)</div></div><div class="card" style="border-top-color:#26a69a"><div class="num">${papOk}</div><div class="lbl">Con citología PAP (${n?Math.round(papOk/n*100):0}%)</div></div><div class="card" style="border-top-color:#5c6bc0"><div class="num">${vphOk}</div><div class="lbl">Con VPH registrado (${n?Math.round(vphOk/n*100):0}%)</div></div><div class="card" style="border-top-color:#43a047"><div class="num">${precon}</div><div class="lbl">Atención Preconcepcional</div></div><div class="card" style="border-top-color:#e65100"><div class="num">${entCount}</div><div class="lbl">Padecen ENT</div></div><div class="card"><div class="num">${sinM}</div><div class="lbl">Sin método anticonceptivo</div></div></div><h2>Distribución por método</h2><div class="bar">${Object.entries(byMetodo).filter(([m,v])=>v>0).map(([m,v])=>`<div class="bar-row"><div class="bar-lbl">${METODO_LABELS[m]||m}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/Math.max(...Object.values(byMetodo),1)*100)}%;background:${METODO_COLORS[m]||'#9c27b0'}"></div></div><div class="bar-cnt">${v}</div></div>`).join('')}</div><footer><span>Control MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>${todayStr}</span></footer></body></html>`;
+  const w=window.open('','_blank','width=900,height=700');if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
+}
+
+/* ═══ MODAL / TOAST ═══ */
+let _modalCb=null;
+window.showModal=function(title,msg,cb){document.getElementById('modal-title').textContent=title;document.getElementById('modal-msg').innerHTML=msg;const btn=document.getElementById('modal-confirm-btn');btn.style.display=cb?'':'none';_modalCb=cb;document.getElementById('modal-bg').classList.add('show');}
+function closeModal(){document.getElementById('modal-bg').classList.remove('show');_modalCb=null;}
+document.getElementById('modal-confirm-btn').addEventListener('click',()=>{if(_modalCb)_modalCb();closeModal();});
+let _tt;
+window.showToast=function(msg,type=''){clearTimeout(_tt);const e=document.querySelector('.toast');if(e)e.remove();const t=document.createElement('div');t.className='toast '+(type||'');t.textContent=msg;document.body.appendChild(t);_tt=setTimeout(()=>t.remove(),3200);}
+
+/* ═══ UTILS ═══ */
+function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escAttr(s){return(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function confirmClearAll(){window.showModal('Limpiar memoria','Se eliminarán <strong>todas las fichas</strong>. Acción irreversible.',()=>{records=[];saveRecords();updateHomeStats();window.showToast('Memoria limpiada.','error');});}
+
+/* ═══ PROFILE ═══ */
+window.loadProfile=function(){try{return JSON.parse(localStorage.getItem(LS_PROFILE))||{};}catch(e){return{};}}
+function loadProfile(){return window.loadProfile();}
+function saveProfile(){const n=document.getElementById('profile-nombre').value.trim();if(!n){window.showToast('⚠ Ingresa tu nombre','error');return;}const c=document.getElementById('profile-cargo').value.trim(),u=document.getElementById('profile-ucsf').value.trim(),p={nombre:n,cargo:c,ucsf:u};localStorage.setItem(LS_PROFILE,JSON.stringify(p));applyProfile(p);closeProfileModal();window.showToast('✓ Perfil guardado','success');}
+function applyProfile(p){const n=p.nombre||'';const pts=n.trim().split(' ').filter(Boolean);const ini=pts.length>=2?(pts[0][0]+pts[pts.length-1][0]).toUpperCase():(n.slice(0,2).toUpperCase()||'?');document.getElementById('user-avatar').textContent=ini;document.getElementById('user-name-display').textContent=n||'Toca aquí para configurar tu nombre';document.getElementById('user-cargo-display').textContent=[p.cargo,p.ucsf].filter(Boolean).join(' · ')||'Personal de salud · MINSAL';}
+function openProfileModal(){const p=loadProfile();document.getElementById('profile-nombre').value=p.nombre||'';document.getElementById('profile-cargo').value=p.cargo||'';document.getElementById('profile-ucsf').value=p.ucsf||'';document.getElementById('profile-modal-bg').classList.add('show');setTimeout(()=>document.getElementById('profile-nombre').focus(),100);}
+function closeProfileModal(){document.getElementById('profile-modal-bg').classList.remove('show');}
+
+/* ═══ INIT ═══ */
+loadRecords();
+window.records=records;
+window.updateHomeStats=updateHomeStats;
+window.renderList=renderList;
+
+// Función clave: recarga records desde localStorage y refresca toda la UI
+window.reloadFromStorage=function(){
+  try{ records=JSON.parse(localStorage.getItem(LS_KEY))||[]; }catch(e){ records=[]; }
+  window.records=records;
+  updateHomeStats();
+  if(currentScreen==='screen-list') renderList();
+  if(currentScreen==='screen-alerts') renderAlerts();
+  if(currentScreen==='screen-stats') renderStats();
+};
+
+updateHomeStats();
+applyProfile(loadProfile());
+if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){localStorage.setItem('pwa_pf_shown','1');const fb=document.getElementById('fab-install');if(fb)fb.style.display='none';}
+</script>
+
+<!-- ════ FIREBASE MODULE ════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCDEW_xLoF34GvnCbPOD3XrEPImK36KWgA",authDomain:"planificacion-familiar-88065.firebaseapp.com",projectId:"planificacion-familiar-88065",storageBucket:"planificacion-familiar-88065.firebasestorage.app",messagingSenderId:"999785369114",appId:"1:999785369114:web:d2bdd68b4e5cc97badcba3"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+function userKey(nombre){return(nombre||'sin_nombre').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,40)||'sin_nombre';}
+function setCS(msg,type){const el=document.getElementById('cloud-status');if(!el)return;el.className='cloud-status'+(type?' '+type:'');el.innerHTML=msg;}
+function setCSBtns(d){['btn-upload','btn-download'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=d;});}
+window.confirmUpload=function(){const p=window.loadProfile?window.loadProfile():{};if(!p.nombre){window.showModal&&window.showModal('Perfil sin configurar','Configura tu nombre primero.',null);return;}let lr=[];try{lr=JSON.parse(localStorage.getItem('minsal_pf_v2'))||[];}catch(e){}if(!lr.length){window.showModal&&window.showModal('Sin datos','No hay fichas guardadas.',null);return;}const k=userKey(p.nombre);window.showModal&&window.showModal('Subir a la nube',`Se subirán <strong>${lr.length} fichas</strong> de <strong>${p.nombre}</strong>.<br><br>¿Continuar?`,async()=>{setCSBtns(true);setCS('<span class="cspin">↻</span>&nbsp;Subiendo…','loading');try{await setDoc(doc(db,'usuarios_pf',k),{records:lr,nombre:p.nombre,cargo:p.cargo||'',ucsf:p.ucsf||'',updatedAt:new Date().toISOString(),count:lr.length});setCS('✓ '+lr.length+' fichas subidas · '+new Date().toLocaleTimeString('es-SV'),'ok');window.showToast&&window.showToast('✓ '+lr.length+' fichas subidas','success');}catch(err){setCS('✗ Error: '+(err.message||'sin conexión'),'err');window.showToast&&window.showToast('✗ Error al subir','error');}finally{setCSBtns(false);}});};
+window.confirmDownload=function(){const p=window.loadProfile?window.loadProfile():{};if(!p.nombre){window.showModal&&window.showModal('Perfil sin configurar','Configura tu nombre primero.',null);return;}let lr=[];try{lr=JSON.parse(localStorage.getItem('minsal_pf_v2'))||[];}catch(e){}const k=userKey(p.nombre);const lm=lr.length>0?'Este dispositivo tiene <strong>'+lr.length+' fichas locales</strong> que serán reemplazadas.':'El dispositivo está vacío.';window.showModal&&window.showModal('Bajar de la nube','Espacio: <em>usuarios_pf/'+k+'</em><br><br>'+lm+'<br><br>¿Continuar?',async()=>{setCSBtns(true);setCS('<span class="cspin">↻</span>&nbsp;Descargando…','loading');try{const snap=await getDoc(doc(db,'usuarios_pf',k));if(!snap.exists()){setCS('⚠ No encontré tus datos en la nube.','err');window.showToast&&window.showToast('⚠ Sin datos en la nube','error');setCSBtns(false);return;}const data=snap.data();const cr=data.records||[];if(!cr.length){setCS('⚠ Nube vacía.','err');setCSBtns(false);return;}localStorage.setItem('minsal_pf_v2',JSON.stringify(cr));if(window.reloadFromStorage)window.reloadFromStorage();const ua=data.updatedAt?new Date(data.updatedAt).toLocaleString('es-SV'):'—';setCS('✓ '+cr.length+' fichas descargadas · Subido: '+ua,'ok');window.showToast&&window.showToast('✓ '+cr.length+' fichas descargadas','success');}catch(err){setCS('✗ Error: '+(err.message||'sin conexión'),'err');window.showToast&&window.showToast('✗ Error al bajar','error');}finally{setCSBtns(false);}});};
+</script>
+</body>
+</html>
