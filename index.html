@@ -469,6 +469,76 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .vac-date-input input:focus{outline:none;border-color:var(--teal)}
 .vac-summary{background:linear-gradient(135deg,#e0f7fa,#b2ebf2);border-radius:9px;padding:.5rem .72rem;font-size:.68rem;color:var(--teal);font-weight:700;border:1px solid var(--teal3);display:flex;align-items:center;gap:.5rem}
 .vac-summary svg{width:13px;height:13px;flex-shrink:0}
+
+/* ══ PESTAÑAS PACIENTES / VACUNAS ══ */
+.list-tabs{display:flex;gap:0;padding:.55rem .9rem 0;background:var(--bg);flex-shrink:0;border-bottom:2px solid var(--border);}
+.list-tab{flex:1;padding:.52rem .4rem;border:none;background:none;font-family:inherit;font-size:.78rem;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.35rem;}
+.list-tab svg{width:14px;height:14px;}
+.list-tab.active{color:var(--purple2);border-bottom-color:var(--purple2);}
+.list-tab:hover:not(.active){color:var(--text);background:rgba(0,0,0,.03);}
+
+/* ══ LIBRO DE VACUNAS ══ */
+#vac-book{display:none;padding:.7rem .9rem 1.2rem;}
+#vac-book.active{display:block;}
+.vb-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.85rem;}
+.vb-card{border-radius:11px;padding:.55rem .5rem;text-align:center;border:1.5px solid;}
+.vb-card.vph{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-color:#ce93d8;color:#6a1b9a;}
+.vb-card.dt{background:linear-gradient(135deg,#e8eaf6,#c5cae9);border-color:#9fa8da;color:#283593;}
+.vb-card.neum{background:linear-gradient(135deg,#e0f2f1,#b2dfdb);border-color:#80cbc4;color:#004d40;}
+.vb-card-num{font-size:1.5rem;font-weight:900;line-height:1;}
+.vb-card-lbl{font-size:.6rem;font-weight:700;margin-top:2px;opacity:.85;}
+.vb-card-sub{font-size:.55rem;opacity:.65;margin-top:1px;}
+.vb-patient{background:var(--white);border:1.5px solid var(--border);border-radius:12px;margin-bottom:.6rem;overflow:hidden;}
+.vb-patient-header{display:flex;align-items:center;gap:.6rem;padding:.55rem .75rem;background:linear-gradient(135deg,#f8f0ff,#fce4ec);}
+.vb-patient-num{font-size:.62rem;font-weight:800;color:var(--purple2);background:rgba(123,45,139,.1);border-radius:6px;padding:.1rem .38rem;}
+.vb-patient-name{font-weight:800;font-size:.85rem;color:var(--text);flex:1;}
+.vb-patient-age{font-size:.7rem;color:var(--muted);}
+.vb-vaccines{padding:.5rem .75rem .6rem;display:flex;flex-direction:column;gap:.45rem;}
+.vb-vac-row{display:flex;align-items:flex-start;gap:.55rem;}
+.vb-vac-icon{width:26px;height:26px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.75rem;}
+.vb-vac-icon.vph{background:linear-gradient(135deg,#9c27b0,#ce93d8);}
+.vb-vac-icon.dt{background:linear-gradient(135deg,#3949ab,#7986cb);}
+.vb-vac-icon.neum{background:linear-gradient(135deg,#00796b,#4db6ac);}
+.vb-vac-info{flex:1;min-width:0;}
+.vb-vac-name{font-size:.7rem;font-weight:800;color:var(--text);margin-bottom:.22rem;}
+.vb-doses-row{display:flex;flex-wrap:wrap;gap:.28rem;}
+.vb-dose-chip{font-size:.6rem;font-weight:700;padding:.18rem .45rem;border-radius:20px;white-space:nowrap;}
+.vb-dose-chip.done{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;}
+.vb-dose-chip.pending{background:#f5f5f5;color:#9e9e9e;border:1px solid #e0e0e0;}
+.vb-complete-badge{font-size:.58rem;font-weight:800;padding:.15rem .5rem;border-radius:20px;background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;margin-left:auto;white-space:nowrap;}
+.vb-incomplete-badge{font-size:.58rem;font-weight:800;padding:.15rem .5rem;border-radius:20px;background:#fff3e0;color:#e65100;border:1px solid #ffcc80;margin-left:auto;white-space:nowrap;}
+.vb-search{display:flex;align-items:center;gap:.5rem;background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:.38rem .65rem;margin-bottom:.65rem;}
+.vb-search svg{width:14px;height:14px;color:var(--muted);flex-shrink:0;}
+.vb-search input{border:none;background:none;font-family:inherit;font-size:.82rem;color:var(--text);flex:1;outline:none;}
+.vb-empty{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.82rem;}
+
+/* ══ LIBRO VAC: botones y modal edición ══ */
+.vb-patient-actions{display:flex;gap:.4rem;padding:.45rem .75rem;background:var(--bg);border-top:1px solid var(--border);}
+.vb-action-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.42rem .5rem;border:none;border-radius:8px;font-family:inherit;font-size:.72rem;font-weight:800;cursor:pointer;transition:all .18s;}
+.vb-action-btn svg{width:14px;height:14px;flex-shrink:0}
+.vb-action-btn.print{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#2e7d32;}
+.vb-action-btn.edit{background:linear-gradient(135deg,#e8eaf6,#c5cae9);color:#283593;}
+.vb-action-btn:hover{filter:brightness(.93);transform:translateY(-1px)}
+
+/* Modal edición vacunas */
+#vac-edit-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;display:none;align-items:flex-end;justify-content:center;}
+#vac-edit-modal-bg.open{display:flex;}
+#vac-edit-modal{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;padding:1.2rem 1.1rem 2rem;}
+.vem-title{font-size:1rem;font-weight:800;color:var(--purple2);margin-bottom:.2rem;}
+.vem-subtitle{font-size:.72rem;color:var(--muted);margin-bottom:1rem;}
+.vem-vac-block{margin-bottom:1rem;}
+.vem-vac-label{font-size:.72rem;font-weight:800;color:var(--text);margin-bottom:.45rem;display:flex;align-items:center;gap:.4rem;}
+.vem-doses{display:flex;gap:.4rem;flex-wrap:wrap;}
+.vem-dose{display:flex;flex-direction:column;align-items:center;gap:.2rem;flex:1;min-width:60px;}
+.vem-dose-btn{width:100%;height:42px;border-radius:9px;border:2px solid var(--border);background:var(--white);cursor:pointer;font-family:inherit;font-size:.6rem;font-weight:800;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transition:all .2s;position:relative;}
+.vem-dose-btn.applied{background:linear-gradient(135deg,var(--teal),var(--teal2));border-color:var(--teal);color:#fff;}
+.vem-dose-btn.applied::after{content:'✓';position:absolute;top:-5px;right:-5px;background:#fff;color:var(--teal);border:1.5px solid var(--teal);border-radius:50%;width:14px;height:14px;font-size:.55rem;display:flex;align-items:center;justify-content:center;font-weight:900;}
+.vem-dose-date{font-size:.56rem;color:var(--muted);text-align:center;min-height:.7rem;}
+.vem-date-wrap{display:none;margin-top:.15rem;}
+.vem-dose.show-input .vem-date-wrap{display:block;}
+.vem-date-wrap input{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:.26rem .35rem;font-size:.6rem;font-family:inherit;color:var(--text);}
+.vem-date-wrap input:focus{outline:none;border-color:var(--teal);}
+.vem-actions{display:flex;gap:.6rem;margin-top:1.1rem;}
 @media(max-width:640px){
   .fg.c2,.fg.c3{grid-template-columns:1fr}.dash-grid{grid-template-columns:repeat(2,1fr)}.home-title{font-size:1.2rem}.scroller{padding:.75rem}.form-body{padding:.82rem}.fs-title{margin-left:-.82rem;padding-left:.82rem}.method-selector{grid-template-columns:1fr 1fr}.month-cards-grid{grid-template-columns:repeat(2,1fr)}.topbar{gap:.36rem}.topbar-btn span{display:none}.f-row-checks{grid-template-columns:1fr}
 }
@@ -586,9 +656,27 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
     <button class="topbar-btn teal" onclick="printListado()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>Imprimir</span></button>
     <button class="topbar-btn" style="background:linear-gradient(135deg,#00796b,#26a69a);color:#fff" onclick="printVacunacion()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/><path d="M14 4l6 6"/><path d="M8 10l6 6"/><line x1="8" y1="10" x2="14" y2="16"/><path d="M10 8l-2 2 6 6 2-2"/></svg><span>Vacunas</span></button>
   </div>
+  <div class="list-tabs">
+    <button class="list-tab active" id="tab-pacientes" onclick="switchListTab('pacientes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Pacientes MEF
+    </button>
+    <button class="list-tab" id="tab-vacunas" onclick="switchListTab('vacunas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/><path d="M14 4l6 6"/><path d="M8 10l6 6"/><line x1="8" y1="10" x2="14" y2="16"/><path d="M10 8l-2 2 6 6 2-2"/></svg>
+      Libro de Vacunas
+    </button>
+  </div>
   <div class="scroller" id="list-scroller">
     <div id="list-summary-cards"></div>
     <div id="list-container"></div>
+  </div>
+  <div class="scroller" id="vac-book">
+    <div class="vb-summary" id="vb-summary-cards"></div>
+    <div class="vb-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="vb-search-input" placeholder="Buscar paciente…" oninput="renderVacBook()"/>
+    </div>
+    <div id="vb-list"></div>
   </div>
 </div>
 
@@ -787,7 +875,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
         <div class="vac-block">
           <div class="vac-label">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-            Vacuna VPH — 2 dosis
+            Vacuna VPH — 1 dosis + refuerzo
           </div>
           <div class="vac-doses" id="vph-doses-container">
             <div class="vac-dose" id="vph-dose-1">
@@ -802,8 +890,8 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
             </div>
             <div class="vac-dose" id="vph-dose-2">
               <button type="button" class="vac-dose-btn" id="vph-btn-2" onclick="toggleVacDose('vph',2)">
-                <span class="vac-dose-num">2</span>
-                <span class="vac-dose-lbl">Dosis</span>
+                <span class="vac-dose-num">R</span>
+                <span class="vac-dose-lbl">Refuerzo</span>
               </button>
               <div class="vac-dose-date" id="vph-date-lbl-2"></div>
               <div class="vac-date-input" id="vph-input-wrap-2">
@@ -976,7 +1064,14 @@ function goTo(sid,mode){
   cur.classList.remove('active');cur.classList.add('slide-out');setTimeout(()=>cur.classList.remove('slide-out'),300);
   next.classList.add('active');currentScreen=sid;
   const s=next.querySelector('.scroller');if(s)s.scrollTop=0;
-  if(sid==='screen-list')renderList();
+  if(sid==='screen-list'){
+    _activeListTab='pacientes';
+    document.getElementById('tab-pacientes').classList.add('active');
+    document.getElementById('tab-vacunas').classList.remove('active');
+    document.getElementById('list-scroller').style.display='';
+    document.getElementById('vac-book').classList.remove('active');
+    renderList();
+  }
   if(sid==='screen-alerts')renderAlerts();
   if(sid==='screen-stats')renderStats();
   if(sid==='screen-form'){if(mode==='new')initNewForm();document.getElementById('form-topbar-title').textContent=mode==='new'?'Nueva Paciente':'Editar Paciente';}
@@ -1117,14 +1212,12 @@ function renderVacUI(){
   if(vphSum && vphTxt){
     if(vphApplied > 0){
       vphSum.style.display='flex';
-      vphTxt.textContent = vphApplied===vphTotal
-        ? '✓ Esquema VPH completo ('+vphApplied+'/'+vphTotal+' dosis)'
-        : 'Esquema VPH incompleto — '+vphApplied+'/'+vphTotal+' dosis aplicadas';
-      vphSum.style.background = vphApplied===vphTotal
-        ? 'linear-gradient(135deg,#e8f5e9,#c8e6c9)'
-        : 'linear-gradient(135deg,#fff3e0,#ffe0b2)';
-      vphSum.style.borderColor = vphApplied===vphTotal ? '#a5d6a7' : '#ffcc80';
-      vphSum.style.color = vphApplied===vphTotal ? '#2e7d32' : '#e65100';
+      vphTxt.textContent = vphApplied===2
+        ? '✓ Esquema VPH completo + refuerzo (2/2 dosis)'
+        : '✓ Esquema VPH completo — dosis inicial aplicada · 2ª dosis como refuerzo';
+      vphSum.style.background = 'linear-gradient(135deg,#e8f5e9,#c8e6c9)';
+      vphSum.style.borderColor = '#a5d6a7';
+      vphSum.style.color = '#2e7d32';
     } else {
       vphSum.style.display='none';
     }
@@ -1492,6 +1585,233 @@ function toggleFolder(key){
 }
 
 /* ═══ PRINT INDIVIDUAL FICHA ═══ */
+
+/* ═══ MODAL EDICIÓN VACUNAS DESDE LIBRO ═══ */
+let _vemId = null;
+let _vemState = {vph:{},dt:{},neum:{}};
+
+function openVacEditModal(id){
+  const rec = records.find(r=>r.id===id); if(!rec) return;
+  _vemId = id;
+  _vemState = {
+    vph:  JSON.parse(JSON.stringify(rec.vacVph  || {1:null,2:null})),
+    dt:   JSON.parse(JSON.stringify(rec.vacDt   || {1:null,2:null,3:null,4:null,5:null})),
+    neum: JSON.parse(JSON.stringify(rec.vacNeum || {1:null,2:null}))
+  };
+  document.getElementById('vem-patient-name').textContent = rec.nombre || '—';
+  renderVemUI();
+  document.getElementById('vac-edit-modal-bg').classList.add('open');
+}
+
+function closeVacEditModal(){
+  document.getElementById('vac-edit-modal-bg').classList.remove('open');
+  _vemId = null;
+}
+
+function renderVemUI(){
+  const fmtShort = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '';
+  // VPH
+  [1,2].forEach(i=>{
+    const date = _vemState.vph[i];
+    const btn = document.getElementById('vem-vph-btn-'+i);
+    const lbl = document.getElementById('vem-vph-lbl-'+i);
+    const inp = document.getElementById('vem-vph-date-'+i);
+    if(btn) btn.classList.toggle('applied', !!date);
+    if(lbl) lbl.textContent = fmtShort(date);
+    if(inp && date) inp.value = date;
+    const wrap = document.getElementById('vem-vph-'+i);
+    if(wrap) wrap.classList.remove('show-input');
+  });
+  // DT
+  [1,2,3,4,5].forEach(i=>{
+    const date = _vemState.dt[i];
+    const btn = document.getElementById('vem-dt-btn-'+i);
+    const lbl = document.getElementById('vem-dt-lbl-'+i);
+    const inp = document.getElementById('vem-dt-date-'+i);
+    if(btn) btn.classList.toggle('applied', !!date);
+    if(lbl) lbl.textContent = fmtShort(date);
+    if(inp && date) inp.value = date;
+    const wrap = document.getElementById('vem-dt-'+i);
+    if(wrap) wrap.classList.remove('show-input');
+  });
+  // Neumococo
+  [1,2].forEach(i=>{
+    const date = _vemState.neum[i];
+    const btn = document.getElementById('vem-neum-btn-'+i);
+    const lbl = document.getElementById('vem-neum-lbl-'+i);
+    const inp = document.getElementById('vem-neum-date-'+i);
+    if(btn) btn.classList.toggle('applied', !!date);
+    if(lbl) lbl.textContent = fmtShort(date);
+    if(inp && date) inp.value = date;
+    const wrap = document.getElementById('vem-neum-'+i);
+    if(wrap) wrap.classList.remove('show-input');
+  });
+}
+
+function toggleVemDose(vac, num){
+  const current = _vemState[vac][num];
+  const wrapEl = document.getElementById('vem-'+vac+'-'+num);
+  if(current){
+    _vemState[vac][num] = null;
+    document.getElementById('vem-'+vac+'-btn-'+num).classList.remove('applied');
+    if(wrapEl) wrapEl.classList.remove('show-input');
+  } else {
+    if(wrapEl) wrapEl.classList.add('show-input');
+    const dateEl = document.getElementById('vem-'+vac+'-date-'+num);
+    if(dateEl){ dateEl.value=''; setTimeout(()=>dateEl.focus(),80); }
+  }
+}
+
+function setVemDate(vac, num){
+  const dateEl = document.getElementById('vem-'+vac+'-date-'+num);
+  if(!dateEl || !dateEl.value) return;
+  _vemState[vac][num] = dateEl.value;
+  const btn = document.getElementById('vem-'+vac+'-btn-'+num);
+  if(btn) btn.classList.add('applied');
+  const wrapEl = document.getElementById('vem-'+vac+'-'+num);
+  if(wrapEl) wrapEl.classList.remove('show-input');
+  const lbl = document.getElementById('vem-'+vac+'-lbl-'+num);
+  if(lbl) lbl.textContent = new Date(dateEl.value+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'});
+}
+
+function saveVacEdit(){
+  if(!_vemId) return;
+  const idx = records.findIndex(r=>r.id===_vemId);
+  if(idx<0) return;
+  records[idx].vacVph  = {..._vemState.vph};
+  records[idx].vacDt   = {..._vemState.dt};
+  records[idx].vacNeum = {..._vemState.neum};
+  records[idx].updatedAt = new Date().toISOString();
+  saveRecords();
+  showToast('✓ Vacunas actualizadas','success');
+  closeVacEditModal();
+  renderVacBook();
+  // Also sync to cloud if available
+  if(typeof uploadToCloud==='function') uploadToCloud();
+}
+
+/* ═══ IMPRIMIR TARJETA VACUNAS INDIVIDUAL ═══ */
+function printTarjetaVacunas(id){
+  const r = records.find(x=>x.id===id); if(!r) return;
+  const profile = loadProfile();
+  const ucsf = profile.ucsf||'UCSF';
+  const todayStr = new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const fmt = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}) : '—';
+
+  const vph  = r.vacVph  || {};
+  const dt   = r.vacDt   || {};
+  const neum = r.vacNeum || {};
+
+  const doseRow = (label, date) => `
+    <tr>
+      <td>${label}</td>
+      <td class="${date?'done':'pending'}">${date ? fmt(date) : 'Pendiente'}</td>
+      <td class="${date?'done':'pending'}">${date ? '✓ Aplicada' : '—'}</td>
+    </tr>`;
+
+  const dtApplied = [1,2,3,4,5].filter(i=>dt[i]).length;
+  const vphOk  = !!vph[1];
+  const dtOk   = dtApplied >= 3;
+  const neumOk = !!neum[1];
+
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>
+  <title>Tarjeta Vacunas · ${escHtml(r.nombre||'')}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    @page{size:Letter portrait;margin:15mm}
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{font-family:'Nunito',sans-serif;font-size:10px;color:#2d1a3a;max-width:180mm;margin:0 auto}
+    .header{text-align:center;border-bottom:3px solid #00796b;padding-bottom:10px;margin-bottom:14px}
+    .header h1{font-size:15px;font-weight:900;color:#00796b;margin-bottom:2px}
+    .header p{font-size:8px;color:#8e6fa0}
+    .patient-card{background:linear-gradient(135deg,#f8f0ff,#fce4ec);border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+    .patient-name{font-size:14px;font-weight:900;color:#5c1a6e}
+    .patient-meta{font-size:8px;color:#8e6fa0;margin-top:3px}
+    .patient-num{font-size:11px;font-weight:800;color:#c2185b}
+    .vac-section{margin-bottom:14px}
+    .vac-title{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#00796b,#26a69a);color:#fff;padding:5px 10px;border-radius:7px 7px 0 0;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+    .badge-ok{background:rgba(255,255,255,.25);border-radius:10px;padding:2px 8px;font-size:8px}
+    .badge-no{background:rgba(255,100,0,.35);border-radius:10px;padding:2px 8px;font-size:8px}
+    table{width:100%;border-collapse:collapse}
+    th{background:#e0f2f1;color:#00695c;font-size:8px;font-weight:800;text-transform:uppercase;padding:4px 8px;border:1px solid #b2dfdb;text-align:left}
+    td{padding:4px 8px;border:1px solid #e0e0e0;font-size:9px;vertical-align:middle}
+    tr:nth-child(even) td{background:#f9f9f9}
+    td.done{color:#2e7d32;font-weight:700}
+    td.pending{color:#9e9e9e}
+    .summary-bar{display:flex;gap:8px;margin-top:10px}
+    .sum-item{flex:1;border-radius:8px;padding:6px 8px;text-align:center;border:1.5px solid}
+    .sum-item.ok{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32}
+    .sum-item.partial{background:#e3f2fd;border-color:#90caf9;color:#1565c0}
+    .sum-item.no{background:#fafafa;border-color:#e0e0e0;color:#9e9e9e}
+    .sum-num{font-size:18px;font-weight:900;line-height:1}
+    .sum-lbl{font-size:7px;font-weight:700;margin-top:2px}
+    .firm-row{display:flex;gap:20mm;margin-top:16mm}
+    .firm{flex:1;border-top:1px solid #bbb;padding-top:4px;font-size:7.5px;color:#8e6fa0;text-align:center}
+    footer{margin-top:10px;border-top:1px solid #e0e0e0;padding-top:5px;font-size:7.5px;color:#8e6fa0;display:flex;justify-content:space-between}
+  </style></head><body>
+  <div class="header">
+    <h1>💉 Tarjeta de Vacunación MEF</h1>
+    <p>${escHtml(ucsf)} · MINSAL El Salvador · ${todayStr}</p>
+  </div>
+
+  <div class="patient-card">
+    <div>
+      <div class="patient-name">${escHtml(r.nombre||'—')}</div>
+      <div class="patient-meta">
+        ${r.nacimiento?'F. Nac.: '+fmt(r.nacimiento)+' · ':''}
+        ${r.edad?'Edad: '+r.edad+' años · ':''}
+        ${r.dui?'DUI: '+escHtml(r.dui):''}
+      </div>
+      <div class="patient-meta">${r.direccion?'📍 '+escHtml(r.direccion):''}</div>
+    </div>
+    <div class="patient-num">Ficha Nº ${String(r.num||'').padStart(3,'0')}</div>
+  </div>
+
+  <div class="vac-section">
+    <div class="vac-title">💉 Vacuna VPH <span class="${vphOk?'badge-ok':'badge-no'}">${vphOk?'✓ Completo':'Sin iniciar'}</span></div>
+    <table><thead><tr><th>Dosis</th><th>Fecha de aplicación</th><th>Estado</th></tr></thead><tbody>
+      ${doseRow('Dosis inicial (1ª)', vph[1])}
+      ${doseRow('Refuerzo (2ª)', vph[2])}
+    </tbody></table>
+  </div>
+
+  <div class="vac-section">
+    <div class="vac-title">💉 Vacuna DT Adulto <span class="${dtOk?'badge-ok':'badge-no'}">${dtOk?'✓ Completo ('+dtApplied+'d)':dtApplied+'/3 dosis'}</span></div>
+    <table><thead><tr><th>Dosis</th><th>Fecha de aplicación</th><th>Estado</th></tr></thead><tbody>
+      ${doseRow('1ª Dosis', dt[1])}
+      ${doseRow('2ª Dosis', dt[2])}
+      ${doseRow('3ª Dosis (completa esquema)', dt[3])}
+      ${doseRow('4ª Dosis (refuerzo)', dt[4])}
+      ${doseRow('5ª Dosis (refuerzo)', dt[5])}
+    </tbody></table>
+  </div>
+
+  <div class="vac-section">
+    <div class="vac-title">💉 Vacuna Neumococo 23V <span class="${neumOk?'badge-ok':'badge-no'}">${neum[1]&&neum[2]?'✓ Completo':neum[1]?'✓ Dosis aplicada':'Sin iniciar'}</span></div>
+    <table><thead><tr><th>Dosis</th><th>Fecha de aplicación</th><th>Estado</th></tr></thead><tbody>
+      ${doseRow('Dosis inicial', neum[1])}
+      ${doseRow('Refuerzo (5 años)', neum[2])}
+    </tbody></table>
+  </div>
+
+  <div class="summary-bar">
+    <div class="sum-item ${vphOk?'ok':'no'}"><div class="sum-num">${[1,2].filter(i=>vph[i]).length}/1</div><div class="sum-lbl">VPH</div></div>
+    <div class="sum-item ${dtOk?'ok':dtApplied>0?'partial':'no'}"><div class="sum-num">${dtApplied}/3</div><div class="sum-lbl">DT Adulto</div></div>
+    <div class="sum-item ${neum[1]&&neum[2]?'ok':neum[1]?'partial':'no'}"><div class="sum-num">${[1,2].filter(i=>neum[i]).length}/2</div><div class="sum-lbl">Neumococo</div></div>
+  </div>
+
+  <div class="firm-row">
+    <div class="firm">Firma del promotor de salud</div>
+    <div class="firm">Firma / huella de la paciente</div>
+  </div>
+
+  <footer><span>Seguimiento Integral MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>${todayStr}</span></footer>
+  </body></html>`;
+
+  const w = window.open('','_blank','width=900,height=700');
+  if(w){ w.document.write(html); w.document.close(); setTimeout(()=>w.print(),700); }
+}
+
 function printFicha(id){
   const r=records.find(x=>x.id===id);if(!r)return;
   const profile=loadProfile();
@@ -1574,8 +1894,8 @@ function printFicha(id){
   </div>
   <div class="section"><div class="section-title">6. Esquema de Vacunación</div>
     <div class="grid">
-      <div class="field"><label>Vacuna VPH (2 dosis)</label><span style="min-height:16px">${
-        [1,2].map(i=>{const d=(r.vacVph||{})[i];return d?'D'+i+': '+fmt(d):'D'+i+': —';}).join(' · ')
+      <div class="field"><label>Vacuna VPH (1 dosis + refuerzo)</label><span style="min-height:16px">${
+        [{i:1,l:'Dosis'},{i:2,l:'Refuerzo'}].map(x=>{const d=(r.vacVph||{})[x.i];return d?x.l+': '+fmt(d):x.l+': —';}).join(' · ')
       }</span></div>
       <div class="field"><label>Vacuna DT Adulto (5 dosis · completo: 3)</label><span style="min-height:16px">${
         [1,2,3,4,5].map(i=>{const d=(r.vacDt||{})[i];return d?'D'+i+': '+fmt(d):'D'+i+': —';}).join(' · ')
@@ -1622,6 +1942,131 @@ function lfItemHTML(r){
       <button class="lf-icon-btn del" title="Eliminar" onclick="confirmDelete('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
     </div>
   </div>`;
+}
+
+
+/* ═══ LIBRO DE VACUNAS ═══ */
+let _activeListTab = 'pacientes';
+
+function switchListTab(tab){
+  _activeListTab = tab;
+  document.getElementById('tab-pacientes').classList.toggle('active', tab==='pacientes');
+  document.getElementById('tab-vacunas').classList.toggle('active', tab==='vacunas');
+  document.getElementById('list-scroller').style.display = tab==='pacientes' ? '' : 'none';
+  const vb = document.getElementById('vac-book');
+  if(tab==='vacunas'){ vb.classList.add('active'); renderVacBook(); }
+  else { vb.classList.remove('active'); }
+}
+
+function renderVacBook(){
+  const search = (document.getElementById('vb-search-input')?.value||'').toLowerCase();
+  const recs = [...records]
+    .filter(r=>!search || (r.nombre||'').toLowerCase().includes(search))
+    .sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+
+  // Summary cards
+  const vphComplete = records.filter(r=>!!((r.vacVph||{})[1])).length;
+  const dtComplete  = records.filter(r=>[1,2,3,4,5].filter(i=>(r.vacDt||{})[i]).length>=3).length;
+  const neumDose    = records.filter(r=>!!((r.vacNeum||{})[1])).length;
+  document.getElementById('vb-summary-cards').innerHTML =
+    '<div class="vb-card vph"><div class="vb-card-num">'+vphComplete+'</div><div class="vb-card-lbl">💉 VPH</div><div class="vb-card-sub">de '+records.length+' pacientes</div></div>'+
+    '<div class="vb-card dt"><div class="vb-card-num">'+dtComplete+'</div><div class="vb-card-lbl">💉 DT Adulto</div><div class="vb-card-sub">esquema completo</div></div>'+
+    '<div class="vb-card neum"><div class="vb-card-num">'+neumDose+'</div><div class="vb-card-lbl">💉 Neumococo</div><div class="vb-card-sub">con dosis inicial</div></div>';
+
+  if(!recs.length){
+    document.getElementById('vb-list').innerHTML='<div class="vb-empty">'+
+      (search?'Sin resultados para "'+escHtml(search)+'"':'No hay pacientes registradas')+'</div>';
+    return;
+  }
+
+  const fmtD = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}) : null;
+
+  const doseChip = (label, date) => date
+    ? '<span class="vb-dose-chip done">'+label+': '+fmtD(date)+'</span>'
+    : '<span class="vb-dose-chip pending">'+label+': —</span>';
+
+  const statusBadge = (complete, label) => complete
+    ? '<span class="vb-complete-badge">✓ '+label+'</span>'
+    : '<span class="vb-incomplete-badge">Incompleto</span>';
+
+  let html = '';
+  recs.forEach(r=>{
+    const vph  = r.vacVph  || {};
+    const dt   = r.vacDt   || {};
+    const neum = r.vacNeum || {};
+
+    const vphOk  = !!vph[1];
+    const dtOk   = [1,2,3,4,5].filter(i=>dt[i]).length >= 3;
+    const neumOk = !!neum[1];
+
+    const hasAny = vph[1]||vph[2]||dt[1]||dt[2]||dt[3]||dt[4]||dt[5]||neum[1]||neum[2];
+
+    html += '<div class="vb-patient">'
+      + '<div class="vb-patient-header">'
+      +   '<span class="vb-patient-num">Nº '+String(r.num||'').padStart(3,'0')+'</span>'
+      +   '<span class="vb-patient-name">'+escHtml(r.nombre||'—')+'</span>'
+      +   '<span class="vb-patient-age">'+(r.edad?r.edad+' años':'')+'</span>'
+      + '</div>'
+      + '<div class="vb-vaccines">';
+
+    // VPH row
+    html += '<div class="vb-vac-row">'
+      + '<div class="vb-vac-icon vph">💉</div>'
+      + '<div class="vb-vac-info">'
+      +   '<div class="vb-vac-name" style="display:flex;align-items:center;gap:.4rem">VPH'
+      +     (vphOk ? statusBadge(true,'Completo') : statusBadge(false,''))
+      +   '</div>'
+      +   '<div class="vb-doses-row">'
+      +     doseChip('Dosis', vph[1])
+      +     doseChip('Refuerzo', vph[2])
+      +   '</div>'
+      + '</div></div>';
+
+    // DT row
+    const dtApplied = [1,2,3,4,5].filter(i=>dt[i]).length;
+    html += '<div class="vb-vac-row">'
+      + '<div class="vb-vac-icon dt">💉</div>'
+      + '<div class="vb-vac-info">'
+      +   '<div class="vb-vac-name" style="display:flex;align-items:center;gap:.4rem">DT Adulto'
+      +     statusBadge(dtOk, dtOk ? 'Completo ('+dtApplied+'d)' : '')
+      +   '</div>'
+      +   '<div class="vb-doses-row">'
+      +     [1,2,3,4,5].map(i=>doseChip('D'+i, dt[i]||null)).join('')
+      +   '</div>'
+      + '</div></div>';
+
+    // Neumococo row
+    html += '<div class="vb-vac-row">'
+      + '<div class="vb-vac-icon neum">💉</div>'
+      + '<div class="vb-vac-info">'
+      +   '<div class="vb-vac-name" style="display:flex;align-items:center;gap:.4rem">Neumococo 23V'
+      +     statusBadge(neum[1]&&neum[2],'Completo')
+      +   '</div>'
+      +   '<div class="vb-doses-row">'
+      +     doseChip('Dosis', neum[1]||null)
+      +     doseChip('Refuerzo', neum[2]||null)
+      +   '</div>'
+      + '</div></div>';
+
+    html += '</div>'  // /vb-vaccines
+      + '<div class="vb-patient-actions">'
+      +   '<button class="vb-action-btn edit" onclick="openVacEditModal(\''+r.id+'\')">'
+      +     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'
+      +     'Editar vacunas'
+      +   '</button>'
+      +   '<button class="vb-action-btn print" onclick="printTarjetaVacunas(\''+r.id+'\')">'
+      +     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>'
+      +     'Imprimir tarjeta'
+      +   '</button>'
+      +   '<button class="vb-action-btn" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);color:#880e4f" onclick="openRecord(\''+r.id+'\')">'
+      +     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>'
+      +     'Ver ficha MEF'
+      +   '</button>'
+      + '</div>'
+      + '</div>'; // /vb-patient
+  });
+
+  document.getElementById('vb-list').innerHTML = html;
 }
 
 function renderList(){
@@ -1807,10 +2252,10 @@ function printVacunacion(){
     return '<td style="background:#fff3e0;color:#e65100;font-weight:700;text-align:center">'+applied+'/3</td>';
   };
   const vphStatus=(r)=>{
-    const applied=[1,2].filter(i=>(r.vacVph||{})[i]).length;
-    if(applied===0) return '<td style="color:#bbb;text-align:center">—</td>';
-    if(applied===2) return '<td style="background:#e8f5e9;color:#2e7d32;font-weight:800;text-align:center">✓ Completo</td>';
-    return '<td style="background:#fff3e0;color:#e65100;font-weight:700;text-align:center">1/2</td>';
+    const d1=(r.vacVph||{})[1]; const d2=(r.vacVph||{})[2];
+    if(!d1) return '<td style="color:#bbb;text-align:center">—</td>';
+    if(d2) return '<td style="background:#e8f5e9;color:#2e7d32;font-weight:800;text-align:center">✓ +Refuerzo</td>';
+    return '<td style="background:#e8f5e9;color:#2e7d32;font-weight:800;text-align:center">✓ Completo</td>';
   };
   const neumStatus=(r)=>{
     const d1=(r.vacNeum||{})[1]; const d2=(r.vacNeum||{})[2];
@@ -1882,7 +2327,7 @@ function printVacunacion(){
   </div>
 
   <div class="summary-row">
-    <div class="sum-card"><div class="sum-num">${recs.filter(r=>[1,2].filter(i=>(r.vacVph||{})[i]).length===2).length}</div><div class="sum-lbl">VPH completo</div></div>
+    <div class="sum-card"><div class="sum-num">${recs.filter(r=>!!((r.vacVph||{})[1])).length}</div><div class="sum-lbl">VPH completo</div></div>
     <div class="sum-card"><div class="sum-num">${recs.filter(r=>[1,2,3,4,5].filter(i=>(r.vacDt||{})[i]).length>=3).length}</div><div class="sum-lbl">DT completo (≥3d)</div></div>
     <div class="sum-card"><div class="sum-num">${recs.filter(r=>!!((r.vacNeum||{})[1])).length}</div><div class="sum-lbl">Neumococo dosis</div></div>
     <div class="sum-card"><div class="sum-num">${recs.filter(r=>!!((r.vacNeum||{})[2])).length}</div><div class="sum-lbl">Neumococo + refuerzo</div></div>
@@ -1958,6 +2403,55 @@ updateHomeStats();
 applyProfile(loadProfile());
 if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone){localStorage.setItem('pwa_pf_shown','1');const fb=document.getElementById('fab-install');if(fb)fb.style.display='none';}
 </script>
+
+
+<!-- ════ MODAL EDICIÓN VACUNAS ════ -->
+<div id="vac-edit-modal-bg" onclick="if(event.target===this)closeVacEditModal()">
+  <div id="vac-edit-modal">
+    <div class="vem-title">💉 Editar esquema de vacunación</div>
+    <div class="vem-subtitle" id="vem-patient-name">Paciente</div>
+
+    <div class="vem-vac-block">
+      <div class="vem-vac-label">💉 Vacuna VPH — 1 dosis + refuerzo</div>
+      <div class="vem-doses">
+        <div class="vem-dose" id="vem-vph-1">
+          <button type="button" class="vem-dose-btn" id="vem-vph-btn-1" onclick="toggleVemDose('vph',1)"><span style="font-size:.8rem;font-weight:900">1</span><span>Dosis</span></button>
+          <div class="vem-dose-date" id="vem-vph-lbl-1"></div>
+          <div class="vem-date-wrap" id="vem-vph-wrap-1"><input type="date" id="vem-vph-date-1" onchange="setVemDate('vph',1)"/></div>
+        </div>
+        <div class="vem-dose" id="vem-vph-2">
+          <button type="button" class="vem-dose-btn" id="vem-vph-btn-2" onclick="toggleVemDose('vph',2)"><span style="font-size:.8rem;font-weight:900">R</span><span>Refuerzo</span></button>
+          <div class="vem-dose-date" id="vem-vph-lbl-2"></div>
+          <div class="vem-date-wrap" id="vem-vph-wrap-2"><input type="date" id="vem-vph-date-2" onchange="setVemDate('vph',2)"/></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vem-vac-block">
+      <div class="vem-vac-label">💉 Vacuna DT Adulto — 5 dosis (completo: 3)</div>
+      <div class="vem-doses">
+        <div class="vem-dose" id="vem-dt-1"><button type="button" class="vem-dose-btn" id="vem-dt-btn-1" onclick="toggleVemDose('dt',1)"><span style="font-size:.8rem;font-weight:900">1</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-1"></div><div class="vem-date-wrap" id="vem-dt-wrap-1"><input type="date" id="vem-dt-date-1" onchange="setVemDate('dt',1)"/></div></div>
+        <div class="vem-dose" id="vem-dt-2"><button type="button" class="vem-dose-btn" id="vem-dt-btn-2" onclick="toggleVemDose('dt',2)"><span style="font-size:.8rem;font-weight:900">2</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-2"></div><div class="vem-date-wrap" id="vem-dt-wrap-2"><input type="date" id="vem-dt-date-2" onchange="setVemDate('dt',2)"/></div></div>
+        <div class="vem-dose" id="vem-dt-3"><button type="button" class="vem-dose-btn" id="vem-dt-btn-3" onclick="toggleVemDose('dt',3)"><span style="font-size:.8rem;font-weight:900">3</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-3"></div><div class="vem-date-wrap" id="vem-dt-wrap-3"><input type="date" id="vem-dt-date-3" onchange="setVemDate('dt',3)"/></div></div>
+        <div class="vem-dose" id="vem-dt-4"><button type="button" class="vem-dose-btn" id="vem-dt-btn-4" onclick="toggleVemDose('dt',4)"><span style="font-size:.8rem;font-weight:900">4</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-4"></div><div class="vem-date-wrap" id="vem-dt-wrap-4"><input type="date" id="vem-dt-date-4" onchange="setVemDate('dt',4)"/></div></div>
+        <div class="vem-dose" id="vem-dt-5"><button type="button" class="vem-dose-btn" id="vem-dt-btn-5" onclick="toggleVemDose('dt',5)"><span style="font-size:.8rem;font-weight:900">5</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-5"></div><div class="vem-date-wrap" id="vem-dt-wrap-5"><input type="date" id="vem-dt-date-5" onchange="setVemDate('dt',5)"/></div></div>
+      </div>
+    </div>
+
+    <div class="vem-vac-block">
+      <div class="vem-vac-label">💉 Vacuna Neumococo 23V — dosis + refuerzo 5 años</div>
+      <div class="vem-doses">
+        <div class="vem-dose" id="vem-neum-1"><button type="button" class="vem-dose-btn" id="vem-neum-btn-1" onclick="toggleVemDose('neum',1)"><span style="font-size:.8rem;font-weight:900">1</span><span>Dosis</span></button><div class="vem-dose-date" id="vem-neum-lbl-1"></div><div class="vem-date-wrap" id="vem-neum-wrap-1"><input type="date" id="vem-neum-date-1" onchange="setVemDate('neum',1)"/></div></div>
+        <div class="vem-dose" id="vem-neum-2"><button type="button" class="vem-dose-btn" id="vem-neum-btn-2" onclick="toggleVemDose('neum',2)"><span style="font-size:.8rem;font-weight:900">R</span><span>Refuerzo</span></button><div class="vem-dose-date" id="vem-neum-lbl-2"></div><div class="vem-date-wrap" id="vem-neum-wrap-2"><input type="date" id="vem-neum-date-2" onchange="setVemDate('neum',2)"/></div></div>
+      </div>
+    </div>
+
+    <div class="vem-actions">
+      <button class="btn save" style="flex:1" onclick="saveVacEdit()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:15px;height:15px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar vacunas</button>
+      <button class="btn secondary" onclick="closeVacEditModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
 
 <!-- ════ FIREBASE MODULE ════ -->
 <script type="module">
