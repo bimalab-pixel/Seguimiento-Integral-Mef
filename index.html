@@ -584,6 +584,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
     <div class="topbar-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="search-input" placeholder="Buscar nombre o DUI…" oninput="renderList()"/></div>
     <button class="topbar-btn primary" onclick="goTo('screen-form','new')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Nueva</span></button>
     <button class="topbar-btn teal" onclick="printListado()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>Imprimir</span></button>
+    <button class="topbar-btn" style="background:linear-gradient(135deg,#00796b,#26a69a);color:#fff" onclick="printVacunacion()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/><path d="M14 4l6 6"/><path d="M8 10l6 6"/><line x1="8" y1="10" x2="14" y2="16"/><path d="M10 8l-2 2 6 6 2-2"/></svg><span>Vacunas</span></button>
   </div>
   <div class="scroller" id="list-scroller">
     <div id="list-summary-cards"></div>
@@ -880,6 +881,40 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
           </div>
         </div>
 
+        <!-- Neumococo 23V: 2 dosis (dosis inicial + refuerzo 5 años) -->
+        <div class="vac-block">
+          <div class="vac-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            Vacuna Neumococo 23V — 1 dosis + refuerzo a los 5 años
+          </div>
+          <div class="vac-doses" id="neum-doses-container">
+            <div class="vac-dose" id="neum-dose-1">
+              <button type="button" class="vac-dose-btn" id="neum-btn-1" onclick="toggleVacDose('neum',1)">
+                <span class="vac-dose-num">1</span>
+                <span class="vac-dose-lbl">Dosis</span>
+              </button>
+              <div class="vac-dose-date" id="neum-date-lbl-1"></div>
+              <div class="vac-date-input" id="neum-input-wrap-1">
+                <input type="date" id="neum-date-1" onchange="setVacDate('neum',1)"/>
+              </div>
+            </div>
+            <div class="vac-dose" id="neum-dose-2">
+              <button type="button" class="vac-dose-btn" id="neum-btn-2" onclick="toggleVacDose('neum',2)">
+                <span class="vac-dose-num">R</span>
+                <span class="vac-dose-lbl">Refuerzo</span>
+              </button>
+              <div class="vac-dose-date" id="neum-date-lbl-2"></div>
+              <div class="vac-date-input" id="neum-input-wrap-2">
+                <input type="date" id="neum-date-2" onchange="setVacDate('neum',2)"/>
+              </div>
+            </div>
+          </div>
+          <div class="vac-summary" id="neum-vac-summary" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span id="neum-vac-summary-text"></span>
+          </div>
+        </div>
+
       </div>
 
       <div class="fs-title green">7. Observaciones y responsable</div>
@@ -1018,17 +1053,19 @@ function getAlerts(){return getAllAlertsFlat();}
 let _vacState = {vph:{}, dt:{}};
 
 function initVacState(){
-  _vacState = {vph:{1:null,2:null}, dt:{1:null,2:null,3:null,4:null,5:null}};
+  _vacState = {vph:{1:null,2:null}, dt:{1:null,2:null,3:null,4:null,5:null}, neum:{1:null,2:null}};
 }
 
 function loadVacFromRecord(rec){
   _vacState = {
-    vph: rec.vacVph || {1:null,2:null},
-    dt:  rec.vacDt  || {1:null,2:null,3:null,4:null,5:null}
+    vph:  rec.vacVph  || {1:null,2:null},
+    dt:   rec.vacDt   || {1:null,2:null,3:null,4:null,5:null},
+    neum: rec.vacNeum || {1:null,2:null}
   };
   // Ensure all keys exist
   [1,2].forEach(i=>{ if(_vacState.vph[i]===undefined)_vacState.vph[i]=null; });
   [1,2,3,4,5].forEach(i=>{ if(_vacState.dt[i]===undefined)_vacState.dt[i]=null; });
+  [1,2].forEach(i=>{ if(_vacState.neum[i]===undefined)_vacState.neum[i]=null; });
   renderVacUI();
 }
 
@@ -1095,6 +1132,7 @@ function renderVacUI(){
 
   // DT
   const dtTotal = 5;
+  const dtComplete = 3; // Esquema completo con 3 dosis, refuerzos 4 y 5 opcionales
   let dtApplied = 0;
   [1,2,3,4,5].forEach(i=>{
     const date = _vacState.dt[i];
@@ -1111,16 +1149,51 @@ function renderVacUI(){
   if(dtSum && dtTxt){
     if(dtApplied > 0){
       dtSum.style.display='flex';
-      dtTxt.textContent = dtApplied===dtTotal
-        ? '✓ Esquema DT Adulto completo ('+dtApplied+'/'+dtTotal+' dosis)'
-        : 'Esquema DT incompleto — '+dtApplied+'/'+dtTotal+' dosis aplicadas';
-      dtSum.style.background = dtApplied===dtTotal
+      const isComplete = dtApplied >= dtComplete;
+      const isFull = dtApplied === dtTotal;
+      dtTxt.textContent = isFull
+        ? '✓ Esquema DT Adulto completo + refuerzos ('+dtApplied+'/'+dtTotal+' dosis)'
+        : isComplete
+          ? '✓ Esquema DT Adulto completo ('+dtApplied+' dosis) — refuerzos 4ª y 5ª opcionales'
+          : 'Esquema DT incompleto — '+dtApplied+'/'+dtComplete+' dosis mínimas';
+      dtSum.style.background = isComplete
         ? 'linear-gradient(135deg,#e8f5e9,#c8e6c9)'
         : 'linear-gradient(135deg,#fff3e0,#ffe0b2)';
-      dtSum.style.borderColor = dtApplied===dtTotal ? '#a5d6a7' : '#ffcc80';
-      dtSum.style.color = dtApplied===dtTotal ? '#2e7d32' : '#e65100';
+      dtSum.style.borderColor = isComplete ? '#a5d6a7' : '#ffcc80';
+      dtSum.style.color = isComplete ? '#2e7d32' : '#e65100';
     } else {
       dtSum.style.display='none';
+    }
+  }
+
+  // ── Neumococo 23V ──
+  let neumApplied = 0;
+  [1,2].forEach(i=>{
+    const date = _vacState.neum[i];
+    const btn  = document.getElementById('neum-btn-'+i);
+    const lbl  = document.getElementById('neum-date-lbl-'+i);
+    const dateInp = document.getElementById('neum-date-'+i);
+    if(btn){btn.classList.toggle('applied', !!date);}
+    if(lbl) lbl.textContent = date ? formatDateShort(date) : '';
+    if(dateInp && date) dateInp.value = date;
+    if(date) neumApplied++;
+  });
+  const neumSum = document.getElementById('neum-vac-summary');
+  const neumTxt = document.getElementById('neum-vac-summary-text');
+  if(neumSum && neumTxt){
+    if(neumApplied > 0){
+      neumSum.style.display='flex';
+      const neumFull = neumApplied === 2;
+      neumTxt.textContent = neumFull
+        ? '✓ Neumococo 23V completo — dosis + refuerzo aplicados'
+        : '✓ Neumococo 23V — dosis inicial aplicada · Refuerzo a los 5 años';
+      neumSum.style.background = neumFull
+        ? 'linear-gradient(135deg,#e8f5e9,#c8e6c9)'
+        : 'linear-gradient(135deg,#e3f2fd,#bbdefb)';
+      neumSum.style.borderColor = neumFull ? '#a5d6a7' : '#90caf9';
+      neumSum.style.color = neumFull ? '#2e7d32' : '#1565c0';
+    } else {
+      neumSum.style.display='none';
     }
   }
 }
@@ -1283,7 +1356,7 @@ function saveRecord(){
     vphFecha,vphNext,referida:getV('f-referida'),
     gestaciones:getV('f-gestaciones'),partos:getV('f-partos'),
     riesgos,observaciones:getV('f-observaciones'),personal:getV('f-personal'),
-    vacVph:{...(_vacState.vph||{})},vacDt:{...(_vacState.dt||{})},
+    vacVph:{...(_vacState.vph||{})},vacDt:{...(_vacState.dt||{})},vacNeum:{...(_vacState.neum||{})},
     nextDate:nd,updatedAt:new Date().toISOString(),
   };
   if(editingId){const i=records.findIndex(r=>r.id===editingId);if(i>-1)records[i]=rec;else records.push(rec);}
@@ -1504,8 +1577,11 @@ function printFicha(id){
       <div class="field"><label>Vacuna VPH (2 dosis)</label><span style="min-height:16px">${
         [1,2].map(i=>{const d=(r.vacVph||{})[i];return d?'D'+i+': '+fmt(d):'D'+i+': —';}).join(' · ')
       }</span></div>
-      <div class="field"><label>Vacuna DT Adulto (5 dosis)</label><span style="min-height:16px">${
+      <div class="field"><label>Vacuna DT Adulto (5 dosis · completo: 3)</label><span style="min-height:16px">${
         [1,2,3,4,5].map(i=>{const d=(r.vacDt||{})[i];return d?'D'+i+': '+fmt(d):'D'+i+': —';}).join(' · ')
+      }</span></div>
+      <div class="field"><label>Vacuna Neumococo 23V (dosis + refuerzo 5 años)</label><span style="min-height:16px">${
+        [{i:1,l:'Dosis'},{i:2,l:'Refuerzo'}].map(x=>{const d=(r.vacNeum||{})[x.i];return d?x.l+': '+fmt(d):x.l+': —';}).join(' · ')
       }</span></div>
     </div>
   </div>
@@ -1711,6 +1787,116 @@ function buildPrintDoc(title,subtitle,recsGrouped){
   html+=`<div class="ft"><span>Control MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>Total: ${Object.values(recsGrouped).flat().length} registros · ${todayStr}</span></div></body></html>`;
   return html;
 }
+function printVacunacion(){
+  const profile=loadProfile();
+  const ucsf=profile.ucsf||'UCSF';
+  const personal=profile.nombre||'Personal de salud';
+  const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+
+  const recs=[...records].sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+
+  const doseCell=(val)=>val
+    ?'<td style="color:#2e7d32;font-weight:800;text-align:center">'+fmt(val)+'</td>'
+    :'<td style="color:#bbb;text-align:center">—</td>';
+
+  const dtStatus=(r)=>{
+    const applied=[1,2,3,4,5].filter(i=>(r.vacDt||{})[i]).length;
+    if(applied===0) return '<td style="color:#bbb;text-align:center">—</td>';
+    if(applied>=3) return '<td style="background:#e8f5e9;color:#2e7d32;font-weight:800;text-align:center">✓ Completo ('+applied+'d)</td>';
+    return '<td style="background:#fff3e0;color:#e65100;font-weight:700;text-align:center">'+applied+'/3</td>';
+  };
+  const vphStatus=(r)=>{
+    const applied=[1,2].filter(i=>(r.vacVph||{})[i]).length;
+    if(applied===0) return '<td style="color:#bbb;text-align:center">—</td>';
+    if(applied===2) return '<td style="background:#e8f5e9;color:#2e7d32;font-weight:800;text-align:center">✓ Completo</td>';
+    return '<td style="background:#fff3e0;color:#e65100;font-weight:700;text-align:center">1/2</td>';
+  };
+  const neumStatus=(r)=>{
+    const d1=(r.vacNeum||{})[1]; const d2=(r.vacNeum||{})[2];
+    if(!d1) return '<td style="color:#bbb;text-align:center">—</td>';
+    if(d2) return '<td style="background:#e8f5e9;color:#2e7d32;font-weight:800;text-align:center">✓ +Refuerzo</td>';
+    return '<td style="background:#e3f2fd;color:#1565c0;font-weight:700;text-align:center">✓ Dosis</td>';
+  };
+
+  const rows=recs.map((r,i)=>`<tr>
+    <td style="text-align:center;font-weight:700">${String(r.num||i+1).padStart(2,'0')}</td>
+    <td style="font-weight:700">${escHtml(r.nombre||'—')}</td>
+    <td style="text-align:center">${r.nacimiento?new Date(r.nacimiento+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—'}</td>
+    <td style="text-align:center">${r.edad||'—'}</td>
+    ${doseCell((r.vacVph||{})[1])}${doseCell((r.vacVph||{})[2])}${vphStatus(r)}
+    ${doseCell((r.vacDt||{})[1])}${doseCell((r.vacDt||{})[2])}${doseCell((r.vacDt||{})[3])}${doseCell((r.vacDt||{})[4])}${doseCell((r.vacDt||{})[5])}${dtStatus(r)}
+    ${doseCell((r.vacNeum||{})[1])}${doseCell((r.vacNeum||{})[2])}${neumStatus(r)}
+  </tr>`).join('');
+
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>
+  <title>Esquema Vacunación MEF · ${escHtml(ucsf)}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    @page{size:Letter landscape;margin:8mm 10mm}
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{font-family:'Nunito',sans-serif;font-size:8px;color:#2d1a3a}
+    .ph{border-bottom:2.5px solid #00796b;padding-bottom:5px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-end}
+    .ph h1{font-size:13px;font-weight:800;color:#00796b}.ph p{font-size:7px;color:#8e6fa0;margin-top:2px}
+    .ph-right{text-align:right;font-size:7px;color:#8e6fa0}
+    .vac-group{margin-bottom:6px}
+    .vac-group-title{background:linear-gradient(135deg,#00796b,#26a69a);color:#fff;padding:2px 8px;border-radius:4px 4px 0 0;font-size:7.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+    table{width:100%;border-collapse:collapse}
+    th{background:#e0f2f1;color:#00695c;font-size:6.5px;font-weight:800;text-transform:uppercase;padding:3px 3px;border:1px solid #b2dfdb;white-space:nowrap}
+    td{padding:2.5px 3px;border:1px solid #e0e0e0;font-size:7.5px;vertical-align:middle}
+    tr:nth-child(even) td{background:#f9f9f9}
+    tr:hover td{background:#e0f7fa}
+    .th-group{background:#004d40;color:#fff;text-align:center;font-size:7px;font-weight:800;padding:2px;border:1px solid #00695c}
+    .summary-row{display:flex;gap:12px;margin-top:7px;flex-wrap:wrap}
+    .sum-card{border:1.5px solid #b2dfdb;border-radius:6px;padding:4px 10px;background:#e0f7fa}
+    .sum-num{font-size:16px;font-weight:800;color:#00695c;line-height:1}
+    .sum-lbl{font-size:6.5px;color:#00695c;font-weight:700}
+    footer{margin-top:8px;border-top:1px solid #b2dfdb;padding-top:4px;font-size:7px;color:#8e6fa0;display:flex;justify-content:space-between}
+  </style></head><body>
+  <div class="ph">
+    <div><h1>🩺 Esquema de Vacunación MEF</h1><p>${escHtml(ucsf)} · ${escHtml(personal)}</p></div>
+    <div class="ph-right">${todayStr}<br>${recs.length} pacientes registradas</div>
+  </div>
+
+  <div class="vac-group">
+    <div class="vac-group-title">Registro de Vacunación por Paciente</div>
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2">#</th>
+          <th rowspan="2">Nombre completo</th>
+          <th rowspan="2">F. Nacimiento</th>
+          <th rowspan="2">Edad</th>
+          <th colspan="3" class="th-group">💉 VPH (2 dosis)</th>
+          <th colspan="6" class="th-group">💉 DT Adulto (5 dosis / completo: 3)</th>
+          <th colspan="3" class="th-group">💉 Neumococo 23V</th>
+        </tr>
+        <tr>
+          <th>D1</th><th>D2</th><th>Estado</th>
+          <th>D1</th><th>D2</th><th>D3</th><th>D4</th><th>D5</th><th>Estado</th>
+          <th>Dosis</th><th>Refuerzo</th><th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>
+
+  <div class="summary-row">
+    <div class="sum-card"><div class="sum-num">${recs.filter(r=>[1,2].filter(i=>(r.vacVph||{})[i]).length===2).length}</div><div class="sum-lbl">VPH completo</div></div>
+    <div class="sum-card"><div class="sum-num">${recs.filter(r=>[1,2,3,4,5].filter(i=>(r.vacDt||{})[i]).length>=3).length}</div><div class="sum-lbl">DT completo (≥3d)</div></div>
+    <div class="sum-card"><div class="sum-num">${recs.filter(r=>!!((r.vacNeum||{})[1])).length}</div><div class="sum-lbl">Neumococo dosis</div></div>
+    <div class="sum-card"><div class="sum-num">${recs.filter(r=>!!((r.vacNeum||{})[2])).length}</div><div class="sum-lbl">Neumococo + refuerzo</div></div>
+    <div class="sum-card" style="border-color:#ffcc80;background:#fff8e1"><div class="sum-num" style="color:#e65100">${recs.filter(r=>[1,2].filter(i=>(r.vacVph||{})[i]).length===0).length}</div><div class="sum-lbl" style="color:#e65100">VPH sin iniciar</div></div>
+    <div class="sum-card" style="border-color:#ffcc80;background:#fff8e1"><div class="sum-num" style="color:#e65100">${recs.filter(r=>[1,2,3,4,5].filter(i=>(r.vacDt||{})[i]).length===0).length}</div><div class="sum-lbl" style="color:#e65100">DT sin iniciar</div></div>
+  </div>
+
+  <footer><span>Seguimiento Integral MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>${todayStr}</span></footer>
+  </body></html>`;
+
+  const w=window.open('','_blank','width=1100,height=800');
+  if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
+}
+
 function printListado(){
   const byM={};METODO_ORDER.forEach(m=>{byM[m]=[];});records.forEach(r=>{if(byM[r.metodo])byM[r.metodo].push(r);else byM['ninguno']=(byM['ninguno']||[]).concat(r);});
   const profile=loadProfile();const html=buildPrintDoc(`Control MEF · ${profile.ucsf||'UCSF'}`,`Listado completo — ${records.length} pacientes`,byM);
