@@ -299,6 +299,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .btn svg{width:13px;height:13px}
 .btn.save{background:var(--grad);color:#fff}.btn.save:hover{opacity:.9}
 .btn.danger{background:var(--danger2);color:#fff}.btn.danger:hover{background:var(--danger)}
+.btn.teal{background:var(--grad-teal);color:#fff}.btn.teal:hover{filter:brightness(1.08)}
 .btn.secondary{background:var(--white);color:var(--purple2);border:1.5px solid var(--border)}.btn.secondary:hover{background:var(--light2)}
 
 /* MODAL */
@@ -449,6 +450,25 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .promotor-month-highlight svg{width:16px;height:16px;color:var(--teal);flex-shrink:0}
 .promotor-month-highlight-text{font-size:.74rem;font-weight:700;color:var(--teal);flex:1}
 .promotor-month-highlight-count{background:var(--teal2);color:#fff;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:11px}
+
+/* ══ ESQUEMA VACUNACIÓN ══ */
+.vac-block{margin-bottom:.85rem}
+.vac-label{font-size:.72rem;font-weight:800;color:var(--text);margin-bottom:.42rem;display:flex;align-items:center;gap:.4rem}
+.vac-label svg{width:14px;height:14px;color:var(--teal)}
+.vac-doses{display:flex;gap:.38rem;flex-wrap:wrap;margin-bottom:.3rem}
+.vac-dose{display:flex;flex-direction:column;align-items:center;gap:.22rem;flex:1;min-width:0}
+.vac-dose-btn{width:100%;min-width:44px;height:44px;border-radius:10px;border:2px solid var(--border);background:var(--white);cursor:pointer;font-family:inherit;font-size:.6rem;font-weight:800;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;transition:all .2s;position:relative;padding:0 2px}
+.vac-dose-btn.applied{background:linear-gradient(135deg,var(--teal),var(--teal2));border-color:var(--teal);color:#fff}
+.vac-dose-btn.applied::after{content:'✓';position:absolute;top:-5px;right:-5px;background:#fff;color:var(--teal);border:1.5px solid var(--teal);border-radius:50%;width:14px;height:14px;font-size:.55rem;display:flex;align-items:center;justify-content:center;font-weight:900}
+.vac-dose-num{font-size:.8rem;font-weight:900;line-height:1}
+.vac-dose-lbl{font-size:.52rem;opacity:.8}
+.vac-dose-date{font-size:.55rem;color:var(--muted);text-align:center;min-height:.75rem;line-height:1.2}
+.vac-date-input{display:none;margin-top:.18rem}
+.vac-dose.show-input .vac-date-input{display:block}
+.vac-date-input input{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:.28rem .4rem;font-size:.62rem;font-family:inherit;color:var(--text);background:var(--white)}
+.vac-date-input input:focus{outline:none;border-color:var(--teal)}
+.vac-summary{background:linear-gradient(135deg,#e0f7fa,#b2ebf2);border-radius:9px;padding:.5rem .72rem;font-size:.68rem;color:var(--teal);font-weight:700;border:1px solid var(--teal3);display:flex;align-items:center;gap:.5rem}
+.vac-summary svg{width:13px;height:13px;flex-shrink:0}
 @media(max-width:640px){
   .fg.c2,.fg.c3{grid-template-columns:1fr}.dash-grid{grid-template-columns:repeat(2,1fr)}.home-title{font-size:1.2rem}.scroller{padding:.75rem}.form-body{padding:.82rem}.fs-title{margin-left:-.82rem;padding-left:.82rem}.method-selector{grid-template-columns:1fr 1fr}.month-cards-grid{grid-template-columns:repeat(2,1fr)}.topbar{gap:.36rem}.topbar-btn span{display:none}.f-row-checks{grid-template-columns:1fr}
 }
@@ -716,7 +736,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
       <div class="fg c2">
         <div class="f-group"><label>Última citología (PAP)</label><input type="date" id="f-pap-fecha" onchange="recalcAlerta()"/></div>
         <div class="f-group"><label>Próxima citología (calculada)</label><input type="text" id="f-pap-prox" readonly placeholder="Un año desde la última" style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
-        <div class="f-group"><label>Último VPH / vacuna</label><input type="date" id="f-vph-fecha" onchange="recalcAlerta()"/></div>
+        <div class="f-group"><label>Último VPH</label><input type="date" id="f-vph-fecha" onchange="recalcAlerta()"/></div>
         <div class="f-group"><label>Próximo VPH (calculado)</label><input type="text" id="f-vph-prox" readonly placeholder="5 años desde el último" style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
         <div class="f-group"><label>Resultado PAP / VPH</label>
           <select id="f-pap-resultado">
@@ -759,7 +779,110 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
       </div>
 
       <!-- SECCIÓN 6: OBSERVACIONES -->
-      <div class="fs-title green">6. Observaciones y responsable</div>
+      <div class="fs-title" style="background:linear-gradient(135deg,#00796b,#26a69a)">6. 💉 Esquema de Vacunación</div>
+      <div class="fg c1">
+
+        <!-- VPH: 2 dosis -->
+        <div class="vac-block">
+          <div class="vac-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            Vacuna VPH — 2 dosis
+          </div>
+          <div class="vac-doses" id="vph-doses-container">
+            <div class="vac-dose" id="vph-dose-1">
+              <button type="button" class="vac-dose-btn" id="vph-btn-1" onclick="toggleVacDose('vph',1)">
+                <span class="vac-dose-num">1</span>
+                <span class="vac-dose-lbl">Dosis</span>
+              </button>
+              <div class="vac-dose-date" id="vph-date-lbl-1"></div>
+              <div class="vac-date-input" id="vph-input-wrap-1">
+                <input type="date" id="vph-date-1" onchange="setVacDate('vph',1)" placeholder="Fecha"/>
+              </div>
+            </div>
+            <div class="vac-dose" id="vph-dose-2">
+              <button type="button" class="vac-dose-btn" id="vph-btn-2" onclick="toggleVacDose('vph',2)">
+                <span class="vac-dose-num">2</span>
+                <span class="vac-dose-lbl">Dosis</span>
+              </button>
+              <div class="vac-dose-date" id="vph-date-lbl-2"></div>
+              <div class="vac-date-input" id="vph-input-wrap-2">
+                <input type="date" id="vph-date-2" onchange="setVacDate('vph',2)" placeholder="Fecha"/>
+              </div>
+            </div>
+          </div>
+          <div class="vac-summary" id="vph-vac-summary" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span id="vph-vac-summary-text"></span>
+          </div>
+        </div>
+
+        <!-- DT Adulto: 5 dosis -->
+        <div class="vac-block">
+          <div class="vac-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            Vacuna DT Adulto — 5 dosis
+          </div>
+          <div class="vac-doses" id="dt-doses-container">
+            <div class="vac-dose" id="dt-dose-1">
+              <button type="button" class="vac-dose-btn" id="dt-btn-1" onclick="toggleVacDose('dt',1)">
+                <span class="vac-dose-num">1</span>
+                <span class="vac-dose-lbl">Dosis</span>
+              </button>
+              <div class="vac-dose-date" id="dt-date-lbl-1"></div>
+              <div class="vac-date-input" id="dt-input-wrap-1">
+                <input type="date" id="dt-date-1" onchange="setVacDate('dt',1)"/>
+              </div>
+            </div>
+            <div class="vac-dose" id="dt-dose-2">
+              <button type="button" class="vac-dose-btn" id="dt-btn-2" onclick="toggleVacDose('dt',2)">
+                <span class="vac-dose-num">2</span>
+                <span class="vac-dose-lbl">Dosis</span>
+              </button>
+              <div class="vac-dose-date" id="dt-date-lbl-2"></div>
+              <div class="vac-date-input" id="dt-input-wrap-2">
+                <input type="date" id="dt-date-2" onchange="setVacDate('dt',2)"/>
+              </div>
+            </div>
+            <div class="vac-dose" id="dt-dose-3">
+              <button type="button" class="vac-dose-btn" id="dt-btn-3" onclick="toggleVacDose('dt',3)">
+                <span class="vac-dose-num">3</span>
+                <span class="vac-dose-lbl">Dosis</span>
+              </button>
+              <div class="vac-dose-date" id="dt-date-lbl-3"></div>
+              <div class="vac-date-input" id="dt-input-wrap-3">
+                <input type="date" id="dt-date-3" onchange="setVacDate('dt',3)"/>
+              </div>
+            </div>
+            <div class="vac-dose" id="dt-dose-4">
+              <button type="button" class="vac-dose-btn" id="dt-btn-4" onclick="toggleVacDose('dt',4)">
+                <span class="vac-dose-num">4</span>
+                <span class="vac-dose-lbl">Dosis</span>
+              </button>
+              <div class="vac-dose-date" id="dt-date-lbl-4"></div>
+              <div class="vac-date-input" id="dt-input-wrap-4">
+                <input type="date" id="dt-date-4" onchange="setVacDate('dt',4)"/>
+              </div>
+            </div>
+            <div class="vac-dose" id="dt-dose-5">
+              <button type="button" class="vac-dose-btn" id="dt-btn-5" onclick="toggleVacDose('dt',5)">
+                <span class="vac-dose-num">5</span>
+                <span class="vac-dose-lbl">Dosis</span>
+              </button>
+              <div class="vac-dose-date" id="dt-date-lbl-5"></div>
+              <div class="vac-date-input" id="dt-input-wrap-5">
+                <input type="date" id="dt-date-5" onchange="setVacDate('dt',5)"/>
+              </div>
+            </div>
+          </div>
+          <div class="vac-summary" id="dt-vac-summary" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <span id="dt-vac-summary-text"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="fs-title green">7. Observaciones y responsable</div>
       <div class="fg c1">
         <div class="f-group"><label>Observaciones clínicas</label><textarea id="f-observaciones" placeholder="Antecedentes relevantes, alergias, seguimientos especiales, notas del promotor…" rows="3"></textarea></div>
         <div class="f-group"><label>Personal de salud responsable</label><input type="text" id="f-personal" placeholder="Nombre, cargo y UCSF"/></div>
@@ -768,6 +891,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
     </div><!-- /form-body -->
     <div class="form-actions">
       <button class="btn save" onclick="saveRecord()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar ficha</button>
+      <button class="btn teal" id="btn-print-ficha" onclick="printFichaActual()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir ficha</button>
       <button class="btn danger" id="btn-delete" onclick="deleteCurrentRecord()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Eliminar</button>
       <button class="btn secondary" onclick="goBack()" style="margin-left:auto">Volver</button>
     </div>
@@ -888,6 +1012,119 @@ function getAllAlertsFlat(){
 }
 function getAlerts(){return getAllAlertsFlat();}
 
+
+/* ═══ VACUNACIÓN ═══ */
+// Estado temporal en memoria durante edición (se persiste en saveRecord)
+let _vacState = {vph:{}, dt:{}};
+
+function initVacState(){
+  _vacState = {vph:{1:null,2:null}, dt:{1:null,2:null,3:null,4:null,5:null}};
+}
+
+function loadVacFromRecord(rec){
+  _vacState = {
+    vph: rec.vacVph || {1:null,2:null},
+    dt:  rec.vacDt  || {1:null,2:null,3:null,4:null,5:null}
+  };
+  // Ensure all keys exist
+  [1,2].forEach(i=>{ if(_vacState.vph[i]===undefined)_vacState.vph[i]=null; });
+  [1,2,3,4,5].forEach(i=>{ if(_vacState.dt[i]===undefined)_vacState.dt[i]=null; });
+  renderVacUI();
+}
+
+function toggleVacDose(vac, num){
+  const current = _vacState[vac][num];
+  const wrap = document.getElementById(vac+'-input-wrap-'+num);
+  const btn  = document.getElementById(vac+'-btn-'+num);
+  if(current){
+    // Already applied: ask to remove
+    _vacState[vac][num] = null;
+    btn.classList.remove('applied');
+    if(wrap) wrap.parentElement.classList.remove('show-input');
+  } else {
+    // Not applied: show date input
+    if(wrap) wrap.parentElement.classList.add('show-input');
+    const dateEl = document.getElementById(vac+'-date-'+num);
+    if(dateEl){ dateEl.value=''; dateEl.focus(); }
+  }
+  renderVacUI();
+}
+
+function setVacDate(vac, num){
+  const dateEl = document.getElementById(vac+'-date-'+num);
+  if(!dateEl||!dateEl.value) return;
+  _vacState[vac][num] = dateEl.value;
+  const btn = document.getElementById(vac+'-btn-'+num);
+  if(btn) btn.classList.add('applied');
+  const wrap = document.getElementById(vac+'-input-wrap-'+num);
+  if(wrap) wrap.parentElement.classList.remove('show-input');
+  renderVacUI();
+}
+
+function renderVacUI(){
+  // VPH
+  const vphTotal = 2;
+  let vphApplied = 0;
+  [1,2].forEach(i=>{
+    const date = _vacState.vph[i];
+    const btn  = document.getElementById('vph-btn-'+i);
+    const lbl  = document.getElementById('vph-date-lbl-'+i);
+    const dateInp = document.getElementById('vph-date-'+i);
+    if(btn){btn.classList.toggle('applied', !!date);}
+    if(lbl) lbl.textContent = date ? formatDateShort(date) : '';
+    if(dateInp && date) dateInp.value = date;
+    if(date) vphApplied++;
+  });
+  const vphSum = document.getElementById('vph-vac-summary');
+  const vphTxt = document.getElementById('vph-vac-summary-text');
+  if(vphSum && vphTxt){
+    if(vphApplied > 0){
+      vphSum.style.display='flex';
+      vphTxt.textContent = vphApplied===vphTotal
+        ? '✓ Esquema VPH completo ('+vphApplied+'/'+vphTotal+' dosis)'
+        : 'Esquema VPH incompleto — '+vphApplied+'/'+vphTotal+' dosis aplicadas';
+      vphSum.style.background = vphApplied===vphTotal
+        ? 'linear-gradient(135deg,#e8f5e9,#c8e6c9)'
+        : 'linear-gradient(135deg,#fff3e0,#ffe0b2)';
+      vphSum.style.borderColor = vphApplied===vphTotal ? '#a5d6a7' : '#ffcc80';
+      vphSum.style.color = vphApplied===vphTotal ? '#2e7d32' : '#e65100';
+    } else {
+      vphSum.style.display='none';
+    }
+  }
+
+  // DT
+  const dtTotal = 5;
+  let dtApplied = 0;
+  [1,2,3,4,5].forEach(i=>{
+    const date = _vacState.dt[i];
+    const btn  = document.getElementById('dt-btn-'+i);
+    const lbl  = document.getElementById('dt-date-lbl-'+i);
+    const dateInp = document.getElementById('dt-date-'+i);
+    if(btn){btn.classList.toggle('applied', !!date);}
+    if(lbl) lbl.textContent = date ? formatDateShort(date) : '';
+    if(dateInp && date) dateInp.value = date;
+    if(date) dtApplied++;
+  });
+  const dtSum = document.getElementById('dt-vac-summary');
+  const dtTxt = document.getElementById('dt-vac-summary-text');
+  if(dtSum && dtTxt){
+    if(dtApplied > 0){
+      dtSum.style.display='flex';
+      dtTxt.textContent = dtApplied===dtTotal
+        ? '✓ Esquema DT Adulto completo ('+dtApplied+'/'+dtTotal+' dosis)'
+        : 'Esquema DT incompleto — '+dtApplied+'/'+dtTotal+' dosis aplicadas';
+      dtSum.style.background = dtApplied===dtTotal
+        ? 'linear-gradient(135deg,#e8f5e9,#c8e6c9)'
+        : 'linear-gradient(135deg,#fff3e0,#ffe0b2)';
+      dtSum.style.borderColor = dtApplied===dtTotal ? '#a5d6a7' : '#ffcc80';
+      dtSum.style.color = dtApplied===dtTotal ? '#2e7d32' : '#e65100';
+    } else {
+      dtSum.style.display='none';
+    }
+  }
+}
+
 /* ═══ METHOD SELECTOR ═══ */
 let _selectedMethod='';
 function selectMethod(val){
@@ -975,12 +1212,14 @@ function initNewForm(){
   document.getElementById('method-details').style.display='none';
   document.getElementById('multi-alert-preview').innerHTML='';
   document.getElementById('btn-delete').style.display='none';
+  document.getElementById('btn-print-ficha').style.display='none';
   document.getElementById('fh-num-display').textContent='Nueva ficha';
   document.getElementById('riesgo-display').style.display='none';
   document.getElementById('f-ent-especifica-wrap').style.display='none';
   document.getElementById('f-discap-especifica-wrap').style.display='none';
   document.getElementById('f-fecha-ent-wrap').style.display='none';
   const p=loadProfile();if(p.nombre)document.getElementById('f-personal').value=[p.nombre,p.cargo].filter(Boolean).join(' · ');
+  initVacState();renderVacUI();
 }
 function loadFormFromRecord(rec){
   _selectedMethod=rec.metodo||'';
@@ -1003,10 +1242,12 @@ function loadFormFromRecord(rec){
   checks.forEach(id=>{const el=document.getElementById(id);if(el)el.checked=!!(rec.riesgos&&rec.riesgos.includes(id));});
   document.getElementById('fh-num-display').textContent=`Ficha #${String(rec.num||0).padStart(3,'0')}`;
   document.getElementById('btn-delete').style.display='flex';
+  document.getElementById('btn-print-ficha').style.display='flex';
   editingId=rec.id;
   toggleENT();toggleDiscapacidad();calcRiesgo();
   if(_selectedMethod)selectMethod(_selectedMethod);
   recalcAlerta();
+  loadVacFromRecord(rec);
 }
 
 /* ═══ SAVE / DELETE ═══ */
@@ -1042,6 +1283,7 @@ function saveRecord(){
     vphFecha,vphNext,referida:getV('f-referida'),
     gestaciones:getV('f-gestaciones'),partos:getV('f-partos'),
     riesgos,observaciones:getV('f-observaciones'),personal:getV('f-personal'),
+    vacVph:{...(_vacState.vph||{})},vacDt:{...(_vacState.dt||{})},
     nextDate:nd,updatedAt:new Date().toISOString(),
   };
   if(editingId){const i=records.findIndex(r=>r.id===editingId);if(i>-1)records[i]=rec;else records.push(rec);}
@@ -1049,6 +1291,7 @@ function saveRecord(){
   editingId=rec.id;saveRecords();updateHomeStats();
   showToast('✓ Ficha guardada correctamente','success');
   document.getElementById('btn-delete').style.display='flex';
+  document.getElementById('btn-print-ficha').style.display='flex';
   document.getElementById('fh-num-display').textContent=`Ficha #${String(rec.num).padStart(3,'0')}`;
 }
 function deleteCurrentRecord(){
@@ -1256,7 +1499,17 @@ function printFicha(id){
       <div class="field"><label>Gestaciones / Partos</label><span>${r.gestaciones||'0'} gest. · ${r.partos||'0'} partos</span></div>
     </div>
   </div>
-  <div class="section"><div class="section-title">6. Observaciones</div>
+  <div class="section"><div class="section-title">6. Esquema de Vacunación</div>
+    <div class="grid">
+      <div class="field"><label>Vacuna VPH (2 dosis)</label><span style="min-height:16px">${
+        [1,2].map(i=>{const d=(r.vacVph||{})[i];return d?'D'+i+': '+fmt(d):'D'+i+': —';}).join(' · ')
+      }</span></div>
+      <div class="field"><label>Vacuna DT Adulto (5 dosis)</label><span style="min-height:16px">${
+        [1,2,3,4,5].map(i=>{const d=(r.vacDt||{})[i];return d?'D'+i+': '+fmt(d):'D'+i+': —';}).join(' · ')
+      }</span></div>
+    </div>
+  </div>
+  <div class="section"><div class="section-title">7. Observaciones</div>
     <div class="field"><label>Notas clínicas</label><span style="min-height:24px">${escHtml(r.observaciones||'—')}</span></div>
     <div class="field" style="margin-top:4px"><label>Personal responsable</label><span>${escHtml(r.personal||'—')}</span></div>
   </div>
@@ -1359,6 +1612,10 @@ function renderList(){
       +'</div>';
   });
   cont.innerHTML=html;
+}
+function printFichaActual(){
+  if(editingId) printFicha(editingId);
+  else showToast('Guarda la ficha primero para imprimir','error');
 }
 function toggleListFolder(key){
   document.getElementById('lf-'+key)?.classList.toggle('open');
