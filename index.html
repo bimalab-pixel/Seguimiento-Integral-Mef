@@ -445,6 +445,15 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .lf-icon-btn.print:hover{background:var(--teal2);border-color:var(--teal2);color:#fff}
 .lf-icon-btn.del:hover{background:var(--danger2);border-color:var(--danger2);color:#fff}
 
+/* ══ SORT BAR ══ */
+.sort-bar{display:flex;align-items:center;gap:.42rem;padding:.52rem .9rem;background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;}
+.sort-bar-lbl{font-size:.62rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;margin-right:.1rem;}
+.sort-btn{display:flex;align-items:center;gap:.28rem;padding:.28rem .62rem;border-radius:20px;border:1.5px solid var(--border);background:var(--white);color:var(--muted);font-family:inherit;font-size:.7rem;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap;}
+.sort-btn svg{width:11px;height:11px;flex-shrink:0;}
+.sort-btn.active{background:var(--purple2);border-color:var(--purple2);color:#fff;}
+.sort-btn:hover:not(.active){background:var(--light2);border-color:var(--purple3);color:var(--purple);}
+
+
 /* ══ PROMOTOR MONTH ALERT in folders ══ */
 .promotor-month-highlight{background:linear-gradient(135deg,#e0f2f1,#b2dfdb);border:1.5px solid #80cbc4;border-radius:9px;padding:.6rem .82rem;margin:.5rem .88rem;display:flex;align-items:center;gap:.55rem}
 .promotor-month-highlight svg{width:16px;height:16px;color:var(--teal);flex-shrink:0}
@@ -666,6 +675,25 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
       Libro de Vacunas
     </button>
   </div>
+  <div class="sort-bar" id="list-sort-bar">
+    <span class="sort-bar-lbl">Ordenar:</span>
+    <button class="sort-btn active" id="sort-btn-az" onclick="setListSort('az')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="11" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="13" y2="18"/><polyline points="15 15 18 18 21 15"/><line x1="18" y1="6" x2="18" y2="18"/></svg>
+      A→Z
+    </button>
+    <button class="sort-btn" id="sort-btn-za" onclick="setListSort('za')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="11" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="13" y2="18"/><polyline points="15 9 18 6 21 9"/><line x1="18" y1="18" x2="18" y2="6"/></svg>
+      Z→A
+    </button>
+    <button class="sort-btn" id="sort-btn-newest" onclick="setListSort('newest')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Más reciente
+    </button>
+    <button class="sort-btn" id="sort-btn-oldest" onclick="setListSort('oldest')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Más antiguo
+    </button>
+  </div>
   <div class="scroller" id="list-scroller">
     <div id="list-summary-cards"></div>
     <div id="list-container"></div>
@@ -676,6 +704,17 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" id="vb-search-input" placeholder="Buscar paciente…" oninput="renderVacBook()"/>
     </div>
+    <div class="sort-bar" style="padding:.42rem .9rem;border-bottom:1px solid var(--border);border-top:1px solid var(--border);">
+      <span class="sort-bar-lbl">Ordenar:</span>
+      <button class="sort-btn active" id="vb-sort-btn-az" onclick="setVbSort('az')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="11" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="13" y2="18"/><polyline points="15 15 18 18 21 15"/><line x1="18" y1="6" x2="18" y2="18"/></svg>A→Z</button>
+      <button class="sort-btn" id="vb-sort-btn-za" onclick="setVbSort('za')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="11" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="13" y2="18"/><polyline points="15 9 18 6 21 9"/><line x1="18" y1="18" x2="18" y2="6"/></svg>Z→A</button>
+      <button class="sort-btn" id="vb-sort-btn-newest" onclick="setVbSort('newest')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Más reciente</button>
+      <button class="sort-btn" id="vb-sort-btn-oldest" onclick="setVbSort('oldest')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Más antiguo</button>
+    </div>
     <div id="vb-list"></div>
   </div>
 </div>
@@ -685,6 +724,15 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
   <div class="topbar">
     <button class="back-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Inicio</button>
     <div class="topbar-title">Alertas de Seguimiento</div>
+  </div>
+  <div class="sort-bar" style="border-bottom:1px solid var(--border);">
+    <span class="sort-bar-lbl">Ordenar alertas:</span>
+    <button class="sort-btn active" id="al-sort-btn-date" onclick="setAlSort('date')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Por fecha</button>
+    <button class="sort-btn" id="al-sort-btn-az" onclick="setAlSort('az')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="11" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="13" y2="18"/><polyline points="15 15 18 18 21 15"/><line x1="18" y1="6" x2="18" y2="18"/></svg>A→Z</button>
+    <button class="sort-btn" id="al-sort-btn-za" onclick="setAlSort('za')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="11" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="13" y2="18"/><polyline points="15 9 18 6 21 9"/><line x1="18" y1="18" x2="18" y2="6"/></svg>Z→A</button>
   </div>
   <div class="scroller" id="alerts-container"></div>
 </div>
@@ -708,6 +756,17 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
   </div>
   <div class="scroller">
     <div class="month-screen-header"><h2 id="month-view-h2">—</h2><span class="month-badge" id="month-view-count">0 fichas</span></div>
+    <div class="sort-bar" style="margin-bottom:.6rem;border-radius:10px;border:1.5px solid var(--border);">
+      <span class="sort-bar-lbl">Ordenar:</span>
+      <button class="sort-btn active" id="mv-sort-btn-az" onclick="setMvSort('az')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="11" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="13" y2="18"/><polyline points="15 15 18 18 21 15"/><line x1="18" y1="6" x2="18" y2="18"/></svg>A→Z</button>
+      <button class="sort-btn" id="mv-sort-btn-za" onclick="setMvSort('za')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="11" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="13" y2="18"/><polyline points="15 9 18 6 21 9"/><line x1="18" y1="18" x2="18" y2="6"/></svg>Z→A</button>
+      <button class="sort-btn" id="mv-sort-btn-newest" onclick="setMvSort('newest')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Más reciente</button>
+      <button class="sort-btn" id="mv-sort-btn-oldest" onclick="setMvSort('oldest')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Más antiguo</button>
+    </div>
     <div id="month-view-container"></div>
   </div>
 </div>
@@ -1050,6 +1109,28 @@ const METODO_COLORS={'oral':'#c2185b','inject-m':'#7b1fa2','inject-t':'#512da8',
 const LS_KEY='minsal_pf_v2';
 const LS_PROFILE='minsal_pf_perfil_v1';
 let records=[],editingId=null,_currentFilter='all';
+let _listSort='az', _vbSort='az', _mvSort='az', _alSort='date', _mvMonthLabel='';
+
+/* ═══ SORT HELPERS ═══ */
+function _applySort(arr, sortKey){
+  const a=[...arr];
+  if(sortKey==='az') a.sort((x,y)=>(x.nombre||'').localeCompare(y.nombre||'','es'));
+  else if(sortKey==='za') a.sort((x,y)=>(y.nombre||'').localeCompare(x.nombre||'','es'));
+  else if(sortKey==='newest') a.sort((x,y)=>(y.fecha||'').localeCompare(x.fecha||''));
+  else if(sortKey==='oldest') a.sort((x,y)=>(x.fecha||'').localeCompare(y.fecha||''));
+  return a;
+}
+function _setSortBtns(prefix, active){
+  ['az','za','newest','oldest','date'].forEach(k=>{
+    const el=document.getElementById(prefix+k);
+    if(el) el.classList.toggle('active', k===active);
+  });
+}
+function setListSort(s){ _listSort=s; _setSortBtns('sort-btn-',s); renderList(); }
+function setVbSort(s){ _vbSort=s; _setSortBtns('vb-sort-btn-',s); renderVacBook(); }
+function setMvSort(s){ _mvSort=s; _setSortBtns('mv-sort-btn-',s); _renderMvContainer(_mvMonthLabel); }
+function setAlSort(s){ _alSort=s; _setSortBtns('al-sort-btn-',s); renderAlerts(); }
+
 
 function loadRecords(){try{records=JSON.parse(localStorage.getItem(LS_KEY))||[];}catch(e){records=[];}}
 function saveRecords(){localStorage.setItem(LS_KEY,JSON.stringify(records));if(typeof window!=='undefined')window.records=records;}
@@ -1066,10 +1147,12 @@ function goTo(sid,mode){
   const s=next.querySelector('.scroller');if(s)s.scrollTop=0;
   if(sid==='screen-list'){
     _activeListTab='pacientes';
+    _listSort='az'; _vbSort='az';
     document.getElementById('tab-pacientes').classList.add('active');
     document.getElementById('tab-vacunas').classList.remove('active');
     document.getElementById('list-scroller').style.display='';
     document.getElementById('vac-book').classList.remove('active');
+    setTimeout(()=>{ _setSortBtns('sort-btn-','az'); _setSortBtns('vb-sort-btn-','az'); },50);
     renderList();
   }
   if(sid==='screen-alerts')renderAlerts();
@@ -1493,16 +1576,24 @@ function renderHomeMonthCards(){
   c.innerHTML=keys.slice(0,6).map(k=>{const m=byMonth[k];const pts=m.label.split(' ');return `<div class="month-card" onclick="openMonthFromHome('${escAttr(m.label)}')"><div class="month-card-name">${escHtml(pts[0])} ${pts[1]||''}</div><div class="month-card-num">${m.count}</div><div class="month-card-sub">paciente${m.count!==1?'s':''} · ver →</div></div>`;}).join('');
 }
 function openMonthFromHome(lbl){_navHistory.push(currentScreen);showMonthDetail(lbl);}
+function _renderMvContainer(monthLabel){
+  const recs=records.filter(r=>{if(!r.fecha)return false;const d=new Date(r.fecha+'T12:00:00');return `${MONTHS_ES[d.getMonth()]} ${d.getFullYear()}`===monthLabel;});
+  const sorted=_applySort(recs,_mvSort);
+  document.getElementById('month-view-container').innerHTML=sorted.length===0?`<div class="empty-state"><h3>Sin fichas</h3></div>`:sorted.map(r=>recordCardHTML(r)).join('');
+}
 function showMonthDetail(monthLabel){
+  _mvMonthLabel=monthLabel;
+  _mvSort='az';
   document.getElementById('month-view-title-bar').textContent=monthLabel;
   document.getElementById('month-view-h2').textContent=monthLabel;
-  const recs=records.filter(r=>{if(!r.fecha)return false;const d=new Date(r.fecha+'T12:00:00');return `${MONTHS_ES[d.getMonth()]} ${d.getFullYear()}`===monthLabel;}).sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+  const recs=records.filter(r=>{if(!r.fecha)return false;const d=new Date(r.fecha+'T12:00:00');return `${MONTHS_ES[d.getMonth()]} ${d.getFullYear()}`===monthLabel;});
   document.getElementById('month-view-count').textContent=`${recs.length} ficha${recs.length!==1?'s':''}`;
   const cur=document.getElementById(currentScreen),next=document.getElementById('screen-month-view');
   cur.classList.remove('active');cur.classList.add('slide-out');setTimeout(()=>cur.classList.remove('slide-out'),300);
   next.classList.add('active');currentScreen='screen-month-view';
   const s=next.querySelector('.scroller');if(s)s.scrollTop=0;
-  document.getElementById('month-view-container').innerHTML=recs.length===0?`<div class="empty-state"><h3>Sin fichas</h3></div>`:recs.map(r=>recordCardHTML(r)).join('');
+  _setSortBtns('mv-sort-btn-','az');
+  _renderMvContainer(monthLabel);
 }
 
 /* ═══ ALERTAS EN CARPETAS ═══ */
@@ -1535,7 +1626,11 @@ function renderAlerts(){
   </div>`;
 
   const foldersHTML=folders.map(f=>{
-    const items=byF[f.key]||[];
+    let items=byF[f.key]||[];
+    // Apply sort to items within each folder
+    if(_alSort==='az') items=[...items].sort((a,b)=>(a.rec.nombre||'').localeCompare(b.rec.nombre||'','es'));
+    else if(_alSort==='za') items=[...items].sort((a,b)=>(b.rec.nombre||'').localeCompare(a.rec.nombre||'','es'));
+    // 'date' keeps the default diff-based sort from getAllAlerts()
     const venc=items.filter(a=>a.date&&a.diff<0).length;
     const badgeTxt=venc>0?`${venc} vencida${venc>1?'s':''}`:items.length>0?`${items.length}`:'0';
     const badgeCls=venc>0?'red-badge':'';
@@ -1960,9 +2055,10 @@ function switchListTab(tab){
 
 function renderVacBook(){
   const search = (document.getElementById('vb-search-input')?.value||'').toLowerCase();
-  const recs = [...records]
-    .filter(r=>!search || (r.nombre||'').toLowerCase().includes(search))
-    .sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+  const recs = _applySort(
+    [...records].filter(r=>!search || (r.nombre||'').toLowerCase().includes(search)),
+    _vbSort
+  );
 
   // Summary cards
   const vphComplete = records.filter(r=>!!((r.vacVph||{})[1])).length;
@@ -2112,7 +2208,7 @@ function renderList(){
   folderDefs.forEach(function(fd){
     var recs=records.filter(fd.filter);
     if(q)recs=recs.filter(function(r){return (r.nombre||'').toLowerCase().includes(q)||(r.dui||'').toLowerCase().includes(q);});
-    recs.sort(function(a,b){return (a.nombre||'').localeCompare(b.nombre||'','es');});
+    recs=_applySort(recs,_listSort);
 
     var bodyHTML=recs.length===0
       ?'<div class="list-folder-empty">Sin pacientes en esta categoría</div>'
