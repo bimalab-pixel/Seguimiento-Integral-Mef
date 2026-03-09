@@ -83,6 +83,44 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .topbar-btn.primary{background:var(--grad);color:#fff}.topbar-btn.primary:hover{opacity:.9}
 .topbar-btn.teal{background:var(--teal2);color:#fff}.topbar-btn.teal:hover{background:var(--teal)}
 .topbar-btn.indigo{background:var(--indigo2);color:#fff}.topbar-btn.indigo:hover{background:var(--indigo)}
+.btn.indigo{background:var(--grad-indigo);color:#fff}.btn.indigo:hover{opacity:.9}
+
+/* Modal historial por categoría de paciente */
+#hist-cat-view-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9200;display:none;align-items:flex-end;justify-content:center;}
+#hist-cat-view-bg.open{display:flex;}
+#hist-cat-view{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:92vh;display:flex;flex-direction:column;}
+.hcv-topbar{flex-shrink:0;display:flex;align-items:center;gap:.55rem;padding:.95rem 1.1rem .7rem;border-bottom:1px solid var(--border);}
+.hcv-title{font-size:.95rem;font-weight:800;color:var(--purple);flex:1}
+.hcv-scroller{flex:1;overflow-y:auto;padding:.75rem 1rem 2rem;}
+
+/* Acordeón de categorías */
+.hcv-acc{border-radius:11px;border:1.5px solid var(--border);margin-bottom:.5rem;overflow:hidden;background:var(--white);}
+.hcv-acc-header{display:flex;align-items:center;gap:.6rem;padding:.7rem .85rem;cursor:pointer;user-select:none;background:var(--white);transition:background .18s;}
+.hcv-acc-header:hover{background:var(--light);}
+.hcv-acc-label{flex:1;font-size:.82rem;font-weight:800;color:var(--text);}
+.hcv-acc-badge{font-size:.62rem;font-weight:800;color:#fff;padding:2px 7px;border-radius:20px;min-width:20px;text-align:center;}
+.hcv-acc-badge-zero{font-size:.62rem;font-weight:700;color:var(--muted);background:var(--light2);padding:2px 7px;border-radius:20px;}
+.hcv-acc-chevron{color:var(--muted);transition:transform .22s;flex-shrink:0;}
+.hcv-acc.open .hcv-acc-chevron{transform:rotate(90deg);}
+.hcv-acc-body{display:none;padding:.5rem .85rem .75rem;border-top:1px solid var(--border);background:var(--light);}
+.hcv-acc.open .hcv-acc-body{display:block;}
+
+.hcv-empty-cat{font-size:.72rem;color:var(--muted);font-style:italic;padding:.2rem 0;}
+.hcv-vac-chip{display:inline-flex;align-items:center;padding:.3rem .6rem;border-radius:20px;font-size:.7rem;font-weight:700;cursor:pointer;border:2px solid transparent;background:#f5f5f5;color:#555;transition:all .15s;user-select:none;}
+.hcv-vac-chip.selected{background:#e3f2fd;color:#1565c0;border-color:#1565c0;}
+.hcv-entry{background:var(--white);border:1px solid var(--border);border-radius:9px;padding:.55rem .75rem;margin-bottom:.4rem;}
+.hcv-entry:last-child{margin-bottom:0;}
+.hcv-entry-top{display:flex;align-items:center;gap:.4rem;margin-bottom:.3rem;flex-wrap:wrap;}
+.hcv-entry-date{font-size:.72rem;font-weight:800;color:var(--purple);flex:1;}
+.hcv-entry-origin{font-size:.56rem;font-weight:800;padding:1px 5px;border-radius:8px;}
+.hcv-entry-origin.auto{background:#f3e5f5;color:#7b1fa2;}
+.hcv-entry-origin.manual{background:#e8f5e9;color:#2e7d32;}
+.hcv-fields{display:grid;grid-template-columns:1fr 1fr;gap:.15rem .55rem;}
+.hcv-field label{font-size:.58rem;font-weight:800;color:var(--muted);text-transform:uppercase;display:block;}
+.hcv-field span{font-size:.73rem;color:var(--text);}
+.hcv-field.full{grid-column:1/-1;}
+.hcv-personal{font-size:.6rem;color:var(--muted);margin-top:.28rem;padding-top:.25rem;border-top:1px dashed var(--border);}
+.hcv-no-hist{text-align:center;padding:1.5rem;color:var(--muted);font-size:.82rem;}
 .scroller{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem}
 .scroller::-webkit-scrollbar{width:4px}
 .scroller::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
@@ -548,8 +586,61 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .vem-date-wrap input{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:.26rem .35rem;font-size:.6rem;font-family:inherit;color:var(--text);}
 .vem-date-wrap input:focus{outline:none;border-color:var(--teal);}
 .vem-actions{display:flex;gap:.6rem;margin-top:1.1rem;}
+/* ══ HISTORIAL DE SEGUIMIENTOS ══ */
+.hist-section{margin-top:1.1rem;border-radius:12px;border:1.5px solid var(--border);background:var(--white);overflow:hidden;}
+.hist-header{display:flex;align-items:center;gap:.6rem;padding:.72rem 1rem;cursor:pointer;background:linear-gradient(135deg,#f3e5f5,#fce4ec);user-select:none;}
+.hist-header:hover{background:linear-gradient(135deg,#e8d5f5,#f8c8dc);}
+.hist-header-icon{font-size:1.1rem;}
+.hist-header-text{flex:1}
+.hist-header-title{font-weight:800;font-size:.85rem;color:var(--purple);line-height:1.2}
+.hist-header-sub{font-size:.65rem;color:var(--muted);margin-top:1px}
+.hist-count-badge{background:var(--purple2);color:#fff;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:20px;}
+.hist-chevron{transition:transform .22s;color:var(--purple2);}
+.hist-chevron svg{width:16px;height:16px}
+.hist-section.open .hist-chevron{transform:rotate(90deg);}
+.hist-body{display:none;padding:.85rem 1rem;border-top:1px solid var(--border);}
+.hist-section.open .hist-body{display:block;}
+.hist-empty{text-align:center;color:var(--muted);font-size:.78rem;padding:.5rem 0;}
+.hist-timeline{position:relative;padding-left:1.4rem;}
+.hist-timeline::before{content:'';position:absolute;left:.45rem;top:.4rem;bottom:.4rem;width:2px;background:var(--border);border-radius:2px;}
+.hist-entry{position:relative;margin-bottom:1rem;}
+.hist-entry:last-child{margin-bottom:0;}
+.hist-dot{position:absolute;left:-1.4rem;top:.3rem;width:10px;height:10px;border-radius:50%;border:2px solid var(--white);box-shadow:0 0 0 2px var(--purple3);}
+.hist-dot.pf{box-shadow:0 0 0 2px var(--rose2);}
+.hist-dot.pap{box-shadow:0 0 0 2px var(--indigo2);}
+.hist-dot.vph{box-shadow:0 0 0 2px var(--teal2);}
+.hist-dot.general{box-shadow:0 0 0 2px var(--purple2);}
+.hist-entry-date{font-size:.65rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.22rem;}
+.hist-entry-card{background:var(--light);border:1px solid var(--border);border-radius:9px;padding:.6rem .75rem;}
+.hist-entry-title{font-size:.78rem;font-weight:800;color:var(--purple);margin-bottom:.3rem;display:flex;align-items:center;gap:.4rem;}
+.hist-entry-title .hist-type-tag{font-size:.58rem;font-weight:800;padding:1px 6px;border-radius:10px;white-space:nowrap;}
+.hist-entry-title .tag-pf{background:#fce4ec;color:#880e4f;}
+.hist-entry-title .tag-pap{background:#e8eaf6;color:#283593;}
+.hist-entry-title .tag-vph{background:#e0f2f1;color:#00695c;}
+.hist-entry-title .tag-general{background:#f3e5f5;color:#6a1b9a;}
+.hist-fields{display:grid;grid-template-columns:1fr 1fr;gap:.2rem .7rem;}
+.hist-field{display:flex;flex-direction:column;gap:1px;}
+.hist-field label{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);}
+.hist-field span{font-size:.73rem;color:var(--text);font-weight:600;}
+.hist-field.full{grid-column:1/-1;}
+.hist-personal{font-size:.62rem;color:var(--muted);margin-top:.35rem;padding-top:.3rem;border-top:1px dashed var(--border);}
+.hist-btn-add{display:flex;align-items:center;gap:.4rem;width:100%;padding:.5rem .75rem;background:var(--light2);border:1.5px dashed var(--purple3);border-radius:9px;color:var(--purple2);font-family:inherit;font-size:.76rem;font-weight:800;cursor:pointer;transition:all .2s;justify-content:center;margin-top:.75rem;}
+.hist-btn-add:hover{background:var(--light);border-color:var(--purple2);}
+/* Modal historial manual */
+#hist-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9100;display:none;align-items:flex-end;justify-content:center;}
+#hist-modal-bg.open{display:flex;}
+#cat-hist-modal-bg.open{display:flex;}
+#hist-modal{background:var(--white);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:1.3rem 1.1rem 2rem;}
+.hm-title{font-size:1rem;font-weight:800;color:var(--purple2);margin-bottom:1rem;}
+.hm-field{margin-bottom:.7rem;}
+.hm-field label{display:block;font-size:.72rem;font-weight:800;color:var(--text);margin-bottom:.28rem;}
+.hm-field select,.hm-field input,.hm-field textarea{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:.42rem .65rem;font-family:inherit;font-size:.82rem;color:var(--text);outline:none;transition:border-color .2s;}
+.hm-field select:focus,.hm-field input:focus,.hm-field textarea:focus{border-color:var(--rose2);}
+.hm-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;}
+.hm-actions{display:flex;gap:.6rem;margin-top:1rem;}
+
 @media(max-width:640px){
-  .fg.c2,.fg.c3{grid-template-columns:1fr}.dash-grid{grid-template-columns:repeat(2,1fr)}.home-title{font-size:1.2rem}.scroller{padding:.75rem}.form-body{padding:.82rem}.fs-title{margin-left:-.82rem;padding-left:.82rem}.method-selector{grid-template-columns:1fr 1fr}.month-cards-grid{grid-template-columns:repeat(2,1fr)}.topbar{gap:.36rem}.topbar-btn span{display:none}.f-row-checks{grid-template-columns:1fr}
+  .fg.c2,.fg.c3{grid-template-columns:1fr}.dash-grid{grid-template-columns:repeat(2,1fr)}.home-title{font-size:1.2rem}.scroller{padding:.75rem}.form-body{padding:.82rem}.fs-title{margin-left:-.82rem;padding-left:.82rem}.method-selector{grid-template-columns:1fr 1fr}.month-cards-grid{grid-template-columns:repeat(2,1fr)}.topbar{gap:.36rem}.topbar-btn span{display:none}.f-row-checks{grid-template-columns:1fr}.hist-fields{grid-template-columns:1fr;}
 }
 @media(max-width:380px){
   .month-cards-grid{grid-template-columns:1fr}.method-selector{grid-template-columns:1fr}.dash-grid{grid-template-columns:1fr}
@@ -724,6 +815,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
   <div class="topbar">
     <button class="back-btn" onclick="goHome()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Inicio</button>
     <div class="topbar-title">Alertas de Seguimiento</div>
+    <button class="topbar-btn primary" onclick="printHistorialCategorias()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>Historial</span></button>
   </div>
   <div class="sort-bar" style="border-bottom:1px solid var(--border);">
     <span class="sort-bar-lbl">Ordenar alertas:</span>
@@ -1070,10 +1162,32 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
         <div class="f-group"><label>Personal de salud responsable</label><input type="text" id="f-personal" placeholder="Nombre, cargo y UCSF"/></div>
       </div>
 
+      <!-- SECCIÓN 8: HISTORIAL DE SEGUIMIENTOS -->
+      <div class="hist-section" id="hist-section">
+        <div class="hist-header" onclick="toggleHistSection()">
+          <div class="hist-header-icon">📋</div>
+          <div class="hist-header-text">
+            <div class="hist-header-title">Historial de seguimientos</div>
+            <div class="hist-header-sub">Por categoría · <span id="hist-count-lbl">sin registros</span></div>
+          </div>
+          <span class="hist-count-badge" id="hist-badge" style="display:none">0</span>
+          <div class="hist-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="hist-body">
+          <div id="hist-acc-cont"></div>
+        </div>
+      </div>
+      <button class="hist-btn-add" id="btn-reg-seguimiento" onclick="openHistModal()" style="display:none;margin-top:.6rem">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Registrar seguimiento
+      </button>
+
     </div><!-- /form-body -->
     <div class="form-actions">
       <button class="btn save" onclick="saveRecord()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar ficha</button>
       <button class="btn teal" id="btn-print-ficha" onclick="printFichaActual()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir ficha</button>
+      <button class="btn indigo" id="btn-print-hist" onclick="printHistorialPaciente()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Imprimir historial</button>
+      <button class="btn" id="btn-print-vac" onclick="if(editingId)printTarjetaVacunas(editingId)" style="display:none;background:linear-gradient(135deg,#00796b,#26a69a);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><rect x="9" y="12" width="6" height="10" rx="1"/><path d="M9 7h1m2 0h1M9 4h1m2 0h1"/><circle cx="16" cy="5" r="1.5" fill="currentColor" stroke="none"/></svg>Tarjeta vacunas</button>
       <button class="btn danger" id="btn-delete" onclick="deleteCurrentRecord()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Eliminar</button>
       <button class="btn secondary" onclick="goBack()" style="margin-left:auto">Volver</button>
     </div>
@@ -1202,7 +1316,7 @@ function calcVphNext(rec){if(!rec.vphFecha)return null;return addYears(rec.vphFe
 
 /* ═══ ALERTAS MÚLTIPLES ═══ */
 function getAllAlerts(){
-  const byFolder={pf:[],pap:[],vph:[],promotor:[],arr:[]};
+  const byFolder={pf:[],pap:[],vph:[],promotor:[],arr:[],ent:[]};
   records.forEach(r=>{
     // PF — planificación familiar
     if(r.nextDate){const d=diffDays(r.nextDate);if(d<=60)byFolder.pf.push({rec:r,type:'pf',date:r.nextDate,diff:d,label:'Próximo seguimiento PF'});}
@@ -1216,6 +1330,8 @@ function getAllAlerts(){
     if(r.atencionPreventiva){const apNext=addYears(r.atencionPreventiva,1);const d=diffDays(apNext);if(d<=60)byFolder.promotor.push({rec:r,type:'promotor',date:apNext,diff:d,label:'Atención preventiva promotor (anual)',thisMonth:isThisMonth(apNext)});}
     // ARR — siempre visible si está activo
     if(r.arr==='si')byFolder.arr.push({rec:r,type:'arr',date:null,diff:0,label:'Alto Riesgo Reproductivo activo'});
+    // ENT — siempre visible si está activo
+    if(r.ent==='si')byFolder.ent.push({rec:r,type:'ent',date:r.fechaEnt||null,diff:r.fechaEnt?diffDays(addYears(r.fechaEnt,1)):0,label:'Control ENT/Discapacidad activo'});
   });
   Object.keys(byFolder).forEach(k=>byFolder[k].sort((a,b)=>(a.diff??999)-(b.diff??999)));
   return byFolder;
@@ -1455,13 +1571,16 @@ function initNewForm(){
   selects.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const checks=['rr-menor20','rr-mayor35','rr-ent','rr-gesta','rr-espacio','rr-aborto','rr-cesarea','rr-discap'];
   checks.forEach(id=>{const el=document.getElementById(id);if(el)el.checked=false;});
-  document.getElementById('f-fecha').value=new Date().toISOString().split('T')[0];
+  document.getElementById('f-fecha').value=(d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date());
   document.querySelectorAll('.method-opt').forEach(el=>el.classList.remove('selected'));
   document.querySelectorAll('input[name="metodo"]').forEach(r=>r.checked=false);
   document.getElementById('method-details').style.display='none';
   document.getElementById('multi-alert-preview').innerHTML='';
   document.getElementById('btn-delete').style.display='none';
   document.getElementById('btn-print-ficha').style.display='none';
+  document.getElementById('btn-print-hist').style.display='none';
+  document.getElementById('btn-print-vac').style.display='none';
+  document.getElementById('btn-reg-seguimiento').style.display='none';
   document.getElementById('fh-num-display').textContent='Nueva ficha';
   document.getElementById('riesgo-display').style.display='none';
   document.getElementById('f-ent-especifica-wrap').style.display='none';
@@ -1469,6 +1588,9 @@ function initNewForm(){
   document.getElementById('f-fecha-ent-wrap').style.display='none';
   const p=loadProfile();if(p.nombre)document.getElementById('f-personal').value=[p.nombre,p.cargo].filter(Boolean).join(' · ');
   initVacState();renderVacUI();
+  // Limpiar historial
+  renderHistAcc([]);
+  document.getElementById('hist-section').classList.remove('open');
 }
 function loadFormFromRecord(rec){
   _selectedMethod=rec.metodo||'';
@@ -1492,11 +1614,17 @@ function loadFormFromRecord(rec){
   document.getElementById('fh-num-display').textContent=`Ficha #${String(rec.num||0).padStart(3,'0')}`;
   document.getElementById('btn-delete').style.display='flex';
   document.getElementById('btn-print-ficha').style.display='flex';
+  document.getElementById('btn-print-hist').style.display='flex';
+  document.getElementById('btn-print-vac').style.display='flex';
+  document.getElementById('btn-reg-seguimiento').style.display='flex';
   editingId=rec.id;
   toggleENT();toggleDiscapacidad();calcRiesgo();
   if(_selectedMethod)selectMethod(_selectedMethod);
   recalcAlerta();
   loadVacFromRecord(rec);
+  // Mostrar historial por categoría
+  renderHistAcc(rec.historial||[]);
+  document.getElementById('hist-section').classList.remove('open');
 }
 
 /* ═══ SAVE / DELETE ═══ */
@@ -1535,12 +1663,31 @@ function saveRecord(){
     vacVph:{...(_vacState.vph||{})},vacDt:{...(_vacState.dt||{})},vacNeum:{...(_vacState.neum||{})},
     nextDate:nd,updatedAt:new Date().toISOString(),
   };
-  if(editingId){const i=records.findIndex(r=>r.id===editingId);if(i>-1)records[i]=rec;else records.push(rec);}
-  else records.push(rec);
+  // ── HISTORIAL AUTOMÁTICO ──
+  if(editingId){
+    const i=records.findIndex(r=>r.id===editingId);
+    const prevRec = i>-1 ? records[i] : null;
+    // Preservar historial existente
+    rec.historial = prevRec ? (prevRec.historial||[]) : [];
+    const newEntries = _buildHistSnapshot(rec, prevRec);
+    if(newEntries.length>0) rec.historial = rec.historial.concat(newEntries);
+    if(i>-1) records[i]=rec; else records.push(rec);
+  } else {
+    rec.historial = [];
+    const newEntries = _buildHistSnapshot(rec, null);
+    rec.historial = newEntries;
+    records.push(rec);
+  }
   editingId=rec.id;saveRecords();updateHomeStats();
+  // Actualizar UI historial
+  renderHistAcc(rec.historial);
+  // hist-section stays closed until user opens it
   showToast('✓ Ficha guardada correctamente','success');
   document.getElementById('btn-delete').style.display='flex';
   document.getElementById('btn-print-ficha').style.display='flex';
+  document.getElementById('btn-print-hist').style.display='flex';
+  document.getElementById('btn-print-vac').style.display='flex';
+  document.getElementById('btn-reg-seguimiento').style.display='flex';
   document.getElementById('fh-num-display').textContent=`Ficha #${String(rec.num).padStart(3,'0')}`;
 }
 function deleteCurrentRecord(){
@@ -1617,6 +1764,8 @@ function renderAlerts(){
      icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`},
     {key:'arr',   label:'Alto Riesgo Reproductivo',sub:'Pacientes con ARR activo',                cls:'arr',
      icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`},
+    {key:'ent',   label:'ENT / Discapacidad',       sub:'Enfermedades No Transmisibles y discapacidad',cls:'arr',
+     icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`},
   ];
 
   const summaryHTML=`<div class="alert-summary-bar">
@@ -1639,19 +1788,23 @@ function renderAlerts(){
       :items.map((a,i,arr)=>{
         const r=a.rec;
         let dotCls='ok',badgeTxt2='Al día',badgeCls2='ok';
-        if(f.key==='arr'){dotCls='arr';badgeTxt2='ARR activo';badgeCls2='arr';}
+        if(f.key==='arr'||f.key==='ent'){dotCls='arr';badgeTxt2=f.key==='arr'?'ARR activo':'ENT activo';badgeCls2='arr';}
         else if(a.diff<0){dotCls='overdue';badgeTxt2=`Vencido ${Math.abs(a.diff)}d`;badgeCls2='overdue';}
         else if(a.diff===0){dotCls='soon';badgeTxt2='Hoy';badgeCls2='soon';}
         else if(a.diff<=7){dotCls='soon';badgeTxt2=`En ${a.diff}d`;badgeCls2='soon';}
         else{dotCls='ok';badgeTxt2=`En ${a.diff}d`;badgeCls2='ok';}
         const dateStr=a.date?formatDateShort(a.date):'';
+        // ENT extra info
+        let entInfo='';
+        if(f.key==='ent'&&r.entEspecifica) entInfo=` · ${escHtml(r.entEspecifica.slice(0,25))}`;
+        if(f.key==='ent'&&r.discapacidad==='si') entInfo+=r.discapEspecifica?' · Discap: '+escHtml(r.discapEspecifica.slice(0,20)):'';
         // Promotor: insert month header before first thisMonth item
         let monthBanner='';
         if(f.key==='promotor'&&a.thisMonth&&(i===0||!arr[i-1].thisMonth)){
           const thisMonthCount=arr.filter(x=>x.thisMonth).length;
           monthBanner=`<div class="promotor-month-highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="promotor-month-highlight-text">📅 Seguimiento este mes — programar visitas</div><span class="promotor-month-highlight-count">${thisMonthCount}</span></div>`;
         }
-        return monthBanner+`<div class="falert" onclick="openRecord('${r.id}')"><div class="falert-dot ${dotCls}"></div><div class="falert-info"><div class="falert-name">${escHtml(r.nombre||'—')}${a.thisMonth&&f.key==='promotor'?' <span style=\'background:#e0f2f1;color:#00695c;font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:4px;\'>Este mes</span>':''}</div><div class="falert-detail">${dateStr?dateStr+' · ':''} ${escHtml(r.metodo?METODO_LABELS[r.metodo]||r.metodo:'')}</div></div><span class="falert-badge ${badgeCls2}">${badgeTxt2}</span></div>`;
+        return monthBanner+`<div class="falert" onclick="openRecord('${r.id}')"><div class="falert-dot ${dotCls}"></div><div class="falert-info"><div class="falert-name">${escHtml(r.nombre||'—')}${a.thisMonth&&f.key==='promotor'?' <span style=\'background:#e0f2f1;color:#00695c;font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:4px;\'>Este mes</span>':''}</div><div class="falert-detail">${dateStr?dateStr+' · ':''} ${escHtml(r.metodo?METODO_LABELS[r.metodo]||r.metodo:'')}${entInfo}</div></div><span class="falert-badge ${badgeCls2}">${badgeTxt2}</span></div>`;
       }).join('');
 
     return `<div class="folder ${f.cls}" id="folder-${f.key}">
@@ -1669,7 +1822,7 @@ function renderAlerts(){
   // auto-open folders with overdue items
   folders.forEach(f=>{
     const items=byF[f.key]||[];
-    if(items.some(a=>a.date&&a.diff<0)||f.key==='arr'&&items.length>0){
+    if(items.some(a=>a.date&&a.diff<0)||(f.key==='arr'||f.key==='ent')&&items.length>0){
       document.getElementById('folder-'+f.key)?.classList.add('open');
     }
   });
@@ -1911,107 +2064,166 @@ function printFicha(id){
   const r=records.find(x=>x.id===id);if(!r)return;
   const profile=loadProfile();
   const ucsf=profile.ucsf||'UCSF';
+  const personal=profile.nombre||'Personal de salud';
+  const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
   const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'}):'—';
   const fmts=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+  const fmtd=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
   const yesno=v=>v==='si'?'Sí':v==='no'?'No':'—';
-  const riesgosLabels={'rr-menor20':'Menor de 20 años','rr-mayor35':'Mayor de 35 años','rr-ent':'Padece ENT','rr-gesta':'Gran multípara','rr-espacio':'PIG corto','rr-aborto':'Antec. aborto','rr-cesarea':'Cesárea anterior','rr-discap':'Discapacidad'};
-  const rrList=(r.riesgos||[]).map(k=>riesgosLabels[k]||k).join(', ')||'Ninguno';
-  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>Ficha MEF · ${r.nombre||''}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
-  <style>@page{size:Letter portrait;margin:12mm 14mm}*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:'Nunito',sans-serif;font-size:9.5px;color:#2d1a3a}
-  .ph{background:linear-gradient(135deg,#5c1a6e,#c2185b);color:#fff;padding:8px 12px;border-radius:6px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
-  .ph-title{font-size:13px;font-weight:800;line-height:1.2}.ph-sub{font-size:8px;opacity:.75;margin-top:2px}
-  .ph-num{background:rgba(255,255,255,.2);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:800;margin-left:auto;white-space:nowrap}
-  .section{margin-bottom:9px}.section-title{background:#f3e5f5;color:#5c1a6e;font-size:7.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:4px;margin-bottom:5px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 10px}
-  .field{display:flex;flex-direction:column;gap:1px}.field label{font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#8e6fa0}.field span{font-size:9px;font-weight:600;color:#2d1a3a;border-bottom:1px solid #e1bee7;padding-bottom:1px;min-height:14px}
-  .badge{display:inline-block;border-radius:3px;padding:1px 5px;font-size:7.5px;font-weight:800}
-  .badge.met{background:#f3e5f5;color:#7b1fa2}.badge.arr{background:#ffebee;color:#b71c1c}.badge.ok{background:#e8f5e9;color:#2e7d32}.badge.warn{background:#fff3e0;color:#e65100}
-  .alert-row{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap}
-  .alert-item{border-radius:6px;padding:4px 7px;font-size:8px;font-weight:700;border:1px solid}
-  .alert-item.pf{background:#fce4ec;border-color:#f48fb1;color:#880e4f}
-  .alert-item.pap{background:#f3e5f5;border-color:#ce93d8;color:#4a148c}
-  .alert-item.vph{background:#e8eaf6;border-color:#9fa8da;color:#283593}
-  .footer{margin-top:10px;padding-top:5px;border-top:1px solid #e1bee7;display:flex;justify-content:space-between;font-size:7px;color:#8e6fa0}
-  .firma-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px}
-  .firma{border-top:1px solid #9e9e9e;padding-top:3px;font-size:7.5px;color:#666;text-align:center}
-  </style></head><body>
-  <div class="ph">
-    <div><div class="ph-title">Ficha de Seguimiento MEF · MINSAL El Salvador</div><div class="ph-sub">${escHtml(ucsf)} · ${escHtml(profile.nombre||'Personal de salud')}</div></div>
-    <div class="ph-num">Ficha #${String(r.num||0).padStart(3,'0')}</div>
-  </div>
-  <div class="section"><div class="section-title">1. Identificación</div>
-    <div class="grid3">
-      <div class="field" style="grid-column:1/3"><label>Nombre completo</label><span>${escHtml(r.nombre||'—')}</span></div>
-      <div class="field"><label>N° Vivienda</label><span>${escHtml(r.vivienda||'—')}</span></div>
-      <div class="field"><label>DUI / Documento</label><span>${escHtml(r.dui||'—')}</span></div>
-      <div class="field"><label>F. Nacimiento</label><span>${fmt(r.nacimiento)}</span></div>
-      <div class="field"><label>Edad</label><span>${r.edad||'—'} años</span></div>
-      <div class="field" style="grid-column:1/3"><label>Dirección / Comunidad / Cantón</label><span>${escHtml(r.direccion||'—')}</span></div>
-      <div class="field"><label>Teléfono</label><span>${escHtml(r.telefono||'—')}</span></div>
-      <div class="field"><label>Fecha de registro</label><span>${fmt(r.fecha)}</span></div>
-      <div class="field"><label>Vida sexual activa</label><span>${yesno(r.vidaSexual)}</span></div>
-    </div>
-  </div>
-  <div class="section"><div class="section-title">2. Condición de salud</div>
-    <div class="grid">
-      <div class="field"><label>Atención Preconcepcional</label><span>${yesno(r.preconcepcional)}</span></div>
-      <div class="field"><label>Alto Riesgo Reproductivo</label><span>${r.arr==='si'?'<span class="badge arr">SÍ — ARR activo</span>':yesno(r.arr)}</span></div>
-      <div class="field"><label>ENT</label><span>${r.ent==='si'?escHtml(r.entEspecifica||'Sí'):yesno(r.ent)}</span></div>
-      <div class="field"><label>Discapacidad</label><span>${r.discapacidad==='si'?escHtml(r.discapEspecifica||'Sí'):yesno(r.discapacidad)}</span></div>
-      <div class="field"><label>Últ. atención preventiva (promotor)</label><span>${fmt(r.atencionPreventiva)}</span></div>
-      <div class="field"><label>Próx. atención preventiva</label><span>${r.atencionPreventiva?fmt(addYears(r.atencionPreventiva,1)):'—'}</span></div>
-    </div>
-  </div>
-  <div class="section"><div class="section-title">3. Planificación Familiar</div>
-    <div class="grid">
-      <div class="field"><label>Método</label><span><span class="badge met">${METODO_LABELS[r.metodo]||r.metodo||'—'}</span></span></div>
-      <div class="field"><label>Próximo seguimiento PF</label><span>${r.nextDate?`<span class="badge ${diffDays(r.nextDate)<0?'arr':diffDays(r.nextDate)<=7?'warn':'ok'}">${fmt(r.nextDate)}</span>`:'—'}</span></div>
-      <div class="field"><label>Fecha inicio / aplicación</label><span>${fmt(r.inicioOral||r.inicioInject||r.inicioAnual||'')}</span></div>
-      ${r.metodo==='oral'?`<div class="field"><label>Blisters entregados</label><span>${r.blisters||'—'}</span></div>`:''}
-    </div>
-  </div>
-  <div class="section"><div class="section-title">4. Prevención Cáncer Cérvico Uterino</div>
-    <div class="grid">
-      <div class="field"><label>Última citología PAP</label><span>${fmt(r.papFecha)}</span></div>
-      <div class="field"><label>Próxima PAP (1 año)</label><span>${r.papNext?`<span class="badge ${diffDays(r.papNext)<0?'arr':'ok'}">${fmt(r.papNext)}</span>`:'—'}</span></div>
-      <div class="field"><label>Último VPH</label><span>${fmt(r.vphFecha)}</span></div>
-      <div class="field"><label>Próximo VPH (5 años)</label><span>${r.vphNext?`<span class="badge ${diffDays(r.vphNext)<0?'arr':'ok'}">${fmt(r.vphNext)}</span>`:'—'}</span></div>
-      <div class="field"><label>Resultado PAP/VPH</label><span>${escHtml(r.papResultado||'—')}</span></div>
-      <div class="field"><label>Referida a 2° nivel</label><span>${yesno(r.referida)}</span></div>
-    </div>
-  </div>
-  <div class="section"><div class="section-title">5. Riesgo Reproductivo</div>
-    <div class="grid">
-      <div class="field"><label>Factores identificados</label><span>${escHtml(rrList)}</span></div>
-      <div class="field"><label>Gestaciones / Partos</label><span>${r.gestaciones||'0'} gest. · ${r.partos||'0'} partos</span></div>
-    </div>
-  </div>
-  <div class="section"><div class="section-title">6. Esquema de Vacunación</div>
-    <div class="grid">
-      <div class="field"><label>Vacuna VPH (1 dosis + refuerzo)</label><span style="min-height:16px">${
-        [{i:1,l:'Dosis'},{i:2,l:'Refuerzo'}].map(x=>{const d=(r.vacVph||{})[x.i];return d?x.l+': '+fmt(d):x.l+': —';}).join(' · ')
-      }</span></div>
-      <div class="field"><label>Vacuna DT Adulto (5 dosis · completo: 3)</label><span style="min-height:16px">${
-        [1,2,3,4,5].map(i=>{const d=(r.vacDt||{})[i];return d?'D'+i+': '+fmt(d):'D'+i+': —';}).join(' · ')
-      }</span></div>
-      <div class="field"><label>Vacuna Neumococo 23V (dosis + refuerzo 5 años)</label><span style="min-height:16px">${
-        [{i:1,l:'Dosis'},{i:2,l:'Refuerzo'}].map(x=>{const d=(r.vacNeum||{})[x.i];return d?x.l+': '+fmt(d):x.l+': —';}).join(' · ')
-      }</span></div>
-    </div>
-  </div>
-  <div class="section"><div class="section-title">7. Observaciones</div>
-    <div class="field"><label>Notas clínicas</label><span style="min-height:24px">${escHtml(r.observaciones||'—')}</span></div>
-    <div class="field" style="margin-top:4px"><label>Personal responsable</label><span>${escHtml(r.personal||'—')}</span></div>
-  </div>
-  <div class="firma-row">
-    <div class="firma">Firma del Promotor / Enfermera</div>
-    <div class="firma">Firma de la Paciente / Responsable</div>
-  </div>
-  <div class="footer"><span>Control MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>Impreso: ${new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'})}</span></div>
-  </body></html>`;
-  const w=window.open('','_blank','width=820,height=950');if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
+  const esc=s=>escHtml(String(s||''));
+  const rLbls={'rr-menor20':'Menor de 20 años','rr-mayor35':'Mayor de 35 años','rr-ent':'Padece ENT','rr-gesta':'Gran multípara','rr-espacio':'PIG corto','rr-aborto':'Antec. aborto','rr-cesarea':'Cesárea anterior','rr-discap':'Discapacidad'};
+  const rrList=(r.riesgos||[]).map(k=>rLbls[k]||k).join(', ')||'Ninguno';
+
+  /* ── PÁGINA 2: historial por categorías ── */
+  const hist=r.historial||[];
+  const CATS=[
+    {key:'pf',        label:'Planificación Familiar',    tipos:['pf'],         color:'#9e3060', head:'#fce4ec', row:'#fff5f7'},
+    {key:'pap',       label:'Citología PAP',             tipos:['pap'],        color:'#3949a3', head:'#eef0fb', row:'#f5f6fd'},
+    {key:'vph',       label:'VPH',                       tipos:['vph'],        color:'#1a7a5e', head:'#e0f5f0', row:'#f2faf8'},
+    {key:'preventiva',label:'Atención Preventiva',       tipos:['preventiva'], color:'#6a35a0', head:'#f5eeff', row:'#faf5ff'},
+    {key:'vacuna',    label:'Vacunación',                tipos:['vacuna'],     color:'#2565b0', head:'#e8f1fb', row:'#f3f7fd'},
+    {key:'arr',       label:'Alto Riesgo Reproductivo',  tipos:['arr'],        color:'#c0392b', head:'#fdecea', row:'#fff7f6'},
+    {key:'ent',       label:'ENT / Discapacidad',        tipos:['ent'],        color:'#c0580a', head:'#fef3e8', row:'#fffaf3'},
+    {key:'general',   label:'Consultas Generales',       tipos:['general'],    color:'#6a3580', head:'#f7eeff', row:'#fdf8ff'},
+  ];
+
+  const chips=CATS.map(cat=>{
+    const n=hist.filter(e=>cat.tipos.includes(e.tipo)).length;
+    return '<div style="border-radius:6px;padding:4px 9px;text-align:center;border:1px solid '+cat.color+'40;background:'+cat.head+';min-width:66px">'
+      +'<div style="font-size:13px;font-weight:800;color:'+cat.color+';line-height:1">'+n+'</div>'
+      +'<div style="font-size:6px;font-weight:700;color:'+cat.color+';margin-top:1px">'+cat.label+'</div></div>';
+  }).join('');
+
+  const catBlocks=CATS.map(cat=>{
+    const entries=hist.filter(e=>cat.tipos.includes(e.tipo)).sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
+    const rows=entries.length===0
+      ?'<tr><td colspan="5" style="text-align:center;color:#9e9e9e;font-style:italic;padding:6px;font-size:8px">Sin registros en esta categoría</td></tr>'
+      :entries.map((e,i)=>'<tr style="'+(i%2?'background:'+cat.row:'')+'">'
+        +'<td style="white-space:nowrap;font-weight:700;padding:3px 6px;border:1px solid rgba(0,0,0,.07)">'+fmtd(e.fecha)+'</td>'
+        +'<td style="padding:3px 6px;border:1px solid rgba(0,0,0,.07)">'+esc(e.detalle||'—')+'</td>'
+        +'<td style="white-space:nowrap;padding:3px 6px;border:1px solid rgba(0,0,0,.07)">'+(e.proxCita?fmtd(e.proxCita):'—')+'</td>'
+        +'<td style="padding:3px 6px;border:1px solid rgba(0,0,0,.07)">'+esc(e.obs||'—')+'</td>'
+        +'<td style="padding:3px 6px;border:1px solid rgba(0,0,0,.07)">'+esc(e.personal||'—')
+        +'<span style="display:inline-block;font-size:6px;font-weight:800;padding:0 3px;border-radius:3px;margin-left:2px;background:'+(e.auto?'#f3e5f5':'#e8f5e9')+';color:'+(e.auto?'#7b1fa2':'#2e7d32')+'">'+(e.auto?'AUTO':'MANUAL')+'</span></td>'
+        +'</tr>').join('');
+    return '<div style="margin-bottom:10px;page-break-inside:avoid;break-inside:avoid;border:1px solid '+cat.color+'30;border-radius:5px">'
+      +'<div style="background:'+cat.head+';border-bottom:2px solid '+cat.color+'50;padding:5px 10px;border-radius:5px 5px 0 0;display:flex;align-items:center;justify-content:space-between">'
+      +'<span style="font-size:9.5px;font-weight:800;color:'+cat.color+'">'+cat.label+'</span>'
+      +'<span style="font-size:7.5px;background:'+cat.color+'15;color:'+cat.color+';padding:1px 7px;border-radius:8px;font-weight:700">'+entries.length+' entrada'+(entries.length!==1?'s':'')+'</span></div>'
+      +'<table style="width:100%;border-collapse:collapse;font-size:8px">'
+      +'<thead><tr style="background:#f9f9f9">'
+      +'<th style="padding:3px 6px;font-size:7px;font-weight:800;text-align:left;text-transform:uppercase;color:#555;border:1px solid #e0e0e0">Fecha</th>'
+      +'<th style="padding:3px 6px;font-size:7px;font-weight:800;text-align:left;text-transform:uppercase;color:#555;border:1px solid #e0e0e0">Detalle</th>'
+      +'<th style="padding:3px 6px;font-size:7px;font-weight:800;text-align:left;text-transform:uppercase;color:#555;border:1px solid #e0e0e0">Próx. cita</th>'
+      +'<th style="padding:3px 6px;font-size:7px;font-weight:800;text-align:left;text-transform:uppercase;color:#555;border:1px solid #e0e0e0">Observaciones</th>'
+      +'<th style="padding:3px 6px;font-size:7px;font-weight:800;text-align:left;text-transform:uppercase;color:#555;border:1px solid #e0e0e0">Responsable</th>'
+      +'</tr></thead><tbody>'+rows+'</tbody></table></div>';
+  }).join('');
+
+  /* ── CSS ── */
+  const css='@page{size:Letter portrait;margin:12mm 14mm}'
+    +'*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    +'body{font-family:\'Nunito\',sans-serif;font-size:9.5px;color:#2d1a3a}'
+    +'.pb{page-break-before:always;break-before:page;display:block;height:0;line-height:0}'
+    +'.ph{background:linear-gradient(135deg,#5c1a6e,#c2185b);color:#fff;padding:8px 12px;border-radius:6px;margin-bottom:10px;display:flex;align-items:center;gap:10px}'
+    +'.ph-title{font-size:13px;font-weight:800;line-height:1.2}.ph-sub{font-size:8px;opacity:.75;margin-top:2px}'
+    +'.ph-num{background:rgba(255,255,255,.2);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:800;margin-left:auto;white-space:nowrap}'
+    +'.sec{margin-bottom:9px}.sec-t{background:#f3e5f5;color:#5c1a6e;font-size:7.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:4px;margin-bottom:5px}'
+    +'.g2{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 10px}'
+    +'.f{display:flex;flex-direction:column;gap:1px}.f label{font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#8e6fa0}.f span{font-size:9px;font-weight:600;color:#2d1a3a;border-bottom:1px solid #e1bee7;padding-bottom:1px;min-height:14px}'
+    +'.b{display:inline-block;border-radius:3px;padding:1px 5px;font-size:7.5px;font-weight:800}'
+    +'.b-m{background:#f3e5f5;color:#7b1fa2}.b-r{background:#ffebee;color:#b71c1c}.b-ok{background:#e8f5e9;color:#2e7d32}.b-w{background:#fff3e0;color:#e65100}'
+    +'.foot{margin-top:10px;padding-top:5px;border-top:1px solid #e1bee7;display:flex;justify-content:space-between;font-size:7px;color:#8e6fa0}'
+    +'.fr{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:14px}'
+    +'.fi{border-top:1px solid #9e9e9e;padding-top:3px;font-size:7.5px;color:#666;text-align:center}';
+
+  /* ── PÁGINA 1 HTML ── */
+  const p1='<div class="ph"><div><div class="ph-title">Ficha de Seguimiento MEF &middot; MINSAL El Salvador</div>'
+    +'<div class="ph-sub">'+esc(ucsf)+' &middot; '+esc(personal)+'</div></div>'
+    +'<div class="ph-num">Ficha #'+String(r.num||0).padStart(3,'0')+'</div></div>'
+
+    +'<div class="sec"><div class="sec-t">1. Identificación</div><div class="g3">'
+    +'<div class="f" style="grid-column:1/3"><label>Nombre completo</label><span>'+esc(r.nombre||'—')+'</span></div>'
+    +'<div class="f"><label>N° Vivienda</label><span>'+esc(r.vivienda||'—')+'</span></div>'
+    +'<div class="f"><label>DUI / Documento</label><span>'+esc(r.dui||'—')+'</span></div>'
+    +'<div class="f"><label>F. Nacimiento</label><span>'+fmt(r.nacimiento)+'</span></div>'
+    +'<div class="f"><label>Edad</label><span>'+(r.edad||'—')+' años</span></div>'
+    +'<div class="f" style="grid-column:1/3"><label>Dirección / Comunidad / Cantón</label><span>'+esc(r.direccion||'—')+'</span></div>'
+    +'<div class="f"><label>Teléfono</label><span>'+esc(r.telefono||'—')+'</span></div>'
+    +'<div class="f"><label>Fecha de registro</label><span>'+fmt(r.fecha)+'</span></div>'
+    +'<div class="f"><label>Vida sexual activa</label><span>'+yesno(r.vidaSexual)+'</span></div>'
+    +'</div></div>'
+
+    +'<div class="sec"><div class="sec-t">2. Condición de salud</div><div class="g2">'
+    +'<div class="f"><label>Atención Preconcepcional</label><span>'+yesno(r.preconcepcional)+'</span></div>'
+    +'<div class="f"><label>Alto Riesgo Reproductivo</label><span>'+(r.arr==='si'?'<span class="b b-r">SÍ — ARR activo</span>':yesno(r.arr))+'</span></div>'
+    +'<div class="f"><label>ENT</label><span>'+(r.ent==='si'?esc(r.entEspecifica||'Sí'):yesno(r.ent))+'</span></div>'
+    +'<div class="f"><label>Discapacidad</label><span>'+(r.discapacidad==='si'?esc(r.discapEspecifica||'Sí'):yesno(r.discapacidad))+'</span></div>'
+    +'<div class="f"><label>Últ. atención preventiva</label><span>'+fmt(r.atencionPreventiva)+'</span></div>'
+    +'<div class="f"><label>Próx. atención preventiva</label><span>'+(r.atencionPreventiva?fmt(addYears(r.atencionPreventiva,1)):'—')+'</span></div>'
+    +'</div></div>'
+
+    +'<div class="sec"><div class="sec-t">3. Planificación Familiar</div><div class="g2">'
+    +'<div class="f"><label>Método</label><span><span class="b b-m">'+(METODO_LABELS[r.metodo]||r.metodo||'—')+'</span></span></div>'
+    +'<div class="f"><label>Próximo seguimiento PF</label><span>'+(r.nextDate?'<span class="b '+(diffDays(r.nextDate)<0?'b-r':diffDays(r.nextDate)<=7?'b-w':'b-ok')+'">'+fmt(r.nextDate)+'</span>':'—')+'</span></div>'
+    +'<div class="f"><label>Fecha inicio / aplicación</label><span>'+fmt(r.inicioOral||r.inicioInject||r.inicioAnual||'')+'</span></div>'
+    +(r.metodo==='oral'?'<div class="f"><label>Blisters entregados</label><span>'+(r.blisters||'—')+'</span></div>':'')
+    +'</div></div>'
+
+    +'<div class="sec"><div class="sec-t">4. Prevención Cáncer Cérvico Uterino</div><div class="g2">'
+    +'<div class="f"><label>Última citología PAP</label><span>'+fmt(r.papFecha)+'</span></div>'
+    +'<div class="f"><label>Próxima PAP</label><span>'+(r.papNext?'<span class="b '+(diffDays(r.papNext)<0?'b-r':'b-ok')+'">'+fmt(r.papNext)+'</span>':'—')+'</span></div>'
+    +'<div class="f"><label>Último VPH</label><span>'+fmt(r.vphFecha)+'</span></div>'
+    +'<div class="f"><label>Próximo VPH</label><span>'+(r.vphNext?'<span class="b '+(diffDays(r.vphNext)<0?'b-r':'b-ok')+'">'+fmt(r.vphNext)+'</span>':'—')+'</span></div>'
+    +'<div class="f"><label>Resultado PAP/VPH</label><span>'+esc(r.papResultado||'—')+'</span></div>'
+    +'<div class="f"><label>Referida a 2° nivel</label><span>'+yesno(r.referida)+'</span></div>'
+    +'</div></div>'
+
+    +'<div class="sec"><div class="sec-t">5. Riesgo Reproductivo</div><div class="g2">'
+    +'<div class="f"><label>Factores identificados</label><span>'+esc(rrList)+'</span></div>'
+    +'<div class="f"><label>Gestaciones / Partos</label><span>'+(r.gestaciones||'0')+' gest. &middot; '+(r.partos||'0')+' partos</span></div>'
+    +'</div></div>'
+
+    +'<div class="sec"><div class="sec-t">6. Esquema de Vacunación</div><div class="g2">'
+    +'<div class="f"><label>VPH (dosis + refuerzo)</label><span>'
+    +[{i:1,l:'Dosis'},{i:2,l:'Refuerzo'}].map(x=>{const d=(r.vacVph||{})[x.i];return d?x.l+': '+fmt(d):x.l+': —';}).join(' · ')
+    +'</span></div>'
+    +'<div class="f"><label>DT Adulto (5 dosis)</label><span>'
+    +[1,2,3,4,5].map(i=>{const d=(r.vacDt||{})[i];return d?'D'+i+': '+fmt(d):'D'+i+': —';}).join(' · ')
+    +'</span></div>'
+    +'<div class="f"><label>Neumococo 23V</label><span>'
+    +[{i:1,l:'Dosis'},{i:2,l:'Refuerzo'}].map(x=>{const d=(r.vacNeum||{})[x.i];return d?x.l+': '+fmt(d):x.l+': —';}).join(' · ')
+    +'</span></div>'
+    +'</div></div>'
+
+    +'<div class="sec"><div class="sec-t">7. Observaciones</div>'
+    +'<div class="f"><label>Notas clínicas</label><span style="min-height:24px">'+esc(r.observaciones||'—')+'</span></div>'
+    +'<div class="f" style="margin-top:4px"><label>Personal responsable</label><span>'+esc(r.personal||'—')+'</span></div>'
+    +'</div>'
+
+    +'<div class="fr"><div class="fi">Firma del Promotor / Enfermera</div><div class="fi">Firma de la Paciente / Responsable</div></div>'
+    +'<div class="foot"><span>Control MEF &middot; MINSAL El Salvador &middot; '+esc(ucsf)+'</span><span>Impreso: '+todayStr+'</span></div>';
+
+  /* ── PÁGINA 2 HTML ── */
+  const p2='<div class="pb"></div>'
+    +'<div style="background:linear-gradient(135deg,#3d4a8a,#5c6bc0);color:#fff;padding:9px 13px;border-radius:7px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">'
+    +'<div><div style="font-size:13px;font-weight:800">&#128203; Historial de Seguimientos</div>'
+    +'<div style="font-size:7.5px;opacity:.75;margin-top:2px">'+esc(r.nombre||'—')+' &middot; Ficha #'+String(r.num||0).padStart(3,'0')+' &middot; '+esc(ucsf)+'</div></div>'
+    +'<div style="text-align:right;font-size:8px;opacity:.85">'+hist.length+' entrada'+(hist.length!==1?'s':'')+' totales<br>'+todayStr+'</div></div>'
+    +'<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">'+chips+'</div>'
+    +catBlocks
+    +'<div class="fr"><div class="fi">Firma del Promotor / Enfermera</div><div class="fi">Firma de la Paciente / Responsable</div></div>'
+    +'<div class="foot"><span>Historial MEF &middot; MINSAL El Salvador &middot; '+esc(ucsf)+'</span><span>'+todayStr+'</span></div>';
+
+  const html='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>'
+    +'<title>Ficha MEF &middot; '+esc(r.nombre||'')+'</title>'
+    +'<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>'
+    +'<style>'+css+'</style></head><body>'+p1+p2+'</body></html>';
+
+  const w=window.open('','_blank','width=820,height=950');
+  if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
 }
+
 
 /* ═══ LIST FOLDERS ═══ */
 function lfItemHTML(r){
@@ -2479,6 +2691,921 @@ function applyProfile(p){const n=p.nombre||'';const pts=n.trim().split(' ').filt
 function openProfileModal(){const p=loadProfile();document.getElementById('profile-nombre').value=p.nombre||'';document.getElementById('profile-cargo').value=p.cargo||'';document.getElementById('profile-ucsf').value=p.ucsf||'';document.getElementById('profile-modal-bg').classList.add('show');setTimeout(()=>document.getElementById('profile-nombre').focus(),100);}
 function closeProfileModal(){document.getElementById('profile-modal-bg').classList.remove('show');}
 
+/* ═══════════════════════════════════════
+   HISTORIAL DE SEGUIMIENTOS
+   Cada entrada: {id, fecha, tipo, detalle, proxCita, obs, personal, auto, ts}
+   'auto:true' = creada automáticamente al guardar; 'auto:false' = ingreso manual
+═══════════════════════════════════════ */
+
+const HIST_TIPO_LABELS = {
+  pf:'Planificación Familiar', pap:'Citología PAP', vph:'VPH',
+  arr:'Alto Riesgo Reproductivo', preventiva:'Atención Preventiva',
+  vacuna:'Vacunación', ent:'Control ENT/Discapacidad', general:'Consulta General'
+};
+const HIST_TIPO_TAG = {
+  pf:'tag-pf', pap:'tag-pap', vph:'tag-vph', arr:'tag-pf',
+  preventiva:'tag-general', vacuna:'tag-vph', ent:'tag-general', general:'tag-general'
+};
+const HIST_DOT_CLS = {
+  pf:'pf', pap:'pap', vph:'vph', arr:'pf',
+  preventiva:'general', vacuna:'vph', ent:'general', general:'general'
+};
+
+/* Crea entradas de historial automáticas al guardar la ficha.
+   Lógica:
+   - prevRec===null  → ficha nueva: generar una entrada por cada campo que tenga dato
+   - prevRec existe  → solo generar entradas para campos que CAMBIARON
+     y que además NO tienen ya una entrada auto con el mismo valor en el historial
+     (evita duplicados al bajar de la nube y guardar sin cambios)
+*/
+function _buildHistSnapshot(rec, prevRec){
+  const entries = [];
+  const localDate = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  const fechaHoy = rec.fecha || localDate(new Date());
+  const profile  = loadProfile();
+  const personal = rec.personal || (profile.nombre ? [profile.nombre,profile.cargo].filter(Boolean).join(' · ') : '');
+  const hist     = prevRec ? (prevRec.historial||[]) : [];
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
+  // ¿Ya existe en el historial una entrada auto de ese tipo con ese valor de referencia?
+  const yaExiste = (tipo, campoVal) =>
+    hist.some(e => e.auto && e.tipo === tipo && e.fecha === campoVal);
+
+  const mk = (sufijo, tipo, fecha, detalle, proxCita, obs) => ({
+    id: Date.now().toString(36)+'_'+sufijo,
+    fecha, tipo, detalle: detalle||'', proxCita: proxCita||'',
+    obs: obs||'', personal, auto: true, ts: new Date().toISOString()
+  });
+
+  const changed = (campo) => !prevRec || rec[campo] !== prevRec[campo];
+  const changedAny = (...campos) => campos.some(c => changed(c));
+
+  // ── Ficha NUEVA: registrar todo lo que tenga dato ─────────────────────
+  if(!prevRec){
+    // Entrada general de registro
+    entries.push(mk('ini','general', fechaHoy,
+      'Registro inicial MEF · Método: '+(METODO_LABELS[rec.metodo]||rec.metodo||'Sin método'),
+      rec.nextDate, rec.observaciones||''));
+
+    // PF — solo si tiene fecha de inicio
+    const iniFecha = rec.inicioOral || rec.inicioInject || rec.inicioAnual;
+    if(rec.metodo && rec.metodo !== 'ninguno' && iniFecha){
+      entries.push(mk('pf','pf', iniFecha,
+        'Método: '+(METODO_LABELS[rec.metodo]||rec.metodo)+(rec.blisters?' · Blisters: '+rec.blisters:''),
+        rec.nextDate));
+    }
+    // PAP
+    if(rec.papFecha)
+      entries.push(mk('pap','pap', rec.papFecha,
+        'Citología PAP'+(rec.papResultado?' · Resultado: '+rec.papResultado:'')+(rec.referida==='si'?' · Referida a 2° nivel':''),
+        rec.papNext));
+    // VPH
+    if(rec.vphFecha)
+      entries.push(mk('vph','vph', rec.vphFecha, 'VPH registrado', rec.vphNext));
+    // Preventiva
+    if(rec.atencionPreventiva)
+      entries.push(mk('prev','preventiva', rec.atencionPreventiva, 'Atención preventiva por promotor de salud', ''));
+    // ARR
+    if(rec.arr === 'si')
+      entries.push(mk('arr','arr', fechaHoy, 'Clasificación ARR activo — requiere seguimiento especial', ''));
+    // ENT
+    if(rec.ent === 'si'){
+      let detEnt = 'ENT activo'+(rec.entEspecifica?' — '+rec.entEspecifica:'');
+      if(rec.discapacidad==='si') detEnt += ' · Discapacidad'+(rec.discapEspecifica?' — '+rec.discapEspecifica:'');
+      entries.push(mk('ent','ent', rec.fechaEnt||fechaHoy, detEnt, ''));
+    }
+    // Vacunas
+    const vacGrupos = [];
+    if((rec.vacVph||{})[1]||(rec.vacVph||{})[2])  vacGrupos.push('VPH');
+    if([1,2,3,4,5].some(i=>(rec.vacDt||{})[i]))   vacGrupos.push('DT Adulto');
+    if((rec.vacNeum||{})[1]||(rec.vacNeum||{})[2]) vacGrupos.push('Neumococo 23V');
+    if(vacGrupos.length)
+      entries.push(mk('vac','vacuna', fechaHoy, 'Esquema inicial de vacunación: '+vacGrupos.join(', '), ''));
+    return entries;
+  }
+
+  // ── Ficha EXISTENTE: solo campos que cambiaron Y que no tienen ya esa entrada ──
+
+  // PF
+  if(changedAny('metodo','inicioOral','inicioInject','inicioAnual','blisters','nextDate')){
+    const iniFecha = rec.inicioOral || rec.inicioInject || rec.inicioAnual || fechaHoy;
+    // No duplicar si ya hay una entrada pf con esa misma fecha de inicio
+    if(!yaExiste('pf', iniFecha)){
+      entries.push(mk('pf','pf', iniFecha,
+        'Método: '+(METODO_LABELS[rec.metodo]||rec.metodo||'Sin método')+(rec.blisters?' · Blisters: '+rec.blisters:''),
+        rec.nextDate));
+    }
+  }
+
+  // PAP
+  if(changedAny('papFecha','papResultado') && rec.papFecha && !yaExiste('pap', rec.papFecha)){
+    entries.push(mk('pap','pap', rec.papFecha,
+      'Citología PAP'+(rec.papResultado?' · Resultado: '+rec.papResultado:'')+(rec.referida==='si'?' · Referida a 2° nivel':''),
+      rec.papNext));
+  }
+
+  // VPH
+  if(changed('vphFecha') && rec.vphFecha && !yaExiste('vph', rec.vphFecha)){
+    entries.push(mk('vph','vph', rec.vphFecha, 'VPH registrado', rec.vphNext));
+  }
+
+  // Preventiva
+  if(changed('atencionPreventiva') && rec.atencionPreventiva && !yaExiste('preventiva', rec.atencionPreventiva)){
+    entries.push(mk('prev','preventiva', rec.atencionPreventiva, 'Atención preventiva por promotor de salud', ''));
+  }
+
+  // ARR
+  if(changed('arr') && rec.arr){
+    const detArr = rec.arr==='si'
+      ? 'Clasificación ARR activo — requiere seguimiento especial'
+      : 'ARR desactivado';
+    entries.push(mk('arr','arr', fechaHoy, detArr, ''));
+  }
+
+  // ENT
+  if(changedAny('ent','entEspecifica','fechaEnt','discapacidad','discapEspecifica')){
+    let detEnt = '';
+    if(rec.ent==='si'){
+      detEnt = 'ENT activo'+(rec.entEspecifica?' — '+rec.entEspecifica:'');
+      if(rec.discapacidad==='si') detEnt += ' · Discapacidad'+(rec.discapEspecifica?' — '+rec.discapEspecifica:'');
+    } else if(rec.ent==='no' && prevRec.ent==='si'){
+      detEnt = 'ENT desactivado';
+    }
+    if(detEnt && !yaExiste('ent', rec.fechaEnt||fechaHoy))
+      entries.push(mk('ent','ent', rec.fechaEnt||fechaHoy, detEnt, ''));
+  }
+
+  // Vacunas
+  const vacCh = (a,b,keys) => keys.some(k=>(a||{})[k]!==(b||{})[k]);
+  const vphCh  = vacCh(rec.vacVph,  prevRec.vacVph,  [1,2]);
+  const dtCh   = vacCh(rec.vacDt,   prevRec.vacDt,   [1,2,3,4,5]);
+  const neumCh = vacCh(rec.vacNeum, prevRec.vacNeum, [1,2]);
+  if(vphCh || dtCh || neumCh){
+    const vd = [];
+    if(vphCh)  vd.push('VPH');
+    if(dtCh)   vd.push('DT Adulto');
+    if(neumCh) vd.push('Neumococo 23V');
+    if(!yaExiste('vacuna', fechaHoy))
+      entries.push(mk('vac','vacuna', fechaHoy, 'Actualización de esquema de vacunación: '+vd.join(', '), ''));
+  }
+
+  // Observaciones
+  if(rec.observaciones && changed('observaciones'))
+    entries.push(mk('obs','general', fechaHoy, 'Actualización de notas clínicas', '', rec.observaciones));
+
+  return entries;
+}
+
+/* Renderizar acordeón de categorías directo en la ficha */
+function renderHistAcc(histArr){
+  const cont  = document.getElementById('hist-acc-cont');
+  const badge = document.getElementById('hist-badge');
+  const lbl   = document.getElementById('hist-count-lbl');
+  if(!cont) return;
+
+  const total = (histArr||[]).length;
+  if(badge){ badge.textContent = total; badge.style.display = total>0 ? '' : 'none'; }
+  if(lbl)   lbl.textContent = total===0 ? 'sin registros' : total+' entrada'+(total!==1?'s':'');
+
+  const fmtD = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+  const fmtS = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—';
+
+  let html = '';
+  HIST_CATS_PACIENTE.forEach((cat, idx) => {
+    const entries = (histArr||[])
+      .filter(e => cat.tipos.includes(e.tipo))
+      .sort((a,b) => (b.fecha||'').localeCompare(a.fecha||''));
+    const n = entries.length;
+
+    let entriesHTML = n === 0
+      ? `<div class="hcv-empty-cat">Sin registros en esta categoría.</div>`
+      : entries.map(e => `
+          <div class="hcv-entry">
+            <div class="hcv-entry-top">
+              <span class="hcv-entry-date">${fmtD(e.fecha)}</span>
+              ${e.tipo==='pf' && e.metodo ? `<span class="hcv-entry-origin" style="background:#fce4ec;color:#880e4f;font-size:.6rem">${escHtml(METODO_LABELS[e.metodo]||e.metodo)}</span>` : ''}
+              <span class="hcv-entry-origin ${e.auto?'auto':'manual'}">${e.auto?'AUTO':'MANUAL'}</span>
+            </div>
+            <div class="hcv-fields">
+              ${e.tipo==='pf' && e.metodo && !e.auto ? '' : (e.detalle ? `<div class="hcv-field full"><label>Detalle</label><span>${escHtml(e.detalle)}</span></div>` : '')}
+              ${e.detalle && e.tipo==='pf' && !e.auto && e.metodo ? `<div class="hcv-field full"><label>Observación</label><span>${escHtml(e.detalle)}</span></div>` : ''}
+              ${e.proxCita ? `<div class="hcv-field"><label>Próxima cita</label><span>${fmtS(e.proxCita)}</span></div>` : ''}
+              ${e.obs ? `<div class="hcv-field full"><label>Observaciones</label><span>${escHtml(e.obs)}</span></div>` : ''}
+            </div>
+            ${e.personal ? `<div class="hcv-personal">👤 ${escHtml(e.personal)}</div>` : ''}
+          </div>`).join('');
+
+    html += `
+      <div class="hcv-acc" id="hcv-acc-${idx}">
+        <div class="hcv-acc-header" onclick="toggleHcvAcc(${idx})" style="border-left:4px solid ${cat.color}">
+          <span class="hcv-acc-label">${cat.label}</span>
+          ${n > 0 ? `<span class="hcv-acc-badge" style="background:${cat.color}">${n}</span>` : `<span class="hcv-acc-badge-zero">0</span>`}
+          <span class="hcv-acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </div>
+        <div class="hcv-acc-body">${entriesHTML}</div>
+      </div>`;
+  });
+
+  cont.innerHTML = html;
+}
+
+function toggleHistSection(){
+  document.getElementById('hist-section').classList.toggle('open');
+}
+
+/* Modal para entrada manual */
+function openHistModal(){
+  if(!editingId){ showToast('⚠ Guarda la ficha primero','error'); return; }
+  const rec = records.find(r=>r.id===editingId)||{};
+  document.getElementById('hm-fecha').value   = (d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date());
+  document.getElementById('hm-prox').value    = '';
+  document.getElementById('hm-detalle').value = '';
+  document.getElementById('hm-obs').value     = '';
+  document.getElementById('hm-blisters').value= '';
+  const _vsel = document.getElementById('hm-vacuna-sel'); if(_vsel) _vsel.value='';
+  const p = loadProfile();
+  document.getElementById('hm-personal').value = p.nombre ? [p.nombre,p.cargo].filter(Boolean).join(' · ') : '';
+  // Pre-seleccionar tipo y método según la paciente
+  document.getElementById('hm-tipo').value   = (rec.metodo && rec.metodo!=='ninguno') ? 'pf' : 'general';
+  document.getElementById('hm-metodo').value = rec.metodo || 'oral';
+  hmAdaptModal();
+  document.getElementById('hist-modal-bg').classList.add('open');
+}
+function closeHistModal(){
+  document.getElementById('hist-modal-bg').classList.remove('open');
+}
+function hmSelVacuna(id, label, color, bg){
+  document.getElementById('hm-vacuna-sel').value = id;
+  // Actualizar chips visualmente
+  document.querySelectorAll('#hm-vacuna-chips .hcv-vac-chip').forEach(ch => {
+    if(ch.dataset.id === id){
+      ch.classList.add('selected');
+      ch.style.background = bg; ch.style.color = color; ch.style.borderColor = color;
+    } else {
+      ch.classList.remove('selected');
+      ch.style.background = ''; ch.style.color = ''; ch.style.borderColor = '';
+    }
+  });
+  // Auto-llenar detalle
+  document.getElementById('hm-detalle').value = label;
+}
+
+/* ─── Recalcula próxima cita y refresca el chip ctx ─── */
+function hmRecalc(){
+  const tipo  = document.getElementById('hm-tipo').value;
+  const fecha = document.getElementById('hm-fecha').value;
+  const m     = document.getElementById('hm-metodo').value;
+  const proxEl= document.getElementById('hm-prox');
+  const ctx   = document.getElementById('hm-ctx');
+  const rec   = records.find(r=>r.id===editingId)||{};
+
+  // Calcular próxima cita
+  let proxVal = '';
+  if(fecha){
+    if(tipo === 'pf'){
+      if(m==='oral'){
+        const bl = parseInt(document.getElementById('hm-blisters').value)||0;
+        proxVal = bl>0 ? addDays(fecha, bl*28) : '';
+      } else if(m==='inject-m')  proxVal = addMonths(fecha,1);
+      else if(m==='inject-t')    proxVal = addMonths(fecha,3);
+      else if(m==='diu'||m==='implante'||m==='esteril') proxVal = addYears(fecha,1);
+    } else if(tipo==='pap')       proxVal = addYears(fecha,1);
+    else if(tipo==='vph')         proxVal = addYears(fecha,5);
+    else if(tipo==='preventiva')  proxVal = addYears(fecha,1);
+    else if(tipo==='ent')         proxVal = addYears(fecha,1);
+  }
+  proxEl.value = proxVal;
+
+  // Actualizar texto del chip ctx con fecha calculada
+  if(ctx.style.display==='none') return;
+  const fmtd = proxVal ? ' → próx: <strong>'+proxVal+'</strong>' : '';
+  if(tipo==='pf'){
+    const mLabel = METODO_LABELS[m]||m||'Sin método';
+    const icon   = m==='oral'?'💊':m.startsWith('inject')?'💉':'🔵';
+    const blTxt  = m==='oral'
+      ? ' · '+(parseInt(document.getElementById('hm-blisters').value)||0)+' blisters'
+      : '';
+    ctx.innerHTML = icon+' <b>'+mLabel+'</b>'+blTxt+fmtd;
+  } else if(tipo==='pap'){
+    ctx.innerHTML = '🔬 PAP · Última registrada: <b>'+(rec.papFecha||'sin registro')+'</b>'+fmtd;
+  } else if(tipo==='vph'){
+    ctx.innerHTML = '🧬 VPH · Último: <b>'+(rec.vphFecha||'sin registro')+'</b>'+fmtd;
+  } else if(tipo==='preventiva'){
+    ctx.innerHTML = '🏠 At. preventiva · Actual: <b>'+(rec.atencionPreventiva||'sin registro')+'</b>'+fmtd;
+  } else if(tipo==='ent'){
+    ctx.innerHTML = '🏥 ENT: <b>'+(rec.entEspecifica||'sin descripción')+'</b>'+(rec.discapacidad==='si'?' · Discap: '+(rec.discapEspecifica||'sí'):'')+fmtd;
+  } else if(tipo==='arr'){
+    ctx.innerHTML = '⚠ ARR activo · <b>'+(rec.riesgos?.length ? rec.riesgos.length+' factor(es)' : 'sin factores')+'</b>';
+  }
+}
+
+/* ─── Adapta etiquetas/visibilidad y llama hmRecalc ─── */
+function hmAdaptModal(){
+  const rec    = records.find(r=>r.id===editingId)||{};
+  const tipo   = document.getElementById('hm-tipo').value;
+  const m      = document.getElementById('hm-metodo').value;
+  const blWrap = document.getElementById('hm-blisters-wrap');
+  const mWrap  = document.getElementById('hm-metodo-wrap');
+  const detLbl = document.getElementById('hm-detalle-lbl');
+  const detEl  = document.getElementById('hm-detalle');
+  const proxLbl= document.getElementById('hm-prox-lbl');
+  const ctx    = document.getElementById('hm-ctx');
+
+  blWrap.style.display = 'none';
+  mWrap.style.display  = 'none';
+  ctx.style.display    = 'none';
+  const vacWrapReset = document.getElementById('hm-vacuna-wrap');
+  if(vacWrapReset) vacWrapReset.style.display = 'none';
+  const detWrapReset = document.getElementById('hm-detalle-wrap');
+  if(detWrapReset) detWrapReset.style.display = '';
+
+  if(tipo === 'pf'){
+    mWrap.style.display = '';
+    detLbl.textContent  = 'Detalle / observación';
+    detEl.placeholder   = 'Ej: Sin efectos adversos, cambio de método…';
+    proxLbl.textContent = 'Próxima cita';
+    if(m==='oral'){
+      blWrap.style.display = '';
+      const blEl = document.getElementById('hm-blisters');
+      if(!blEl.value) blEl.value = rec.blisters || '';
+      ctx.style.display='block';ctx.style.background='#fce4ec';ctx.style.color='#880e4f';
+    } else if(m==='inject-m'){
+      ctx.style.display='block';ctx.style.background='#f3e5f5';ctx.style.color='#7b1fa2';
+    } else if(m==='inject-t'){
+      ctx.style.display='block';ctx.style.background='#ede7f6';ctx.style.color='#512da8';
+    } else if(m==='diu'||m==='implante'||m==='esteril'){
+      ctx.style.display='block';ctx.style.background='#e8f5e9';ctx.style.color='#2e7d32';
+    } else {
+      ctx.style.display='block';ctx.style.background='#f5f5f5';ctx.style.color='#555';
+    }
+  } else if(tipo === 'pap'){
+    detLbl.textContent  = 'Resultado PAP';
+    detEl.placeholder   = 'Ej: Normal, ASCUS, LIE bajo grado…';
+    proxLbl.textContent = 'Próxima PAP (calculada)';
+    ctx.style.display='block';ctx.style.background='#e8eaf6';ctx.style.color='#283593';
+  } else if(tipo === 'vph'){
+    detLbl.textContent  = 'Detalle VPH';
+    detEl.placeholder   = 'Ej: Negativo, dosis 1, refuerzo…';
+    proxLbl.textContent = 'Próximo VPH (calculado)';
+    ctx.style.display='block';ctx.style.background='#e0f2f1';ctx.style.color='#00695c';
+  } else if(tipo === 'preventiva'){
+    detLbl.textContent  = 'Detalle de la visita';
+    detEl.placeholder   = 'Ej: Visita domiciliar, consejería…';
+    proxLbl.textContent = 'Próxima atención (calculada)';
+    ctx.style.display='block';ctx.style.background='#f3e5f5';ctx.style.color='#4a148c';
+  } else if(tipo === 'ent'){
+    detLbl.textContent  = 'ENT / Descripción';
+    detEl.placeholder   = 'Ej: HTA controlada, DM2…';
+    if(!detEl.value) detEl.value = rec.entEspecifica || '';
+    proxLbl.textContent = 'Próximo control ENT';
+    ctx.style.display='block';ctx.style.background='#fff3e0';ctx.style.color='#e65100';
+  } else if(tipo === 'arr'){
+    detLbl.textContent  = 'Detalle ARR';
+    detEl.placeholder   = 'Ej: Referida, consejería, monitoreo…';
+    proxLbl.textContent = 'Próxima cita ARR';
+    ctx.style.display='block';ctx.style.background='#ffebee';ctx.style.color='#b71c1c';
+  } else if(tipo === 'vacuna'){
+    // Chips de selección de vacuna
+    const vacWrap = document.getElementById('hm-vacuna-wrap');
+    if(vacWrap) vacWrap.style.display = '';
+    const detWrap = document.getElementById('hm-detalle-wrap');
+    if(detWrap) detWrap.style.display = 'none'; // se llena automáticamente
+    proxLbl.textContent = 'Próxima dosis (si aplica)';
+    // Construir chips con las vacunas disponibles para esta paciente
+    const vacChips = document.getElementById('hm-vacuna-chips');
+    if(vacChips){
+      const VACUNAS = [
+        {id:'vph-1',  label:'VPH Dosis 1',      grupo:'VPH',        color:'#1a7a5e',bg:'#e0f5f0'},
+        {id:'vph-2',  label:'VPH Dosis 2',      grupo:'VPH',        color:'#1a7a5e',bg:'#e0f5f0'},
+        {id:'dt-1',   label:'DT Adulto D1',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
+        {id:'dt-2',   label:'DT Adulto D2',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
+        {id:'dt-3',   label:'DT Adulto D3',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
+        {id:'dt-4',   label:'DT Adulto D4',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
+        {id:'dt-5',   label:'DT Adulto D5',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
+        {id:'neum-1', label:'Neumococo Dosis 1', grupo:'Neumococo',  color:'#6a35a0',bg:'#f5eeff'},
+        {id:'neum-2', label:'Neumococo Refuerzo',grupo:'Neumococo',  color:'#6a35a0',bg:'#f5eeff'},
+      ];
+      const selVal = document.getElementById('hm-vacuna-sel').value;
+      vacChips.innerHTML = VACUNAS.map(v =>
+        `<span class="hcv-vac-chip${selVal===v.id?' selected':''}"
+          data-id="${v.id}" data-label="${v.label}"
+          style="${selVal===v.id?'background:'+v.bg+';color:'+v.color+';border-color:'+v.color:''}"
+          onclick="hmSelVacuna('${v.id}','${v.label}','${v.color}','${v.bg}')">${v.label}</span>`
+      ).join('');
+    }
+  } else {
+    detLbl.textContent  = 'Detalle / resultado';
+    detEl.placeholder   = 'Describa el seguimiento…';
+    proxLbl.textContent = 'Próxima cita';
+  }
+  hmRecalc();
+}
+
+function saveHistEntry(){
+  // ── Leer TODO el DOM antes de cerrar el modal ──
+  const fecha     = document.getElementById('hm-fecha').value;
+  if(!fecha){ showToast('\u26a0 Ingresa la fecha','error'); return; }
+  if(!editingId){ showToast('\u26a0 Guarda la ficha primero','error'); return; }
+  const idx = records.findIndex(r=>r.id===editingId);
+  if(idx<0) return;
+
+  const tipo      = document.getElementById('hm-tipo').value;
+  const mUsado    = document.getElementById('hm-metodo')?.value || '';
+  const blistersV = parseInt(document.getElementById('hm-blisters')?.value)||0;
+  const proxInput = document.getElementById('hm-prox').value;
+  const detalle   = document.getElementById('hm-detalle').value.trim();
+  const obs       = document.getElementById('hm-obs').value.trim();
+  const personal  = document.getElementById('hm-personal').value.trim();
+  const vacSel    = document.getElementById('hm-vacuna-sel')?.value || '';
+
+  // Validar vacuna seleccionada
+  if(tipo === 'vacuna' && !vacSel){
+    showToast('\u26a0 Selecciona la vacuna aplicada','error'); return;
+  }
+
+  // ── Calcular próxima cita directamente ──
+  let proxCalc = '';
+  if(tipo === 'pf'){
+    if(mUsado==='oral')                                    proxCalc = blistersV>0 ? addDays(fecha, blistersV*28) : '';
+    else if(mUsado==='inject-m')                           proxCalc = addMonths(fecha, 1);
+    else if(mUsado==='inject-t')                           proxCalc = addMonths(fecha, 3);
+    else if(['diu','implante','esteril'].includes(mUsado)) proxCalc = addYears(fecha, 1);
+  } else if(tipo==='pap')      proxCalc = addYears(fecha, 1);
+  else if(tipo==='vph')        proxCalc = addYears(fecha, 5);
+  else if(tipo==='preventiva') proxCalc = addYears(fecha, 1);
+  else if(tipo==='ent')        proxCalc = addYears(fecha, 1);
+  const proxCita = proxInput || proxCalc;
+
+  const entry = {
+    id: Date.now().toString(36)+'_man',
+    fecha, tipo,
+    detalle: tipo==='vacuna' ? (detalle||vacSel) : detalle,
+    proxCita, obs, personal,
+    metodo: tipo==='pf' ? mUsado : undefined,
+    vacuna: tipo==='vacuna' ? vacSel : undefined,
+    auto: false,
+    ts: new Date().toISOString()
+  };
+
+  // ── Cerrar modal ──
+  closeHistModal();
+
+  // ── Actualizar campos del record en memoria ──
+  const r = records[idx];
+  let camposActualizados = [];
+
+  if(tipo === 'pf'){
+    if(mUsado && mUsado !== r.metodo){
+      r.metodo = mUsado;
+      camposActualizados.push('m\u00e9todo \u2192 '+(METODO_LABELS[mUsado]||mUsado));
+    }
+    if(mUsado === 'oral'){
+      r.inicioOral = fecha;
+      if(blistersV>0) r.blisters = String(blistersV);
+      const bl = parseInt(r.blisters)||0;
+      if(bl>0) r.nextDate = addDays(fecha, bl*28);
+      camposActualizados.push('inicio oral'+(blistersV>0?', '+blistersV+' blisters':''));
+    } else if(mUsado==='inject-m'||mUsado==='inject-t'){
+      r.inicioInject = fecha; r.nextDate = proxCalc;
+      camposActualizados.push('inicio inyectable, pr\u00f3x. cita');
+    } else if(['diu','implante','esteril'].includes(mUsado)){
+      r.inicioAnual = fecha; r.nextDate = proxCalc;
+      camposActualizados.push('inicio '+mUsado+', pr\u00f3x. cita');
+    } else if(proxCita){
+      r.nextDate = proxCita; camposActualizados.push('pr\u00f3x. cita PF');
+    }
+  } else if(tipo === 'pap'){
+    r.papFecha = fecha; r.papNext = addYears(fecha,1);
+    if(detalle) r.papResultado = detalle;
+    camposActualizados.push('fecha PAP'+(detalle?', resultado':''));
+  } else if(tipo === 'vph'){
+    r.vphFecha = fecha; r.vphNext = addYears(fecha,5);
+    camposActualizados.push('fecha VPH');
+  } else if(tipo === 'preventiva'){
+    r.atencionPreventiva = fecha;
+    camposActualizados.push('atenci\u00f3n preventiva');
+  } else if(tipo === 'ent'){
+    r.fechaEnt = fecha;
+    if(detalle && r.ent==='si') r.entEspecifica = detalle;
+    camposActualizados.push('fecha ENT');
+  } else if(tipo === 'vacuna'){
+    // Actualizar el campo de vacuna correspondiente en el record
+    const vacNum = vacSel.match(/-(\d+)$/)?.[1];
+    if(vacSel.startsWith('vph') && vacNum)   r.vacVph  = {...(r.vacVph||{}),  [vacNum]: fecha};
+    if(vacSel.startsWith('dt') && vacNum)    r.vacDt   = {...(r.vacDt||{}),   [vacNum]: fecha};
+    if(vacSel.startsWith('neum') && vacNum)  r.vacNeum = {...(r.vacNeum||{}), [vacNum]: fecha};
+    camposActualizados.push('vacuna: '+(detalle||vacSel));
+  } else if(tipo === 'arr'){
+    camposActualizados.push('ARR registrado');
+  }
+
+  // ── Guardar y recargar formulario completo ──
+  if(!r.historial) r.historial = [];
+  r.historial.push(entry);
+  r.updatedAt = new Date().toISOString();
+  saveRecords();
+  loadFormFromRecord(r);
+  document.getElementById('hist-section').classList.add('open');
+  const msg = camposActualizados.length
+    ? '\u2713 Seguimiento registrado \u00b7 Actualizado: ' + camposActualizados.join(', ')
+    : '\u2713 Seguimiento registrado en historial';
+  showToast(msg, 'success');
+}
+
+
+/* ═══ HISTORIAL POR CATEGORÍA ═══ */
+// Mapeo: clave de carpeta → tipos de historial correspondientes
+const CAT_HIST_TIPOS = {
+  pf:       ['pf'],
+  pap:      ['pap'],
+  vph:      ['vph'],
+  promotor: ['preventiva'],
+  arr:      ['arr'],
+  ent:      ['ent'],
+};
+// Colores de cabecera por categoría
+const CAT_COLORS = {
+  pf:'linear-gradient(135deg,#880e4f,#c2185b)',
+  pap:'linear-gradient(135deg,#283593,#5c6bc0)',
+  vph:'linear-gradient(135deg,#00695c,#26a69a)',
+  promotor:'linear-gradient(135deg,#4a148c,#9c27b0)',
+  arr:'linear-gradient(135deg,#b71c1c,#e53935)',
+  ent:'linear-gradient(135deg,#e65100,#ffa726)',
+};
+
+let _catHistKey='', _catHistLabel='';
+
+function openCatHistModal(catKey, catLabel){
+  _catHistKey = catKey;
+  _catHistLabel = catLabel;
+  document.getElementById('cat-hist-modal-title').textContent = '📋 Historial · ' + catLabel;
+  document.getElementById('cat-hist-modal-bg').style.background = 'rgba(0,0,0,.55)';
+  renderCatHistModal();
+  document.getElementById('cat-hist-modal-bg').classList.add('open');
+}
+function closeCatHistModal(){ document.getElementById('cat-hist-modal-bg').classList.remove('open'); }
+
+function printCatHist(){
+  const profile = loadProfile();
+  const ucsf = profile.ucsf||'UCSF';
+  const todayStr = new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const fmtD = ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
+  const entries = _getEntriesForCat(_catHistKey);
+  const CAT_COLORS_MAP = {pf:'#880e4f',pap:'#283593',vph:'#00695c',promotor:'#4a148c',arr:'#b71c1c',ent:'#e65100'};
+  const color = CAT_COLORS_MAP[_catHistKey]||'#5c1a6e';
+  const rows = entries.length===0
+    ? `<tr><td colspan="7" style="text-align:center;color:#9e9e9e;font-style:italic;padding:10px">Sin entradas registradas</td></tr>`
+    : entries.map((e,i)=>`<tr style="${i%2===1?'background:#fafafa':''}">
+        <td style="font-weight:700">${fmtD(e.fecha)}</td>
+        <td style="font-weight:800">Nº${String(e._num).padStart(3,'0')}</td>
+        <td>${escHtml(e._paciente)}</td>
+        <td>${escHtml(e.detalle||'—')}</td>
+        <td>${e.proxCita?fmtD(e.proxCita):'—'}</td>
+        <td>${escHtml(e.obs||'—')}</td>
+        <td>${escHtml(e.personal||'—')}</td>
+      </tr>`).join('');
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>
+  <title>Historial ${_catHistLabel} MEF · ${ucsf}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>@page{size:Letter landscape;margin:10mm 14mm}*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:'Nunito',sans-serif;font-size:9.5px;color:#2d1a3a}.ph{background:${color};color:#fff;padding:8px 14px;border-radius:6px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}.ph h1{font-size:13px;font-weight:800}.ph-r{font-size:8.5px;opacity:.8;text-align:right}table{width:100%;border-collapse:collapse}th{background:#f3e5f5;color:#3d1a4a;font-size:8px;font-weight:800;padding:4px 8px;border:1px solid #e1bee7;text-align:left;text-transform:uppercase}td{padding:4px 8px;border:1px solid #e8e8e8;font-size:9px;vertical-align:top}footer{margin-top:10px;border-top:1px solid #e1bee7;padding-top:5px;font-size:7.5px;color:#8e6fa0;display:flex;justify-content:space-between}</style></head><body>
+  <div class="ph"><h1>📋 Historial · ${escHtml(_catHistLabel)} · MINSAL El Salvador</h1><div class="ph-r">${escHtml(ucsf)} · ${entries.length} entradas · ${todayStr}</div></div>
+  <table><thead><tr><th>Fecha</th><th>#</th><th>Paciente</th><th>Detalle</th><th>Próx. cita</th><th>Observaciones</th><th>Responsable</th></tr></thead><tbody>${rows}</tbody></table>
+  <footer><span>MEF · MINSAL El Salvador · ${escHtml(ucsf)} · ${escHtml(profile.nombre||'Personal de salud')}</span><span>${todayStr}</span></footer>
+  </body></html>`;
+  const w=window.open('','_blank','width=1100,height=800');
+  if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
+}
+
+function _getEntriesForCat(catKey){
+  const tipos = CAT_HIST_TIPOS[catKey] || [catKey];
+  const result = [];
+  records.forEach(r=>{
+    const hist = r.historial || [];
+    hist.filter(e=>tipos.includes(e.tipo)).forEach(e=>{
+      result.push({...e, _paciente: r.nombre||'—', _num: r.num||0, _rec: r});
+    });
+    // Para ENT/ARR también incluir si el registro está activo (aunque no tenga entrada en historial)
+    if(catKey==='arr' && r.arr==='si' && hist.filter(e=>e.tipo==='arr').length===0){
+      result.push({id:'_arr_'+r.id, fecha:r.fecha||'', tipo:'arr', detalle:'Clasificación ARR activo', proxCita:'', obs:'', personal:r.personal||'', auto:true, ts:r.updatedAt||'', _paciente:r.nombre||'—', _num:r.num||0, _rec:r});
+    }
+    if(catKey==='ent' && r.ent==='si' && hist.filter(e=>e.tipo==='ent').length===0){
+      result.push({id:'_ent_'+r.id, fecha:r.fechaEnt||r.fecha||'', tipo:'ent', detalle:'ENT activo'+(r.entEspecifica?' — '+r.entEspecifica:'')+(r.discapacidad==='si'?'; Discapacidad'+(r.discapEspecifica?' — '+r.discapEspecifica:''):''), proxCita:'', obs:'', personal:r.personal||'', auto:true, ts:r.updatedAt||'', _paciente:r.nombre||'—', _num:r.num||0, _rec:r});
+    }
+  });
+  return result.sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||'')||(b.ts||'').localeCompare(a.ts||''));
+}
+
+function renderCatHistModal(){
+  const entries = _getEntriesForCat(_catHistKey);
+  const cont = document.getElementById('cat-hist-modal-body');
+  const fmtD = ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'}):'—';
+  const fmtS = ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+  const TIPO_LBL = {pf:'Plan. Familiar',pap:'Citología PAP',vph:'VPH',arr:'ARR',preventiva:'At. Preventiva',vacuna:'Vacunación',ent:'ENT/Discapacidad',general:'General'};
+  if(!entries.length){
+    cont.innerHTML='<div style="text-align:center;color:#8e6fa0;padding:1.5rem;font-size:.82rem">No hay entradas de historial para esta categoría.</div>';
+    return;
+  }
+  cont.innerHTML = entries.map(e=>`
+    <div style="border:1px solid #e1bee7;border-radius:10px;margin-bottom:.65rem;overflow:hidden">
+      <div style="background:#f3e5f5;padding:.45rem .75rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <span style="font-weight:800;font-size:.78rem;color:#5c1a6e">Nº${String(e._num).padStart(3,'0')} · ${escHtml(e._paciente)}</span>
+        <span style="font-size:.6rem;background:#fff;color:#7b1fa2;padding:1px 6px;border-radius:8px;font-weight:800;margin-left:auto">${TIPO_LBL[e.tipo]||e.tipo}</span>
+        <span style="font-size:.6rem;background:${e.auto?'#f3e5f5':'#e8f5e9'};color:${e.auto?'#7b1fa2':'#2e7d32'};padding:1px 5px;border-radius:8px;font-weight:700">${e.auto?'AUTO':'MANUAL'}</span>
+      </div>
+      <div style="padding:.5rem .75rem">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.2rem .6rem">
+          <div><div style="font-size:.58rem;font-weight:800;color:#8e6fa0;text-transform:uppercase">Fecha</div><div style="font-size:.75rem;font-weight:700;color:#3d1a4a">${fmtD(e.fecha)}</div></div>
+          ${e.proxCita?`<div><div style="font-size:.58rem;font-weight:800;color:#8e6fa0;text-transform:uppercase">Próx. cita</div><div style="font-size:.75rem;font-weight:700;color:#3d1a4a">${fmtS(e.proxCita)}</div></div>`:''}
+          ${e.detalle?`<div style="grid-column:1/-1"><div style="font-size:.58rem;font-weight:800;color:#8e6fa0;text-transform:uppercase">Detalle</div><div style="font-size:.73rem;color:#3d1a4a">${escHtml(e.detalle)}</div></div>`:''}
+          ${e.obs?`<div style="grid-column:1/-1"><div style="font-size:.58rem;font-weight:800;color:#8e6fa0;text-transform:uppercase">Observaciones</div><div style="font-size:.73rem;color:#3d1a4a">${escHtml(e.obs)}</div></div>`:''}
+        </div>
+        ${e.personal?`<div style="font-size:.62rem;color:#8e6fa0;margin-top:.3rem;padding-top:.28rem;border-top:1px dashed #e1bee7">👤 ${escHtml(e.personal)}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+/* ═══ IMPRIMIR HISTORIAL POR CATEGORÍAS ═══ */
+function printHistorialCategorias(){
+  const profile = loadProfile();
+  const ucsf = profile.ucsf||'UCSF';
+  const todayStr = new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const fmtD = ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
+  const TIPO_LBL = {pf:'Plan. Familiar',pap:'Citología PAP',vph:'VPH',arr:'ARR',preventiva:'At. Preventiva',vacuna:'Vacunación',ent:'ENT/Discapacidad',general:'General'};
+
+  const cats = [
+    {key:'pf',      label:'Planificación Familiar',      color:'#880e4f'},
+    {key:'pap',     label:'Citología PAP',                color:'#283593'},
+    {key:'vph',     label:'VPH',                          color:'#00695c'},
+    {key:'promotor',label:'Atención Preventiva',          color:'#4a148c'},
+    {key:'arr',     label:'Alto Riesgo Reproductivo',     color:'#b71c1c'},
+    {key:'ent',     label:'ENT / Discapacidad',           color:'#e65100'},
+  ];
+
+  let sectionsHTML = '';
+  cats.forEach(cat=>{
+    const entries = _getEntriesForCat(cat.key);
+    const total = entries.length;
+    const rows = entries.length===0
+      ? `<tr><td colspan="7" style="text-align:center;color:#9e9e9e;font-style:italic;padding:8px">Sin entradas de historial en esta categoría</td></tr>`
+      : entries.map((e,i)=>`<tr style="${i%2===1?'background:#fafafa':''}">
+          <td style="font-weight:700">${fmtD(e.fecha)}</td>
+          <td style="font-weight:800">Nº${String(e._num).padStart(3,'0')}</td>
+          <td>${escHtml(e._paciente)}</td>
+          <td>${escHtml(e.detalle||'—')}</td>
+          <td>${e.proxCita?fmtD(e.proxCita):'—'}</td>
+          <td>${escHtml(e.obs||'—')}</td>
+          <td>${escHtml(e.personal||'—')}</td>
+        </tr>`).join('');
+    sectionsHTML += `
+      <div class="cat-section" style="margin-bottom:18px;page-break-inside:avoid">
+        <div class="cat-title" style="background:${cat.color};color:#fff;padding:6px 12px;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:11px;font-weight:800">${cat.label}</span>
+          <span style="font-size:9px;opacity:.85">${total} entrada${total!==1?'s':''}</span>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Fecha</th><th>#</th><th>Paciente</th><th>Detalle</th><th>Próx. cita</th><th>Observaciones</th><th>Responsable</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  });
+
+  const totalEntradas = cats.reduce((s,c)=>s+_getEntriesForCat(c.key).length,0);
+
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>
+  <title>Historial de Seguimientos MEF · ${ucsf}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    @page{size:Letter landscape;margin:10mm 12mm}
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{font-family:'Nunito',sans-serif;font-size:9px;color:#2d1a3a}
+    .page-header{background:linear-gradient(135deg,#5c1a6e,#c2185b);color:#fff;padding:8px 14px;border-radius:6px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+    .ph-left h1{font-size:13px;font-weight:800;line-height:1.2}
+    .ph-left p{font-size:8px;opacity:.75;margin-top:2px}
+    .ph-right{text-align:right;font-size:8px;opacity:.8}
+    table{width:100%;border-collapse:collapse;margin-bottom:0}
+    th{background:#f5f5f5;color:#3d1a4a;font-size:8px;font-weight:800;padding:4px 7px;border:1px solid #e0e0e0;text-align:left;text-transform:uppercase;letter-spacing:.04em}
+    td{padding:4px 7px;border:1px solid #e8e8e8;font-size:8.5px;vertical-align:top}
+    .summary{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+    .sum-chip{border-radius:8px;padding:5px 10px;text-align:center;min-width:90px;border:1px solid}
+    .sum-num{font-size:16px;font-weight:800;line-height:1}
+    .sum-lbl{font-size:7px;font-weight:700;margin-top:2px}
+    footer{margin-top:10px;border-top:1px solid #e1bee7;padding-top:5px;font-size:7.5px;color:#8e6fa0;display:flex;justify-content:space-between}
+  </style></head><body>
+  <div class="page-header">
+    <div class="ph-left"><h1>📋 Historial de Seguimientos MEF · MINSAL El Salvador</h1><p>${escHtml(ucsf)} · ${escHtml(profile.nombre||'Personal de salud')} · Generado: ${todayStr}</p></div>
+    <div class="ph-right">${records.length} pacientes · ${totalEntradas} entradas totales</div>
+  </div>
+  <div class="summary">
+    ${cats.map(c=>{const n=_getEntriesForCat(c.key).length;return `<div class="sum-chip" style="border-color:${c.color};background:${c.color}18"><div class="sum-num" style="color:${c.color}">${n}</div><div class="sum-lbl" style="color:${c.color}">${c.label}</div></div>`;}).join('')}
+  </div>
+  ${sectionsHTML}
+  <footer><span>Historial MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>${todayStr}</span></footer>
+  </body></html>`;
+
+  const w=window.open('','_blank','width=1100,height=800');
+  if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
+}
+
+/* ═══ HISTORIAL POR CATEGORÍA — VISTA PACIENTE ═══ */
+const HIST_CATS_PACIENTE = [
+  {key:'pf',        label:'Planificación Familiar',       tipos:['pf'],          color:'#880e4f'},
+  {key:'pap',       label:'Citología PAP',                tipos:['pap'],         color:'#283593'},
+  {key:'vph',       label:'VPH',                          tipos:['vph'],         color:'#00695c'},
+  {key:'preventiva',label:'Atención Preventiva',          tipos:['preventiva'],  color:'#4a148c'},
+  {key:'vacuna',    label:'Vacunación',                   tipos:['vacuna'],      color:'#1565c0'},
+  {key:'arr',       label:'Alto Riesgo Reproductivo',     tipos:['arr'],         color:'#b71c1c'},
+  {key:'ent',       label:'ENT / Discapacidad',           tipos:['ent'],         color:'#e65100'},
+  {key:'general',   label:'Consultas Generales',          tipos:['general'],     color:'#5c1a6e'},
+];
+
+function openHistCatView(){
+  if(!editingId) return;
+  const rec = records.find(r=>r.id===editingId);
+  if(!rec) return;
+  document.getElementById('hcv-patient-name').textContent = '📋 ' + (rec.nombre||'Paciente') + ' · Historial';
+  renderHistCatView(rec.historial||[]);
+  document.getElementById('hist-cat-view-bg').classList.add('open');
+}
+function closeHistCatView(){
+  document.getElementById('hist-cat-view-bg').classList.remove('open');
+}
+
+function renderHistCatView(histArr){
+  const body = document.getElementById('hcv-body');
+
+  if(!histArr.length){
+    body.innerHTML = '<div class="hcv-no-hist">Esta paciente aún no tiene entradas en el historial.<br>Se generarán automáticamente al guardar cambios.</div>';
+    return;
+  }
+
+  const fmtD = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+  const fmtS = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '—';
+
+  let html = '';
+  HIST_CATS_PACIENTE.forEach((cat, idx) => {
+    const entries = histArr
+      .filter(e => cat.tipos.includes(e.tipo))
+      .sort((a,b) => (b.fecha||'').localeCompare(a.fecha||''));
+    const n = entries.length;
+
+    // Entradas colapsadas
+    let entriesHTML = '';
+    if(!n){
+      entriesHTML = `<div class="hcv-empty-cat">Sin registros en esta categoría.</div>`;
+    } else {
+      entriesHTML = entries.map(e => `
+        <div class="hcv-entry">
+          <div class="hcv-entry-top">
+            <span class="hcv-entry-date">${fmtD(e.fecha)}</span>
+            <span class="hcv-entry-origin ${e.auto?'auto':'manual'}">${e.auto?'AUTO':'MANUAL'}</span>
+          </div>
+          <div class="hcv-fields">
+            ${e.detalle ? `<div class="hcv-field full"><label>Detalle</label><span>${escHtml(e.detalle)}</span></div>` : ''}
+            ${e.proxCita ? `<div class="hcv-field"><label>Próxima cita</label><span>${fmtS(e.proxCita)}</span></div>` : ''}
+            ${e.obs ? `<div class="hcv-field full"><label>Observaciones</label><span>${escHtml(e.obs)}</span></div>` : ''}
+          </div>
+          ${e.personal ? `<div class="hcv-personal">👤 ${escHtml(e.personal)}</div>` : ''}
+        </div>`).join('');
+    }
+
+    html += `
+      <div class="hcv-acc" id="hcv-acc-${idx}">
+        <div class="hcv-acc-header" onclick="toggleHcvAcc(${idx})" style="border-left:4px solid ${cat.color}">
+          <span class="hcv-acc-label">${cat.label}</span>
+          ${n > 0 ? `<span class="hcv-acc-badge" style="background:${cat.color}">${n}</span>` : `<span class="hcv-acc-badge-zero">0</span>`}
+          <span class="hcv-acc-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px"><polyline points="9 18 15 12 9 6"/></svg></span>
+        </div>
+        <div class="hcv-acc-body">${entriesHTML}</div>
+      </div>`;
+  });
+
+  body.innerHTML = html;
+}
+
+function toggleHcvAcc(idx){
+  document.getElementById('hcv-acc-'+idx)?.classList.toggle('open');
+}
+
+/* ═══ IMPRIMIR HISTORIAL COMPLETO DE UNA PACIENTE ═══ */
+function printHistorialPaciente(){
+  if(!editingId) return;
+  const rec = records.find(r=>r.id===editingId);
+  if(!rec) return;
+  const hist = rec.historial || [];
+  const profile = loadProfile();
+  const ucsf = profile.ucsf||'UCSF';
+  const todayStr = new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const fmtD = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}) : '—';
+  const fmtL = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'}) : '—';
+
+  let catSections = '';
+  HIST_CATS_PACIENTE.forEach(cat => {
+    const entries = hist
+      .filter(e => cat.tipos.includes(e.tipo))
+      .sort((a,b) => (b.fecha||'').localeCompare(a.fecha||''));
+
+    const rows = entries.length === 0
+      ? `<tr><td colspan="5" style="text-align:center;color:#9e9e9e;font-style:italic;padding:6px 8px">Sin registros en esta categoría</td></tr>`
+      : entries.map((e,i) => `
+        <tr style="${i%2===1?'background:#fafafa':''}">
+          <td style="font-weight:700;white-space:nowrap">${fmtD(e.fecha)}</td>
+          <td>${escHtml(e.detalle||'—')}</td>
+          <td style="white-space:nowrap">${e.proxCita ? fmtD(e.proxCita) : '—'}</td>
+          <td>${escHtml(e.obs||'—')}</td>
+          <td>${escHtml(e.personal||'—')} <span style="font-size:7px;background:${e.auto?'#f3e5f5':'#e8f5e9'};color:${e.auto?'#7b1fa2':'#2e7d32'};padding:1px 4px;border-radius:4px;font-weight:700">${e.auto?'AUTO':'MANUAL'}</span></td>
+        </tr>`).join('');
+
+    catSections += `
+      <div class="cat-block">
+        <div class="cat-head" style="background:${cat.color}">
+          <span>${cat.label}</span>
+          <span class="cat-cnt">${entries.length} entrada${entries.length!==1?'s':''}</span>
+        </div>
+        <table>
+          <thead><tr>
+            <th>Fecha</th><th>Detalle</th><th>Próx. cita</th><th>Observaciones</th><th>Responsable</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  });
+
+  const totalEntradas = hist.length;
+  const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>
+  <title>Historial Seguimientos · ${escHtml(rec.nombre||'Paciente')}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    @page{size:Letter portrait;margin:11mm 13mm}
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{font-family:'Nunito',sans-serif;font-size:9px;color:#2d1a3a}
+    .page-header{background:linear-gradient(135deg,#5c1a6e,#c2185b);color:#fff;padding:9px 14px;border-radius:7px;margin-bottom:11px}
+    .ph-top{display:flex;justify-content:space-between;align-items:flex-start}
+    .ph-title{font-size:13px;font-weight:800;line-height:1.2}
+    .ph-sub{font-size:8px;opacity:.75;margin-top:2px}
+    .ph-num{background:rgba(255,255,255,.2);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:800;white-space:nowrap}
+    .pat-info{display:grid;grid-template-columns:repeat(4,1fr);gap:3px 10px;margin-top:7px;background:rgba(255,255,255,.12);border-radius:5px;padding:5px 8px}
+    .pi-item label{font-size:7px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;opacity:.7;display:block}
+    .pi-item span{font-size:8.5px;font-weight:700}
+    .summary-row{display:flex;gap:6px;margin-bottom:11px;flex-wrap:wrap}
+    .sum-chip{border-radius:6px;padding:4px 9px;text-align:center;border:1.5px solid;min-width:70px}
+    .sum-num{font-size:14px;font-weight:800;line-height:1}
+    .sum-lbl{font-size:6.5px;font-weight:700;margin-top:1px}
+    .cat-block{margin-bottom:12px;page-break-inside:avoid}
+    .cat-head{color:#fff;padding:5px 10px;border-radius:5px 5px 0 0;display:flex;justify-content:space-between;align-items:center;font-size:9.5px;font-weight:800}
+    .cat-cnt{font-size:8px;background:rgba(255,255,255,.25);padding:1px 6px;border-radius:8px}
+    table{width:100%;border-collapse:collapse}
+    th{background:#f5f5f5;color:#3d1a4a;font-size:7.5px;font-weight:800;padding:3px 7px;border:1px solid #e0e0e0;text-align:left;text-transform:uppercase;letter-spacing:.04em}
+    td{padding:3px 7px;border:1px solid #eeeeee;font-size:8.5px;vertical-align:top}
+    footer{margin-top:10px;border-top:1px solid #e1bee7;padding-top:5px;font-size:7.5px;color:#8e6fa0;display:flex;justify-content:space-between}
+    .firma-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:14px}
+    .firma{border-top:1px solid #9e9e9e;padding-top:3px;font-size:7.5px;color:#666;text-align:center}
+  </style></head><body>
+
+  <div class="page-header">
+    <div class="ph-top">
+      <div>
+        <div class="ph-title">📋 Historial de Seguimientos MEF</div>
+        <div class="ph-sub">MINSAL El Salvador · ${escHtml(ucsf)} · ${escHtml(profile.nombre||'Personal de salud')}</div>
+      </div>
+      <div class="ph-num">Ficha #${String(rec.num||0).padStart(3,'0')}</div>
+    </div>
+    <div class="pat-info">
+      <div class="pi-item"><label>Nombre</label><span>${escHtml(rec.nombre||'—')}</span></div>
+      <div class="pi-item"><label>DUI</label><span>${escHtml(rec.dui||'—')}</span></div>
+      <div class="pi-item"><label>F. Nacimiento</label><span>${fmtD(rec.nacimiento)}</span></div>
+      <div class="pi-item"><label>Edad</label><span>${rec.edad||'—'} años</span></div>
+      <div class="pi-item" style="grid-column:1/3"><label>Dirección</label><span>${escHtml(rec.direccion||'—')}</span></div>
+      <div class="pi-item"><label>Teléfono</label><span>${escHtml(rec.telefono||'—')}</span></div>
+      <div class="pi-item"><label>Método actual</label><span>${METODO_LABELS[rec.metodo]||rec.metodo||'—'}</span></div>
+    </div>
+  </div>
+
+  <div class="summary-row">
+    ${HIST_CATS_PACIENTE.map(cat=>{
+      const n = hist.filter(e=>cat.tipos.includes(e.tipo)).length;
+      return `<div class="sum-chip" style="border-color:${cat.color};background:${cat.color}15"><div class="sum-num" style="color:${cat.color}">${n}</div><div class="sum-lbl" style="color:${cat.color}">${cat.label}</div></div>`;
+    }).join('')}
+    <div class="sum-chip" style="border-color:#5c1a6e;background:#f3e5f5"><div class="sum-num" style="color:#5c1a6e">${totalEntradas}</div><div class="sum-lbl" style="color:#5c1a6e">Total</div></div>
+  </div>
+
+  ${catSections}
+
+  <div class="firma-row">
+    <div class="firma">Firma del Promotor / Enfermera responsable</div>
+    <div class="firma">Firma de la Paciente / Responsable</div>
+  </div>
+  <footer>
+    <span>Historial MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span>
+    <span>Impreso: ${todayStr}</span>
+  </footer>
+  </body></html>`;
+
+  const w = window.open('','_blank','width=820,height=950');
+  if(w){ w.document.write(html); w.document.close(); setTimeout(()=>w.print(),700); }
+}
+
 /* ═══ INIT ═══ */
 loadRecords();
 window.records=records;
@@ -2545,6 +3672,120 @@ if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.sta
     <div class="vem-actions">
       <button class="btn save" style="flex:1" onclick="saveVacEdit()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:15px;height:15px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Guardar vacunas</button>
       <button class="btn secondary" onclick="closeVacEditModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL HISTORIAL POR CATEGORÍA ════ -->
+<div id="cat-hist-modal-bg" onclick="if(event.target===this)closeCatHistModal()" style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9050;display:none;align-items:flex-end;justify-content:center">
+  <div style="background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:88vh;overflow-y:auto;padding:1.2rem 1.1rem 2rem">
+    <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.85rem">
+      <div style="font-size:1rem;font-weight:800;color:#7b2d8b;flex:1" id="cat-hist-modal-title">Historial</div>
+      <button onclick="printCatHist()" style="display:flex;align-items:center;gap:.35rem;padding:.38rem .72rem;background:linear-gradient(135deg,#5c1a6e,#c2185b);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.72rem;font-weight:800;cursor:pointer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:13px;height:13px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir
+      </button>
+      <button onclick="closeCatHistModal()" style="padding:.38rem .65rem;background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;font-family:inherit;font-size:.72rem;font-weight:800;cursor:pointer;color:#555">✕ Cerrar</button>
+    </div>
+    <div id="cat-hist-modal-body"></div>
+  </div>
+</div>
+
+<!-- ════ MODAL VER HISTORIAL POR CATEGORÍA (paciente) ════ -->
+<div id="hist-cat-view-bg" onclick="if(event.target===this)closeHistCatView()">
+  <div id="hist-cat-view">
+    <div class="hcv-topbar">
+      <div class="hcv-title" id="hcv-patient-name">Historial por categoría</div>
+      <button onclick="printHistorialPaciente()" style="display:flex;align-items:center;gap:.35rem;padding:.38rem .72rem;background:var(--grad-indigo);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.72rem;font-weight:800;cursor:pointer;flex-shrink:0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:13px;height:13px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir
+      </button>
+      <button onclick="closeHistCatView()" style="padding:.38rem .65rem;background:#f5f5f5;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.72rem;font-weight:800;cursor:pointer;color:#555;flex-shrink:0">✕</button>
+    </div>
+    <div class="hcv-scroller" id="hcv-body"></div>
+  </div>
+</div>
+
+<!-- ════ MODAL HISTORIAL MANUAL ════ -->
+<div id="hist-modal-bg" onclick="if(event.target===this)closeHistModal()">
+  <div id="hist-modal">
+    <div class="hm-title">📋 Registrar seguimiento</div>
+
+    <!-- Tipo -->
+    <div class="hm-field">
+      <label>Tipo de seguimiento *</label>
+      <select id="hm-tipo" onchange="hmAdaptModal()">
+        <option value="pf">Planificación Familiar (PF)</option>
+        <option value="pap">Citología PAP</option>
+        <option value="vph">VPH</option>
+        <option value="preventiva">Atención preventiva / Promotor</option>
+        <option value="arr">Alto Riesgo Reproductivo (ARR)</option>
+        <option value="ent">Control ENT / Discapacidad</option>
+        <option value="vacuna">Vacunación</option>
+        <option value="general">General / Consulta</option>
+      </select>
+    </div>
+
+    <!-- Selector de método (solo cuando tipo=PF) -->
+    <div class="hm-field" id="hm-metodo-wrap" style="display:none">
+      <label>Método anticonceptivo</label>
+      <select id="hm-metodo" onchange="hmAdaptModal()">
+        <option value="oral">💊 ACO Orales Combinados</option>
+        <option value="inject-m">💉 Inyectable Mensual</option>
+        <option value="inject-t">💉 Inyectable Trimestral</option>
+        <option value="diu">🔵 DIU</option>
+        <option value="implante">🔵 Implante Intradérmico</option>
+        <option value="esteril">🔵 Esterilización Femenina</option>
+        <option value="ninguno">— Sin método</option>
+      </select>
+    </div>
+
+    <!-- Blisters (solo oral) -->
+    <div class="hm-field" id="hm-blisters-wrap" style="display:none">
+      <label>Blisters entregados <span style="font-size:.62rem;color:#e65100;font-weight:700">· próx = fecha + blisters × 28 días</span></label>
+      <input type="number" id="hm-blisters" min="1" max="12" placeholder="Ej: 3" oninput="hmRecalc()"/>
+    </div>
+
+    <!-- Selector de vacuna (solo cuando tipo=vacuna) -->
+    <div class="hm-field" id="hm-vacuna-wrap" style="display:none">
+      <label>Vacuna aplicada *</label>
+      <div id="hm-vacuna-chips" style="display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.25rem"></div>
+      <input type="hidden" id="hm-vacuna-sel" value=""/>
+    </div>
+
+    <!-- Info contextual -->
+    <div id="hm-ctx" style="display:none;padding:.42rem .65rem;border-radius:8px;font-size:.71rem;font-weight:700;margin-bottom:.1rem"></div>
+
+    <!-- Fechas: atención + próxima -->
+    <div class="hm-grid">
+      <div class="hm-field">
+        <label id="hm-fecha-lbl">Fecha de atención *</label>
+        <input type="date" id="hm-fecha" onchange="hmRecalc()" oninput="hmRecalc()"/>
+      </div>
+      <div class="hm-field">
+        <label id="hm-prox-lbl">Próxima cita</label>
+        <input type="date" id="hm-prox"/>
+      </div>
+    </div>
+
+    <!-- Detalle -->
+    <div class="hm-field" id="hm-detalle-wrap">
+      <label id="hm-detalle-lbl">Detalle / resultado</label>
+      <input type="text" id="hm-detalle" placeholder=""/>
+    </div>
+
+    <div class="hm-field">
+      <label>Observaciones</label>
+      <textarea id="hm-obs" rows="2" placeholder="Notas adicionales…"></textarea>
+    </div>
+    <div class="hm-field">
+      <label>Personal responsable</label>
+      <input type="text" id="hm-personal" placeholder="Nombre, cargo y UCSF"/>
+    </div>
+    <div class="hm-actions">
+      <button class="btn save" style="flex:1" onclick="saveHistEntry()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Guardar entrada
+      </button>
+      <button class="btn secondary" onclick="closeHistModal()">Cancelar</button>
     </div>
   </div>
 </div>
