@@ -400,6 +400,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .folder-header{display:flex;align-items:center;gap:.72rem;padding:.72rem .9rem;cursor:pointer;transition:all .22s;user-select:none;}
 .folder-header:hover{filter:brightness(1.04)}
 .folder.pf .folder-header{background:linear-gradient(135deg,#c2185b,#e91e8c)}
+.folder.dt .folder-header{background:linear-gradient(135deg,#00695c,#00897b)}
 .folder.pap .folder-header{background:linear-gradient(135deg,#6a1b9a,#9c27b0)}
 .folder.vph .folder-header{background:linear-gradient(135deg,#283593,#3949ab)}
 .folder.promotor .folder-header{background:linear-gradient(135deg,#00695c,#00897b)}
@@ -1056,17 +1057,31 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
           </div>
         </div>
 
-        <!-- DT Adulto: 5 dosis -->
-        <div class="vac-block">
+        <!-- Esquema de vacunación infantil → determina modo DT -->
+        <div class="vac-block" style="background:#f5f7ff;border:1.5px solid #c5cae9;border-radius:10px;padding:.6rem .8rem">
+          <div class="vac-label" style="color:#3949ab;margin-bottom:.5rem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:#3949ab"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            Esquema de vacunación infantil
+          </div>
+          <select id="vac-infantil-sel" onchange="onVacInfantilChange()" style="width:100%;padding:.45rem .6rem;border-radius:8px;border:1.5px solid #9fa8da;font-size:.82rem;font-weight:700;color:#1a237e;background:#fff;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%233949ab' stroke-width='3'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .6rem center;padding-right:1.8rem">
+            <option value="">— Seleccionar —</option>
+            <option value="completo">Completo</option>
+            <option value="incompleto">Incompleto</option>
+          </select>
+        </div>
+
+        <!-- DT Adulto: panel oculto hasta seleccionar esquema infantil -->
+        <div class="vac-block" id="dt-panel" style="display:none">
           <div class="vac-label">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-            Vacuna DT Adulto — 5 dosis
+            <span id="dt-vac-label-text">Vacuna DT Adulto</span>
           </div>
+          <div id="dt-modo-chip" style="font-size:.68rem;font-weight:800;padding:.18rem .55rem;border-radius:7px;margin-bottom:.4rem;width:fit-content"></div>
           <div class="vac-doses" id="dt-doses-container">
             <div class="vac-dose" id="dt-dose-1">
               <button type="button" class="vac-dose-btn" id="dt-btn-1" onclick="toggleVacDose('dt',1)">
-                <span class="vac-dose-num">1</span>
-                <span class="vac-dose-lbl">Dosis</span>
+                <span class="vac-dose-num" id="dt-num-1">1</span>
+                <span class="vac-dose-lbl" id="dt-lbl-1">D1</span>
               </button>
               <div class="vac-dose-date" id="dt-date-lbl-1"></div>
               <div class="vac-date-input" id="dt-input-wrap-1">
@@ -1075,8 +1090,8 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
             </div>
             <div class="vac-dose" id="dt-dose-2">
               <button type="button" class="vac-dose-btn" id="dt-btn-2" onclick="toggleVacDose('dt',2)">
-                <span class="vac-dose-num">2</span>
-                <span class="vac-dose-lbl">Dosis</span>
+                <span class="vac-dose-num" id="dt-num-2">2</span>
+                <span class="vac-dose-lbl" id="dt-lbl-2">D2</span>
               </button>
               <div class="vac-dose-date" id="dt-date-lbl-2"></div>
               <div class="vac-date-input" id="dt-input-wrap-2">
@@ -1085,8 +1100,8 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
             </div>
             <div class="vac-dose" id="dt-dose-3">
               <button type="button" class="vac-dose-btn" id="dt-btn-3" onclick="toggleVacDose('dt',3)">
-                <span class="vac-dose-num">3</span>
-                <span class="vac-dose-lbl">Dosis</span>
+                <span class="vac-dose-num" id="dt-num-3">3</span>
+                <span class="vac-dose-lbl" id="dt-lbl-3">D3</span>
               </button>
               <div class="vac-dose-date" id="dt-date-lbl-3"></div>
               <div class="vac-date-input" id="dt-input-wrap-3">
@@ -1095,8 +1110,8 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
             </div>
             <div class="vac-dose" id="dt-dose-4">
               <button type="button" class="vac-dose-btn" id="dt-btn-4" onclick="toggleVacDose('dt',4)">
-                <span class="vac-dose-num">4</span>
-                <span class="vac-dose-lbl">Dosis</span>
+                <span class="vac-dose-num" id="dt-num-4">4</span>
+                <span class="vac-dose-lbl" id="dt-lbl-4">R1</span>
               </button>
               <div class="vac-dose-date" id="dt-date-lbl-4"></div>
               <div class="vac-date-input" id="dt-input-wrap-4">
@@ -1105,8 +1120,8 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
             </div>
             <div class="vac-dose" id="dt-dose-5">
               <button type="button" class="vac-dose-btn" id="dt-btn-5" onclick="toggleVacDose('dt',5)">
-                <span class="vac-dose-num">5</span>
-                <span class="vac-dose-lbl">Dosis</span>
+                <span class="vac-dose-num" id="dt-num-5">5</span>
+                <span class="vac-dose-lbl" id="dt-lbl-5">R2</span>
               </button>
               <div class="vac-dose-date" id="dt-date-lbl-5"></div>
               <div class="vac-date-input" id="dt-input-wrap-5">
@@ -1316,7 +1331,7 @@ function calcVphNext(rec){if(!rec.vphFecha)return null;return addYears(rec.vphFe
 
 /* ═══ ALERTAS MÚLTIPLES ═══ */
 function getAllAlerts(){
-  const byFolder={pf:[],pap:[],vph:[],promotor:[],arr:[],ent:[]};
+  const byFolder={pf:[],pap:[],vph:[],promotor:[],arr:[],ent:[],dt:[]};
   records.forEach(r=>{
     // PF — planificación familiar
     if(r.nextDate){const d=diffDays(r.nextDate);if(d<=60)byFolder.pf.push({rec:r,type:'pf',date:r.nextDate,diff:d,label:'Próximo seguimiento PF'});}
@@ -1332,6 +1347,23 @@ function getAllAlerts(){
     if(r.arr==='si')byFolder.arr.push({rec:r,type:'arr',date:null,diff:0,label:'Alto Riesgo Reproductivo activo'});
     // ENT — siempre visible si está activo
     if(r.ent==='si')byFolder.ent.push({rec:r,type:'ent',date:r.fechaEnt||null,diff:r.fechaEnt?diffDays(addYears(r.fechaEnt,1)):0,label:'Control ENT/Discapacidad activo'});
+    // DT Adulto — alertas según modo
+    const dt = r.vacDt || {};
+    if(r.vacInfantil === 'completo'){
+      // 5 refuerzos cada 10 años: alertar el siguiente pendiente
+      const sig = [1,2,3,4,5].find(i => dt[i] && !dt[i+1]);
+      if(sig){
+        const next10 = addYears(dt[sig], 10);
+        const d = diffDays(next10);
+        if(d <= 365) byFolder.dt.push({rec:r,type:'dt',date:next10,diff:d,label:'DT — Refuerzo R'+(sig+1)+' (10 años desde R'+sig+')'});
+      }
+    } else if(r.vacInfantil === 'incompleto'){
+      // D1 contacto · D2 30d · D3 1año · R1 10a · R2 10a
+      if(dt[1] && !dt[2]){const next=addDays(dt[1],30);const d=diffDays(next);if(d<=60)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — 2ª dosis (30 días desde D1)'});}
+      if(dt[2] && !dt[3]){const next=addYears(dt[2],1);const d=diffDays(next);if(d<=365)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — 3ª dosis (1 año desde D2)'});}
+      if(dt[3] && !dt[4]){const next=addYears(dt[3],10);const d=diffDays(next);if(d<=365)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — Refuerzo R1 (10 años desde D3)'});}
+      if(dt[4] && !dt[5]){const next=addYears(dt[4],10);const d=diffDays(next);if(d<=365)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — Refuerzo R2 (10 años desde R1)'});}
+    }
   });
   Object.keys(byFolder).forEach(k=>byFolder[k].sort((a,b)=>(a.diff??999)-(b.diff??999)));
   return byFolder;
@@ -1346,8 +1378,51 @@ function getAlerts(){return getAllAlertsFlat();}
 // Estado temporal en memoria durante edición (se persiste en saveRecord)
 let _vacState = {vph:{}, dt:{}};
 
+function getDtModo(){
+  const sel = document.getElementById('vac-infantil-sel');
+  return sel ? sel.value : '';
+}
+
+function updateDtLabels(){
+  const modo = getDtModo();
+  const panel    = document.getElementById('dt-panel');
+  const labelTxt = document.getElementById('dt-vac-label-text');
+  const chip     = document.getElementById('dt-modo-chip');
+
+  if(!modo){ if(panel) panel.style.display='none'; return; }
+  if(panel) panel.style.display='';
+
+  if(modo === 'completo'){
+    // 5 refuerzos cada 10 años
+    const lbls = [{n:'R1',l:'Ref·10a'},{n:'R2',l:'Ref·10a'},{n:'R3',l:'Ref·10a'},{n:'R4',l:'Ref·10a'},{n:'R5',l:'Ref·10a'}];
+    if(labelTxt) labelTxt.textContent = 'Vacuna DT Adulto — 5 refuerzos · cada 10 años';
+    if(chip){ chip.textContent='✓ Esquema infantil completo — refuerzos cada 10 años'; chip.style.cssText='font-size:.68rem;font-weight:800;padding:.18rem .55rem;border-radius:7px;margin-bottom:.4rem;width:fit-content;background:#e3f2fd;color:#1565c0'; }
+    [1,2,3,4,5].forEach((i,idx)=>{
+      const ne=document.getElementById('dt-num-'+i); const le=document.getElementById('dt-lbl-'+i);
+      if(ne) ne.textContent=lbls[idx].n; if(le) le.textContent=lbls[idx].l;
+    });
+  } else {
+    // D1 contacto · D2 30d · D3 1año · R1 10a · R2 10a
+    const lbls = [{n:'1',l:'D1'},{n:'2',l:'D2·30d'},{n:'3',l:'D3·1año'},{n:'R1',l:'Ref·10a'},{n:'R2',l:'Ref·10a'}];
+    if(labelTxt) labelTxt.textContent = 'Vacuna DT Adulto — 3 dosis + 2 refuerzos';
+    if(chip){ chip.textContent='⚠ Esquema infantil incompleto — D1 contacto · D2 30 días · D3 1 año'; chip.style.cssText='font-size:.68rem;font-weight:800;padding:.18rem .55rem;border-radius:7px;margin-bottom:.4rem;width:fit-content;background:#fff3e0;color:#e65100'; }
+    [1,2,3,4,5].forEach((i,idx)=>{
+      const ne=document.getElementById('dt-num-'+i); const le=document.getElementById('dt-lbl-'+i);
+      if(ne) ne.textContent=lbls[idx].n; if(le) le.textContent=lbls[idx].l;
+    });
+  }
+}
+
+function onVacInfantilChange(){
+  updateDtLabels();
+  renderVacUI();
+}
+
 function initVacState(){
   _vacState = {vph:{1:null,2:null}, dt:{1:null,2:null,3:null,4:null,5:null}, neum:{1:null,2:null}};
+  // Ocultar panel DT al crear nueva ficha
+  const sel = document.getElementById('vac-infantil-sel'); if(sel) sel.value='';
+  const panel = document.getElementById('dt-panel'); if(panel) panel.style.display='none';
 }
 
 function loadVacFromRecord(rec){
@@ -1360,7 +1435,10 @@ function loadVacFromRecord(rec){
   [1,2].forEach(i=>{ if(_vacState.vph[i]===undefined)_vacState.vph[i]=null; });
   [1,2,3,4,5].forEach(i=>{ if(_vacState.dt[i]===undefined)_vacState.dt[i]=null; });
   [1,2].forEach(i=>{ if(_vacState.neum[i]===undefined)_vacState.neum[i]=null; });
-  renderVacUI();
+  // Cargar esquema infantil
+  const selVI = document.getElementById('vac-infantil-sel');
+  if(selVI) selVI.value = rec.vacInfantil || '';
+  renderVacUI(); // renderVacUI llama updateDtLabels que muestra/oculta panel
 }
 
 function toggleVacDose(vac, num){
@@ -1422,16 +1500,16 @@ function renderVacUI(){
     }
   }
 
-  // DT
-  const dtTotal = 5;
-  const dtComplete = 3; // Esquema completo con 3 dosis, refuerzos 4 y 5 opcionales
+  // DT — modo según esquema infantil
+  updateDtLabels();
+  const modo = getDtModo();
   let dtApplied = 0;
   [1,2,3,4,5].forEach(i=>{
     const date = _vacState.dt[i];
     const btn  = document.getElementById('dt-btn-'+i);
     const lbl  = document.getElementById('dt-date-lbl-'+i);
     const dateInp = document.getElementById('dt-date-'+i);
-    if(btn){btn.classList.toggle('applied', !!date);}
+    if(btn) btn.classList.toggle('applied', !!date);
     if(lbl) lbl.textContent = date ? formatDateShort(date) : '';
     if(dateInp && date) dateInp.value = date;
     if(date) dtApplied++;
@@ -1439,22 +1517,28 @@ function renderVacUI(){
   const dtSum = document.getElementById('dt-vac-summary');
   const dtTxt = document.getElementById('dt-vac-summary-text');
   if(dtSum && dtTxt){
-    if(dtApplied > 0){
-      dtSum.style.display='flex';
-      const isComplete = dtApplied >= dtComplete;
-      const isFull = dtApplied === dtTotal;
-      dtTxt.textContent = isFull
-        ? '✓ Esquema DT Adulto completo + refuerzos ('+dtApplied+'/'+dtTotal+' dosis)'
-        : isComplete
-          ? '✓ Esquema DT Adulto completo ('+dtApplied+' dosis) — refuerzos 4ª y 5ª opcionales'
-          : 'Esquema DT incompleto — '+dtApplied+'/'+dtComplete+' dosis mínimas';
-      dtSum.style.background = isComplete
-        ? 'linear-gradient(135deg,#e8f5e9,#c8e6c9)'
-        : 'linear-gradient(135deg,#fff3e0,#ffe0b2)';
-      dtSum.style.borderColor = isComplete ? '#a5d6a7' : '#ffcc80';
-      dtSum.style.color = isComplete ? '#2e7d32' : '#e65100';
+    if(dtApplied > 0 && modo){
+      dtSum.style.display = 'flex';
+      if(modo === 'completo'){
+        dtTxt.textContent = dtApplied === 5
+          ? '✓ Todos los refuerzos DT aplicados (5/5 · cada 10 años)'
+          : dtApplied+'/5 refuerzos DT — próximo en 10 años';
+        dtSum.style.background = dtApplied===5 ? 'linear-gradient(135deg,#e8f5e9,#c8e6c9)' : 'linear-gradient(135deg,#e3f2fd,#bbdefb)';
+        dtSum.style.borderColor = dtApplied===5 ? '#a5d6a7' : '#90caf9';
+        dtSum.style.color       = dtApplied===5 ? '#2e7d32' : '#1565c0';
+      } else {
+        const base = dtApplied >= 3;
+        dtTxt.textContent = dtApplied === 5
+          ? '✓ Esquema DT completo — 3 dosis + 2 refuerzos aplicados'
+          : base
+            ? '✓ Dosis base completa ('+dtApplied+'/3) — refuerzos pendientes c/10 años'
+            : '⚠ Esquema DT incompleto — '+dtApplied+'/3 dosis base';
+        dtSum.style.background = base ? 'linear-gradient(135deg,#e8f5e9,#c8e6c9)' : 'linear-gradient(135deg,#fff3e0,#ffe0b2)';
+        dtSum.style.borderColor = base ? '#a5d6a7' : '#ffcc80';
+        dtSum.style.color       = base ? '#2e7d32' : '#e65100';
+      }
     } else {
-      dtSum.style.display='none';
+      dtSum.style.display = 'none';
     }
   }
 
@@ -1661,6 +1745,7 @@ function saveRecord(){
     gestaciones:getV('f-gestaciones'),partos:getV('f-partos'),
     riesgos,observaciones:getV('f-observaciones'),personal:getV('f-personal'),
     vacVph:{...(_vacState.vph||{})},vacDt:{...(_vacState.dt||{})},vacNeum:{...(_vacState.neum||{})},
+    vacInfantil:(document.getElementById('vac-infantil-sel')?.value||''),
     nextDate:nd,updatedAt:new Date().toISOString(),
   };
   // ── HISTORIAL AUTOMÁTICO ──
@@ -1764,6 +1849,8 @@ function renderAlerts(){
      icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`},
     {key:'arr',   label:'Alto Riesgo Reproductivo',sub:'Pacientes con ARR activo',                cls:'arr',
      icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`},
+    {key:'dt',    label:'DT Adulto — Próximas dosis', sub:'Seguimiento del esquema DT · 30d · 1a · 10a', cls:'dt',
+     icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`},
     {key:'ent',   label:'ENT / Discapacidad',       sub:'Enfermedades No Transmisibles y discapacidad',cls:'arr',
      icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`},
   ];
@@ -1804,7 +1891,7 @@ function renderAlerts(){
           const thisMonthCount=arr.filter(x=>x.thisMonth).length;
           monthBanner=`<div class="promotor-month-highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="promotor-month-highlight-text">📅 Seguimiento este mes — programar visitas</div><span class="promotor-month-highlight-count">${thisMonthCount}</span></div>`;
         }
-        return monthBanner+`<div class="falert" onclick="openRecord('${r.id}')"><div class="falert-dot ${dotCls}"></div><div class="falert-info"><div class="falert-name">${escHtml(r.nombre||'—')}${a.thisMonth&&f.key==='promotor'?' <span style=\'background:#e0f2f1;color:#00695c;font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:4px;\'>Este mes</span>':''}</div><div class="falert-detail">${dateStr?dateStr+' · ':''} ${escHtml(r.metodo?METODO_LABELS[r.metodo]||r.metodo:'')}${entInfo}</div></div><span class="falert-badge ${badgeCls2}">${badgeTxt2}</span></div>`;
+        return monthBanner+`<div class="falert" onclick="openRecord('${r.id}')"><div class="falert-dot ${dotCls}"></div><div class="falert-info"><div class="falert-name">${escHtml(r.nombre||'—')}${a.thisMonth&&f.key==='promotor'?' <span style=\'background:#e0f2f1;color:#00695c;font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:4px;\'>Este mes</span>':''}</div><div class="falert-detail">${dateStr?dateStr+' · ':''} ${f.key==='dt'?escHtml(a.label):escHtml(r.metodo?METODO_LABELS[r.metodo]||r.metodo:'')}${entInfo}</div></div><span class="falert-badge ${badgeCls2}">${badgeTxt2}</span></div>`;
       }).join('');
 
     return `<div class="folder ${f.cls}" id="folder-${f.key}">
@@ -1939,6 +2026,27 @@ function saveVacEdit(){
 }
 
 /* ═══ IMPRIMIR TARJETA VACUNAS INDIVIDUAL ═══ */
+/* ═══ HELPER: etiquetas DT según modo del record ═══ */
+function getDtInfoForRecord(r){
+  // Devuelve {modo, labels, modoLabel, completo}
+  // modo: 'completo' (infantil completo → 5 refuerzos 10a) | 'incompleto' (3d+2ref)
+  const modo = r.vacInfantil === 'completo' ? 'completo' : 'incompleto';
+  const dt   = r.vacDt || {};
+  const dtApplied = [1,2,3,4,5].filter(i=>dt[i]).length;
+
+  let labels, modoLabel, completo;
+  if(modo === 'completo'){
+    labels     = ['Refuerzo 1','Refuerzo 2','Refuerzo 3','Refuerzo 4','Refuerzo 5'];
+    modoLabel  = 'Esquema infantil completo — 5 refuerzos · cada 10 años';
+    completo   = dtApplied === 5;
+  } else {
+    labels     = ['1ª Dosis (contacto)','2ª Dosis (30 días)','3ª Dosis (1 año)','Refuerzo 1 (10 años)','Refuerzo 2 (10 años)'];
+    modoLabel  = 'Esquema infantil incompleto — 3 dosis base + 2 refuerzos c/10 años';
+    completo   = dtApplied >= 3;
+  }
+  return {modo, labels, modoLabel, completo, dtApplied};
+}
+
 function printTarjetaVacunas(id){
   const r = records.find(x=>x.id===id); if(!r) return;
   const profile = loadProfile();
@@ -1957,9 +2065,9 @@ function printTarjetaVacunas(id){
       <td class="${date?'done':'pending'}">${date ? '✓ Aplicada' : '—'}</td>
     </tr>`;
 
-  const dtApplied = [1,2,3,4,5].filter(i=>dt[i]).length;
+  const dtInfo = getDtInfoForRecord(r);
+  const { labels: dtLabels, modoLabel: dtModoLabel, completo: dtOk, dtApplied } = dtInfo;
   const vphOk  = !!vph[1];
-  const dtOk   = dtApplied >= 3;
   const neumOk = !!neum[1];
 
   const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>
@@ -2024,13 +2132,14 @@ function printTarjetaVacunas(id){
   </div>
 
   <div class="vac-section">
-    <div class="vac-title">💉 Vacuna DT Adulto <span class="${dtOk?'badge-ok':'badge-no'}">${dtOk?'✓ Completo ('+dtApplied+'d)':dtApplied+'/3 dosis'}</span></div>
-    <table><thead><tr><th>Dosis</th><th>Fecha de aplicación</th><th>Estado</th></tr></thead><tbody>
-      ${doseRow('1ª Dosis', dt[1])}
-      ${doseRow('2ª Dosis', dt[2])}
-      ${doseRow('3ª Dosis (completa esquema)', dt[3])}
-      ${doseRow('4ª Dosis (refuerzo)', dt[4])}
-      ${doseRow('5ª Dosis (refuerzo)', dt[5])}
+    <div class="vac-title">💉 Vacuna DT Adulto <span class="${dtOk?'badge-ok':'badge-no'}">${dtOk?'✓ Completo ('+dtApplied+'/'+( dtInfo.modo==='completo'?'5 refuerzos':'3 dosis')+')':dtApplied+(dtInfo.modo==='completo'?'/5 ref':'/3 dosis')}</span></div>
+    <div style="font-size:7.5px;color:#546e7a;padding:3px 8px;background:#eceff1;border:1px solid #cfd8dc;border-top:none;margin-bottom:0">${dtModoLabel}</div>
+    <table><thead><tr><th>Dosis / Refuerzo</th><th>Fecha de aplicación</th><th>Estado</th></tr></thead><tbody>
+      ${doseRow(dtLabels[0], dt[1])}
+      ${doseRow(dtLabels[1], dt[2])}
+      ${doseRow(dtLabels[2], dt[3])}
+      ${doseRow(dtLabels[3], dt[4])}
+      ${doseRow(dtLabels[4], dt[5])}
     </tbody></table>
   </div>
 
@@ -2044,7 +2153,7 @@ function printTarjetaVacunas(id){
 
   <div class="summary-bar">
     <div class="sum-item ${vphOk?'ok':'no'}"><div class="sum-num">${[1,2].filter(i=>vph[i]).length}/1</div><div class="sum-lbl">VPH</div></div>
-    <div class="sum-item ${dtOk?'ok':dtApplied>0?'partial':'no'}"><div class="sum-num">${dtApplied}/3</div><div class="sum-lbl">DT Adulto</div></div>
+    <div class="sum-item ${dtOk?'ok':dtApplied>0?'partial':'no'}"><div class="sum-num">${dtApplied}/${dtInfo.modo==='completo'?5:3}</div><div class="sum-lbl">DT Adulto</div></div>
     <div class="sum-item ${neum[1]&&neum[2]?'ok':neum[1]?'partial':'no'}"><div class="sum-num">${[1,2].filter(i=>neum[i]).length}/2</div><div class="sum-lbl">Neumococo</div></div>
   </div>
 
@@ -2272,13 +2381,14 @@ function renderVacBook(){
     _vbSort
   );
 
-  // Summary cards
-  const vphComplete = records.filter(r=>!!((r.vacVph||{})[1])).length;
-  const dtComplete  = records.filter(r=>[1,2,3,4,5].filter(i=>(r.vacDt||{})[i]).length>=3).length;
-  const neumDose    = records.filter(r=>!!((r.vacNeum||{})[1])).length;
+  // Summary cards — DT inteligente según modo de cada paciente
+  const vphComplete  = records.filter(r=>!!((r.vacVph||{})[1])).length;
+  const dtComplete   = records.filter(r=>getDtInfoForRecord(r).completo).length;
+  const dtTotal      = records.filter(r=>(r.vacDt&&[1,2,3,4,5].some(i=>r.vacDt[i]))).length;
+  const neumDose     = records.filter(r=>!!((r.vacNeum||{})[1])).length;
   document.getElementById('vb-summary-cards').innerHTML =
     '<div class="vb-card vph"><div class="vb-card-num">'+vphComplete+'</div><div class="vb-card-lbl">💉 VPH</div><div class="vb-card-sub">de '+records.length+' pacientes</div></div>'+
-    '<div class="vb-card dt"><div class="vb-card-num">'+dtComplete+'</div><div class="vb-card-lbl">💉 DT Adulto</div><div class="vb-card-sub">esquema completo</div></div>'+
+    '<div class="vb-card dt"><div class="vb-card-num">'+dtComplete+'</div><div class="vb-card-lbl">💉 DT Adulto</div><div class="vb-card-sub">esquema completo · '+dtTotal+' con dosis</div></div>'+
     '<div class="vb-card neum"><div class="vb-card-num">'+neumDose+'</div><div class="vb-card-lbl">💉 Neumococo</div><div class="vb-card-sub">con dosis inicial</div></div>';
 
   if(!recs.length){
@@ -2304,7 +2414,7 @@ function renderVacBook(){
     const neum = r.vacNeum || {};
 
     const vphOk  = !!vph[1];
-    const dtOk   = [1,2,3,4,5].filter(i=>dt[i]).length >= 3;
+    // dtOk se calcula por getDtInfoForRecord más abajo según modo
     const neumOk = !!neum[1];
 
     const hasAny = vph[1]||vph[2]||dt[1]||dt[2]||dt[3]||dt[4]||dt[5]||neum[1]||neum[2];
@@ -2330,16 +2440,22 @@ function renderVacBook(){
       +   '</div>'
       + '</div></div>';
 
-    // DT row
-    const dtApplied = [1,2,3,4,5].filter(i=>dt[i]).length;
+    // DT row — etiquetas según modo del esquema infantil
+    const dtInfo = getDtInfoForRecord(r);
+    const dtApplied = dtInfo.dtApplied;
+    const dtOkDyn   = dtInfo.completo;
+    const dtModoChip = dtInfo.modo === 'completo'
+      ? '<span style="font-size:.55rem;font-weight:800;background:#e3f2fd;color:#1565c0;padding:1px 5px;border-radius:4px;margin-left:.3rem">5 Ref·10a</span>'
+      : '<span style="font-size:.55rem;font-weight:800;background:#fff3e0;color:#e65100;padding:1px 5px;border-radius:4px;margin-left:.3rem">3D+2Ref</span>';
     html += '<div class="vb-vac-row">'
       + '<div class="vb-vac-icon dt">💉</div>'
       + '<div class="vb-vac-info">'
-      +   '<div class="vb-vac-name" style="display:flex;align-items:center;gap:.4rem">DT Adulto'
-      +     statusBadge(dtOk, dtOk ? 'Completo ('+dtApplied+'d)' : '')
+      +   '<div class="vb-vac-name" style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap">DT Adulto'
+      +     dtModoChip
+      +     statusBadge(dtOkDyn, dtOkDyn ? 'Completo ('+dtApplied+'/'+(dtInfo.modo==='completo'?5:3)+')' : '')
       +   '</div>'
       +   '<div class="vb-doses-row">'
-      +     [1,2,3,4,5].map(i=>doseChip('D'+i, dt[i]||null)).join('')
+      +     [1,2,3,4,5].map(i=>doseChip(dtInfo.labels[i-1], dt[i]||null)).join('')
       +   '</div>'
       + '</div></div>';
 
@@ -2774,13 +2890,23 @@ function _buildHistSnapshot(rec, prevRec){
       if(rec.discapacidad==='si') detEnt += ' · Discapacidad'+(rec.discapEspecifica?' — '+rec.discapEspecifica:'');
       entries.push(mk('ent','ent', rec.fechaEnt||fechaHoy, detEnt, ''));
     }
-    // Vacunas
+    // Vacunas — con detalle de modo DT según esquema infantil
     const vacGrupos = [];
-    if((rec.vacVph||{})[1]||(rec.vacVph||{})[2])  vacGrupos.push('VPH');
-    if([1,2,3,4,5].some(i=>(rec.vacDt||{})[i]))   vacGrupos.push('DT Adulto');
+    if((rec.vacVph||{})[1]||(rec.vacVph||{})[2]) vacGrupos.push('VPH');
+    if([1,2,3,4,5].some(i=>(rec.vacDt||{})[i])){
+      const dti = getDtInfoForRecord(rec);
+      const dtApN = dti.dtApplied;
+      const modoStr = dti.modo === 'completo'
+        ? 'DT Adulto · '+dtApN+'/5 refuerzos (c/10 años)'
+        : 'DT Adulto · '+dtApN+'/'+(dtApN>=3?'3✓':'3') +' dosis'+(dtApN>=3?' + refuerzos c/10a':'');
+      vacGrupos.push(modoStr);
+    }
     if((rec.vacNeum||{})[1]||(rec.vacNeum||{})[2]) vacGrupos.push('Neumococo 23V');
+    // Esquema infantil si se registró
+    if(rec.vacInfantil)
+      vacGrupos.push('Esquema infantil: '+(rec.vacInfantil==='completo'?'Completo':'Incompleto'));
     if(vacGrupos.length)
-      entries.push(mk('vac','vacuna', fechaHoy, 'Esquema inicial de vacunación: '+vacGrupos.join(', '), ''));
+      entries.push(mk('vac','vacuna', fechaHoy, 'Esquema inicial de vacunación: '+vacGrupos.join(' · '), ''));
     return entries;
   }
 
@@ -2840,13 +2966,23 @@ function _buildHistSnapshot(rec, prevRec){
   const vphCh  = vacCh(rec.vacVph,  prevRec.vacVph,  [1,2]);
   const dtCh   = vacCh(rec.vacDt,   prevRec.vacDt,   [1,2,3,4,5]);
   const neumCh = vacCh(rec.vacNeum, prevRec.vacNeum, [1,2]);
-  if(vphCh || dtCh || neumCh){
+  const infantilCh = rec.vacInfantil !== (prevRec.vacInfantil||'');
+  if(vphCh || dtCh || neumCh || infantilCh){
     const vd = [];
-    if(vphCh)  vd.push('VPH');
-    if(dtCh)   vd.push('DT Adulto');
+    if(vphCh) vd.push('VPH');
+    if(dtCh){
+      const dti = getDtInfoForRecord(rec);
+      const dtApN = dti.dtApplied;
+      const modoStr = dti.modo === 'completo'
+        ? 'DT Adulto · '+dtApN+'/5 refuerzos (c/10 años)'
+        : 'DT Adulto · '+dtApN+'/3 dosis'+(dtApN>=3?' ✓ base + refuerzos c/10a':'');
+      vd.push(modoStr);
+    }
     if(neumCh) vd.push('Neumococo 23V');
-    if(!yaExiste('vacuna', fechaHoy))
-      entries.push(mk('vac','vacuna', fechaHoy, 'Actualización de esquema de vacunación: '+vd.join(', '), ''));
+    if(infantilCh && rec.vacInfantil)
+      vd.push('Esquema infantil: '+(rec.vacInfantil==='completo'?'Completo':'Incompleto'));
+    if(vd.length && !yaExiste('vacuna', fechaHoy))
+      entries.push(mk('vac','vacuna', fechaHoy, 'Actualización de vacunación: '+vd.join(' · '), ''));
   }
 
   // Observaciones
