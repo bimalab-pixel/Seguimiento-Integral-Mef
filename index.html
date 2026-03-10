@@ -1479,9 +1479,12 @@ function renderVacUI(){
     const btn  = document.getElementById('vph-btn-'+i);
     const lbl  = document.getElementById('vph-date-lbl-'+i);
     const dateInp = document.getElementById('vph-date-'+i);
-    if(btn){btn.classList.toggle('applied', !!date);}
+    const dose = document.getElementById('vph-dose-'+i);
+    if(btn) btn.classList.toggle('applied', !!date);
     if(lbl) lbl.textContent = date ? formatDateShort(date) : '';
     if(dateInp && date) dateInp.value = date;
+    // Si ya tiene fecha aplicada, ocultar el input picker
+    if(dose && date) dose.classList.remove('show-input');
     if(date) vphApplied++;
   });
   const vphSum = document.getElementById('vph-vac-summary');
@@ -1509,9 +1512,12 @@ function renderVacUI(){
     const btn  = document.getElementById('dt-btn-'+i);
     const lbl  = document.getElementById('dt-date-lbl-'+i);
     const dateInp = document.getElementById('dt-date-'+i);
+    const dose = document.getElementById('dt-dose-'+i);
     if(btn) btn.classList.toggle('applied', !!date);
     if(lbl) lbl.textContent = date ? formatDateShort(date) : '';
     if(dateInp && date) dateInp.value = date;
+    // Si ya tiene fecha aplicada, ocultar el input picker
+    if(dose && date) dose.classList.remove('show-input');
     if(date) dtApplied++;
   });
   const dtSum = document.getElementById('dt-vac-summary');
@@ -1549,9 +1555,12 @@ function renderVacUI(){
     const btn  = document.getElementById('neum-btn-'+i);
     const lbl  = document.getElementById('neum-date-lbl-'+i);
     const dateInp = document.getElementById('neum-date-'+i);
-    if(btn){btn.classList.toggle('applied', !!date);}
+    const dose = document.getElementById('neum-dose-'+i);
+    if(btn) btn.classList.toggle('applied', !!date);
     if(lbl) lbl.textContent = date ? formatDateShort(date) : '';
     if(dateInp && date) dateInp.value = date;
+    // Si ya tiene fecha aplicada, ocultar el input picker
+    if(dose && date) dose.classList.remove('show-input');
     if(date) neumApplied++;
   });
   const neumSum = document.getElementById('neum-vac-summary');
@@ -2670,10 +2679,12 @@ function printVacunacion(){
     :'<td style="color:#bbb;text-align:center">—</td>';
 
   const dtStatus=(r)=>{
-    const applied=[1,2,3,4,5].filter(i=>(r.vacDt||{})[i]).length;
+    const dti = getDtInfoForRecord(r);
+    const applied = dti.dtApplied;
+    const total   = dti.modo === 'completo' ? 5 : 3;
     if(applied===0) return '<td style="color:#bbb;text-align:center">—</td>';
-    if(applied>=3) return '<td style="background:#e8f5e9;color:#2e7d32;font-weight:800;text-align:center">✓ Completo ('+applied+'d)</td>';
-    return '<td style="background:#fff3e0;color:#e65100;font-weight:700;text-align:center">'+applied+'/3</td>';
+    if(dti.completo) return '<td style="background:#e8f5e9;color:#2e7d32;font-weight:800;text-align:center">✓ Completo ('+applied+'d)</td>';
+    return '<td style="background:#fff3e0;color:#e65100;font-weight:700;text-align:center">'+applied+'/'+total+'</td>';
   };
   const vphStatus=(r)=>{
     const d1=(r.vacVph||{})[1]; const d2=(r.vacVph||{})[2];
@@ -2688,15 +2699,37 @@ function printVacunacion(){
     return '<td style="background:#e3f2fd;color:#1565c0;font-weight:700;text-align:center">✓ Dosis</td>';
   };
 
-  const rows=recs.map((r,i)=>`<tr>
+  // Etiquetas columnas DT — las 5 cols son fijas pero la celda muestra el label del modo
+  const DT_LBLS_COMP = ['R1','R2','R3','R4','R5'];
+  const DT_LBLS_INC  = ['D1','D2','D3','R1','R2'];
+
+  const dtCell=(r,i)=>{
+    const dti  = getDtInfoForRecord(r);
+    const val  = (r.vacDt||{})[i];
+    const lbl  = dti.modo==='completo' ? DT_LBLS_COMP[i-1] : DT_LBLS_INC[i-1];
+    const bg   = dti.modo==='completo' ? 'background:#f3f8ff' : '';
+    if(val) return '<td style="color:#2e7d32;font-weight:800;text-align:center;'+bg+'" title="'+lbl+'">'+fmt(val)+'</td>';
+    return '<td style="color:#bbb;text-align:center;'+bg+'" title="'+lbl+'">—</td>';
+  };
+
+  const rows=recs.map((r,i)=>{
+    const dti = getDtInfoForRecord(r);
+    const rowBg = dti.modo==='completo' ? 'background:#f8fbff' : '';
+    return `<tr style="${rowBg}">
     <td style="text-align:center;font-weight:700">${String(r.num||i+1).padStart(2,'0')}</td>
-    <td style="font-weight:700">${escHtml(r.nombre||'—')}</td>
+    <td style="font-weight:700">${escHtml(r.nombre||'—')}${dti.modo==='completo'?'<span style="font-size:6px;background:#e3f2fd;color:#1565c0;border-radius:3px;padding:1px 3px;margin-left:3px;font-weight:800">5R</span>':''}</td>
     <td style="text-align:center">${r.nacimiento?new Date(r.nacimiento+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—'}</td>
     <td style="text-align:center">${r.edad||'—'}</td>
+    ${(()=>{
+      const vi = r.vacInfantil;
+      if(vi==='completo')   return '<td style="background:#e8f5e9;color:#2e7d32;font-weight:800;text-align:center;font-size:7px">✓ Completo</td>';
+      if(vi==='incompleto') return '<td style="background:#fff3e0;color:#e65100;font-weight:700;text-align:center;font-size:7px">⚠ Incompleto</td>';
+      return '<td style="color:#bbb;text-align:center;font-size:7px">—</td>';
+    })()}
     ${doseCell((r.vacVph||{})[1])}${doseCell((r.vacVph||{})[2])}${vphStatus(r)}
-    ${doseCell((r.vacDt||{})[1])}${doseCell((r.vacDt||{})[2])}${doseCell((r.vacDt||{})[3])}${doseCell((r.vacDt||{})[4])}${doseCell((r.vacDt||{})[5])}${dtStatus(r)}
+    ${dtCell(r,1)}${dtCell(r,2)}${dtCell(r,3)}${dtCell(r,4)}${dtCell(r,5)}${dtStatus(r)}
     ${doseCell((r.vacNeum||{})[1])}${doseCell((r.vacNeum||{})[2])}${neumStatus(r)}
-  </tr>`).join('');
+  </tr>`;}).join('');
 
   const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/>
   <title>Esquema Vacunación MEF · ${escHtml(ucsf)}</title>
@@ -2736,13 +2769,19 @@ function printVacunacion(){
           <th rowspan="2">Nombre completo</th>
           <th rowspan="2">F. Nacimiento</th>
           <th rowspan="2">Edad</th>
+          <th rowspan="2" class="th-group" style="background:#5c1a6e;border-color:#7b1fa2">🧒 Esq. Infantil</th>
           <th colspan="3" class="th-group">💉 VPH (2 dosis)</th>
-          <th colspan="6" class="th-group">💉 DT Adulto (5 dosis / completo: 3)</th>
+          <th colspan="6" class="th-group">💉 DT Adulto · Inc: D1/D2/D3/R1/R2 · Comp: R1-R5</th>
           <th colspan="3" class="th-group">💉 Neumococo 23V</th>
         </tr>
         <tr>
           <th>D1</th><th>D2</th><th>Estado</th>
-          <th>D1</th><th>D2</th><th>D3</th><th>D4</th><th>D5</th><th>Estado</th>
+          <th title="Incompleto: D1 · Completo: R1">D1/R1</th>
+          <th title="Incompleto: D2 · Completo: R2">D2/R2</th>
+          <th title="Incompleto: D3 · Completo: R3">D3/R3</th>
+          <th title="Incompleto: R1 · Completo: R4">R1/R4</th>
+          <th title="Incompleto: R2 · Completo: R5">R2/R5</th>
+          <th>Estado</th>
           <th>Dosis</th><th>Refuerzo</th><th>Estado</th>
         </tr>
       </thead>
@@ -2751,8 +2790,10 @@ function printVacunacion(){
   </div>
 
   <div class="summary-row">
+    <div class="sum-card" style="border-color:#ce93d8;background:#f3e5f5"><div class="sum-num" style="color:#6a1b9a">${recs.filter(r=>r.vacInfantil==='completo').length}</div><div class="sum-lbl" style="color:#6a1b9a">Esq. infantil completo</div></div>
+    <div class="sum-card" style="border-color:#ffcc80;background:#fff8e1"><div class="sum-num" style="color:#e65100">${recs.filter(r=>r.vacInfantil==='incompleto').length}</div><div class="sum-lbl" style="color:#e65100">Esq. infantil incompleto</div></div>
     <div class="sum-card"><div class="sum-num">${recs.filter(r=>!!((r.vacVph||{})[1])).length}</div><div class="sum-lbl">VPH completo</div></div>
-    <div class="sum-card"><div class="sum-num">${recs.filter(r=>[1,2,3,4,5].filter(i=>(r.vacDt||{})[i]).length>=3).length}</div><div class="sum-lbl">DT completo (≥3d)</div></div>
+    <div class="sum-card"><div class="sum-num">${recs.filter(r=>getDtInfoForRecord(r).completo).length}</div><div class="sum-lbl">DT completo (por esquema)</div></div>
     <div class="sum-card"><div class="sum-num">${recs.filter(r=>!!((r.vacNeum||{})[1])).length}</div><div class="sum-lbl">Neumococo dosis</div></div>
     <div class="sum-card"><div class="sum-num">${recs.filter(r=>!!((r.vacNeum||{})[2])).length}</div><div class="sum-lbl">Neumococo + refuerzo</div></div>
     <div class="sum-card" style="border-color:#ffcc80;background:#fff8e1"><div class="sum-num" style="color:#e65100">${recs.filter(r=>[1,2].filter(i=>(r.vacVph||{})[i]).length===0).length}</div><div class="sum-lbl" style="color:#e65100">VPH sin iniciar</div></div>
@@ -2880,7 +2921,7 @@ function _buildHistSnapshot(rec, prevRec){
       entries.push(mk('vph','vph', rec.vphFecha, 'VPH registrado', rec.vphNext));
     // Preventiva
     if(rec.atencionPreventiva)
-      entries.push(mk('prev','preventiva', rec.atencionPreventiva, 'Atención preventiva por promotor de salud', ''));
+      entries.push(mk('prev','preventiva', rec.atencionPreventiva, 'Atención preventiva por promotor de salud', addYears(rec.atencionPreventiva,1)));
     // ARR
     if(rec.arr === 'si')
       entries.push(mk('arr','arr', fechaHoy, 'Clasificación ARR activo — requiere seguimiento especial', ''));
@@ -2890,23 +2931,37 @@ function _buildHistSnapshot(rec, prevRec){
       if(rec.discapacidad==='si') detEnt += ' · Discapacidad'+(rec.discapEspecifica?' — '+rec.discapEspecifica:'');
       entries.push(mk('ent','ent', rec.fechaEnt||fechaHoy, detEnt, ''));
     }
-    // Vacunas — con detalle de modo DT según esquema infantil
-    const vacGrupos = [];
-    if((rec.vacVph||{})[1]||(rec.vacVph||{})[2]) vacGrupos.push('VPH');
-    if([1,2,3,4,5].some(i=>(rec.vacDt||{})[i])){
-      const dti = getDtInfoForRecord(rec);
-      const dtApN = dti.dtApplied;
-      const modoStr = dti.modo === 'completo'
-        ? 'DT Adulto · '+dtApN+'/5 refuerzos (c/10 años)'
-        : 'DT Adulto · '+dtApN+'/'+(dtApN>=3?'3✓':'3') +' dosis'+(dtApN>=3?' + refuerzos c/10a':'');
-      vacGrupos.push(modoStr);
-    }
-    if((rec.vacNeum||{})[1]||(rec.vacNeum||{})[2]) vacGrupos.push('Neumococo 23V');
-    // Esquema infantil si se registró
+    // Vacunas — una entrada por cada dosis registrada, con su fecha real
+    const dtiNew = getDtInfoForRecord(rec);
+    const dtLblsNew = dtiNew.labels;
+
+    // Esquema infantil primero (si aplica)
     if(rec.vacInfantil)
-      vacGrupos.push('Esquema infantil: '+(rec.vacInfantil==='completo'?'Completo':'Incompleto'));
-    if(vacGrupos.length)
-      entries.push(mk('vac','vacuna', fechaHoy, 'Esquema inicial de vacunación: '+vacGrupos.join(' · '), ''));
+      entries.push(mk('vac-infantil','vacuna', fechaHoy,
+        'Esquema infantil registrado: '+(rec.vacInfantil==='completo'?'Completo — 5 refuerzos c/10 años':'Incompleto — 3 dosis base + refuerzos c/10a'),
+        ''));
+
+    // VPH dosis por dosis
+    [1,2].forEach(i=>{
+      const fd = (rec.vacVph||{})[i];
+      if(fd) entries.push(mk('vac-vph-'+i,'vacuna', fd,
+        (i===1?'VPH Dosis 1':'VPH Dosis 2 (Refuerzo)')+' aplicada', ''));
+    });
+
+    // DT dosis por dosis
+    [1,2,3,4,5].forEach(i=>{
+      const fd = (rec.vacDt||{})[i];
+      if(fd) entries.push(mk('vac-dt-'+i,'vacuna', fd,
+        'DT Adulto · '+(dtLblsNew[i-1]||'Dosis '+i)+' aplicada', ''));
+    });
+
+    // Neumococo dosis por dosis
+    [1,2].forEach(i=>{
+      const fd = (rec.vacNeum||{})[i];
+      if(fd) entries.push(mk('vac-neum-'+i,'vacuna', fd,
+        (i===1?'Neumococo 23V Dosis inicial':'Neumococo 23V Refuerzo (5 años)')+' aplicada', ''));
+    });
+
     return entries;
   }
 
@@ -2937,7 +2992,7 @@ function _buildHistSnapshot(rec, prevRec){
 
   // Preventiva
   if(changed('atencionPreventiva') && rec.atencionPreventiva && !yaExiste('preventiva', rec.atencionPreventiva)){
-    entries.push(mk('prev','preventiva', rec.atencionPreventiva, 'Atención preventiva por promotor de salud', ''));
+    entries.push(mk('prev','preventiva', rec.atencionPreventiva, 'Atención preventiva por promotor de salud', addYears(rec.atencionPreventiva,1)));
   }
 
   // ARR
@@ -2961,29 +3016,49 @@ function _buildHistSnapshot(rec, prevRec){
       entries.push(mk('ent','ent', rec.fechaEnt||fechaHoy, detEnt, ''));
   }
 
-  // Vacunas
-  const vacCh = (a,b,keys) => keys.some(k=>(a||{})[k]!==(b||{})[k]);
-  const vphCh  = vacCh(rec.vacVph,  prevRec.vacVph,  [1,2]);
-  const dtCh   = vacCh(rec.vacDt,   prevRec.vacDt,   [1,2,3,4,5]);
-  const neumCh = vacCh(rec.vacNeum, prevRec.vacNeum, [1,2]);
-  const infantilCh = rec.vacInfantil !== (prevRec.vacInfantil||'');
-  if(vphCh || dtCh || neumCh || infantilCh){
-    const vd = [];
-    if(vphCh) vd.push('VPH');
-    if(dtCh){
-      const dti = getDtInfoForRecord(rec);
-      const dtApN = dti.dtApplied;
-      const modoStr = dti.modo === 'completo'
-        ? 'DT Adulto · '+dtApN+'/5 refuerzos (c/10 años)'
-        : 'DT Adulto · '+dtApN+'/3 dosis'+(dtApN>=3?' ✓ base + refuerzos c/10a':'');
-      vd.push(modoStr);
+  // Vacunas — entrada individual por cada dosis nueva que se agregó
+  const dtiRec = getDtInfoForRecord(rec);
+  const dtLbls = dtiRec.labels; // ['1ª Dosis (contacto)', '2ª Dosis (30 días)', ...]
+
+  // VPH: cada dosis que apareció nueva
+  [1,2].forEach(i=>{
+    const fechaDosis = (rec.vacVph||{})[i];
+    const fecAntes   = (prevRec.vacVph||{})[i];
+    if(fechaDosis && fechaDosis !== fecAntes){
+      const lbl = i===1 ? 'VPH Dosis 1' : 'VPH Dosis 2 (Refuerzo)';
+      if(!yaExiste('vacuna', fechaDosis))
+        entries.push(mk('vac-vph-'+i,'vacuna', fechaDosis, lbl+' aplicada', ''));
     }
-    if(neumCh) vd.push('Neumococo 23V');
-    if(infantilCh && rec.vacInfantil)
-      vd.push('Esquema infantil: '+(rec.vacInfantil==='completo'?'Completo':'Incompleto'));
-    if(vd.length && !yaExiste('vacuna', fechaHoy))
-      entries.push(mk('vac','vacuna', fechaHoy, 'Actualización de vacunación: '+vd.join(' · '), ''));
-  }
+  });
+
+  // DT: cada dosis que apareció nueva
+  [1,2,3,4,5].forEach(i=>{
+    const fechaDosis = (rec.vacDt||{})[i];
+    const fecAntes   = (prevRec.vacDt||{})[i];
+    if(fechaDosis && fechaDosis !== fecAntes){
+      const lbl = dtLbls[i-1] || ('DT Dosis '+i);
+      if(!yaExiste('vacuna', fechaDosis))
+        entries.push(mk('vac-dt-'+i,'vacuna', fechaDosis, 'DT Adulto · '+lbl+' aplicada', ''));
+    }
+  });
+
+  // Neumococo: cada dosis nueva
+  [1,2].forEach(i=>{
+    const fechaDosis = (rec.vacNeum||{})[i];
+    const fecAntes   = (prevRec.vacNeum||{})[i];
+    if(fechaDosis && fechaDosis !== fecAntes){
+      const lbl = i===1 ? 'Neumococo 23V Dosis inicial' : 'Neumococo 23V Refuerzo (5 años)';
+      if(!yaExiste('vacuna', fechaDosis))
+        entries.push(mk('vac-neum-'+i,'vacuna', fechaDosis, lbl+' aplicada', ''));
+    }
+  });
+
+  // Esquema infantil si cambió
+  const infantilCh = rec.vacInfantil !== (prevRec.vacInfantil||'');
+  if(infantilCh && rec.vacInfantil)
+    entries.push(mk('vac-infantil','vacuna', fechaHoy,
+      'Esquema infantil actualizado: '+(rec.vacInfantil==='completo'?'Completo — 5 refuerzos c/10 años':'Incompleto — 3 dosis base + refuerzos c/10a'),
+      ''));
 
   // Observaciones
   if(rec.observaciones && changed('observaciones'))
@@ -3210,16 +3285,24 @@ function hmAdaptModal(){
     // Construir chips con las vacunas disponibles para esta paciente
     const vacChips = document.getElementById('hm-vacuna-chips');
     if(vacChips){
+      // DT: etiquetas según esquema infantil del record activo
+      const _recActivo = editingId ? records.find(r=>r.id===editingId) : null;
+      const _dtModo = _recActivo ? (_recActivo.vacInfantil === 'completo' ? 'completo' : 'incompleto') : 'incompleto';
+      const _dtLabels = _dtModo === 'completo'
+        ? ['DT Refuerzo 1','DT Refuerzo 2','DT Refuerzo 3','DT Refuerzo 4','DT Refuerzo 5']
+        : ['DT D1 (contacto)','DT D2 (30 días)','DT D3 (1 año)','DT Refuerzo 1 (10a)','DT Refuerzo 2 (10a)'];
+      const _dtBadge = _dtModo === 'completo'
+        ? ' · 5 ref/10a' : ' · 3d+2ref';
       const VACUNAS = [
-        {id:'vph-1',  label:'VPH Dosis 1',      grupo:'VPH',        color:'#1a7a5e',bg:'#e0f5f0'},
-        {id:'vph-2',  label:'VPH Dosis 2',      grupo:'VPH',        color:'#1a7a5e',bg:'#e0f5f0'},
-        {id:'dt-1',   label:'DT Adulto D1',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
-        {id:'dt-2',   label:'DT Adulto D2',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
-        {id:'dt-3',   label:'DT Adulto D3',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
-        {id:'dt-4',   label:'DT Adulto D4',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
-        {id:'dt-5',   label:'DT Adulto D5',     grupo:'DT Adulto',  color:'#2565b0',bg:'#e8f1fb'},
-        {id:'neum-1', label:'Neumococo Dosis 1', grupo:'Neumococo',  color:'#6a35a0',bg:'#f5eeff'},
-        {id:'neum-2', label:'Neumococo Refuerzo',grupo:'Neumococo',  color:'#6a35a0',bg:'#f5eeff'},
+        {id:'vph-1',  label:'VPH Dosis 1',       grupo:'VPH',       color:'#1a7a5e',bg:'#e0f5f0'},
+        {id:'vph-2',  label:'VPH Dosis 2',        grupo:'VPH',       color:'#1a7a5e',bg:'#e0f5f0'},
+        {id:'dt-1',   label:_dtLabels[0],         grupo:'DT Adulto'+_dtBadge, color:'#2565b0',bg:'#e8f1fb'},
+        {id:'dt-2',   label:_dtLabels[1],         grupo:'DT Adulto'+_dtBadge, color:'#2565b0',bg:'#e8f1fb'},
+        {id:'dt-3',   label:_dtLabels[2],         grupo:'DT Adulto'+_dtBadge, color:'#2565b0',bg:'#e8f1fb'},
+        {id:'dt-4',   label:_dtLabels[3],         grupo:'DT Adulto'+_dtBadge, color:'#2565b0',bg:'#e8f1fb'},
+        {id:'dt-5',   label:_dtLabels[4],         grupo:'DT Adulto'+_dtBadge, color:'#2565b0',bg:'#e8f1fb'},
+        {id:'neum-1', label:'Neumococo Dosis 1',  grupo:'Neumococo', color:'#6a35a0',bg:'#f5eeff'},
+        {id:'neum-2', label:'Neumococo Refuerzo', grupo:'Neumococo', color:'#6a35a0',bg:'#f5eeff'},
       ];
       const selVal = document.getElementById('hm-vacuna-sel').value;
       vacChips.innerHTML = VACUNAS.map(v =>
@@ -3270,12 +3353,33 @@ function saveHistEntry(){
   else if(tipo==='vph')        proxCalc = addYears(fecha, 5);
   else if(tipo==='preventiva') proxCalc = addYears(fecha, 1);
   else if(tipo==='ent')        proxCalc = addYears(fecha, 1);
+  else if(tipo==='vacuna' && vacSel.startsWith('dt-')){
+    // Próxima dosis DT según esquema:
+    // D1 → D2 a 30 días | D2 → D3 al año | D3/R1/R2/R3/R4 → siguiente refuerzo a 10 años
+    const _recAct = editingId ? records.find(r=>r.id===editingId) : null;
+    const _dtModoAct = _recAct ? (_recAct.vacInfantil === 'completo' ? 'completo' : 'incompleto') : 'incompleto';
+    const dosNum = parseInt(vacSel.replace('dt-',''));
+    if(_dtModoAct === 'incompleto'){
+      if(dosNum === 1)      proxCalc = addDays(fecha, 30);    // D2 a 30 días
+      else if(dosNum === 2) proxCalc = addYears(fecha, 1);    // D3 al año
+      else                  proxCalc = addYears(fecha, 10);   // refuerzos c/10 años
+    } else {
+      // modo completo: todos son refuerzos cada 10 años
+      proxCalc = dosNum < 5 ? addYears(fecha, 10) : '';
+    }
+  }
   const proxCita = proxInput || proxCalc;
 
+  // Para vacuna: obtener el label legible desde el chip seleccionado
+  let vacLabel = vacSel;
+  if(tipo === 'vacuna' && vacSel){
+    const selChip = document.querySelector('#hm-vacuna-chips .hcv-vac-chip.selected');
+    if(selChip) vacLabel = selChip.textContent.trim();
+  }
   const entry = {
     id: Date.now().toString(36)+'_man',
     fecha, tipo,
-    detalle: tipo==='vacuna' ? (detalle||vacSel) : detalle,
+    detalle: tipo==='vacuna' ? (detalle||vacLabel) : detalle,
     proxCita, obs, personal,
     metodo: tipo==='pf' ? mUsado : undefined,
     vacuna: tipo==='vacuna' ? vacSel : undefined,
