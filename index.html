@@ -436,6 +436,23 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .falert-badge.soon{background:rgba(255,143,0,.12);color:var(--amber2)}
 .falert-badge.ok{background:rgba(46,125,50,.12);color:var(--green2)}
 .falert-badge.arr{background:rgba(183,28,28,.12);color:var(--danger)}
+.falert-btn{display:flex;align-items:center;gap:.25rem;padding:3px 9px;border-radius:8px;border:1.5px solid;font-size:.63rem;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0;margin-left:.35rem;background:#e8f5e9;color:#2e7d32;border-color:#a5d6a7;transition:background .15s}
+.falert-btn:active{background:#c8e6c9}
+#atencion-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9800;align-items:center;justify-content:center;padding:1rem}
+#atencion-modal{background:#fff;border-radius:16px;width:100%;max-width:400px;box-shadow:0 8px 32px rgba(0,0,0,.18);overflow:hidden}
+.am-header{padding:.85rem 1.1rem;display:flex;align-items:center;gap:.6rem}
+.am-header svg{width:20px;height:20px;flex-shrink:0}
+.am-title{font-size:.92rem;font-weight:800;flex:1}
+.am-sub{font-size:.7rem;opacity:.75;margin-top:1px}
+.am-body{padding:.9rem 1.1rem}
+.am-field{margin-bottom:.7rem}
+.am-field label{display:block;font-size:.7rem;font-weight:800;color:var(--purple2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.3rem}
+.am-field input{width:100%;border:1.5px solid var(--border);border-radius:9px;padding:.45rem .7rem;font-family:inherit;font-size:.88rem;color:var(--text)}
+.am-field input:focus{outline:none;border-color:var(--purple)}
+.am-info{background:var(--light);border-radius:9px;padding:.5rem .75rem;font-size:.72rem;color:var(--muted);margin-bottom:.7rem;border-left:3px solid var(--purple)}
+.am-footer{display:flex;gap:.5rem;padding:.75rem 1.1rem;border-top:1px solid var(--light2)}
+.am-btn-cancel{flex:1;padding:.55rem;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-family:inherit;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer}
+.am-btn-save{flex:2;padding:.55rem;border:none;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:800;color:#fff;cursor:pointer;background:linear-gradient(135deg,#2e7d32,#43a047)}
 
 
 /* ══ LIST FOLDERS ══ */
@@ -526,8 +543,8 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .list-tab:hover:not(.active){color:var(--text);background:rgba(0,0,0,.03);}
 
 /* ══ LIBRO DE VACUNAS ══ */
-#vac-book{display:none;padding:.7rem .9rem 1.2rem;}
-#vac-book.active{display:block;}
+#vac-book{display:none;padding:.7rem .9rem 1.2rem;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#vac-book.active{display:flex;flex-direction:column;}
 .vb-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.85rem;}
 .vb-card{border-radius:11px;padding:.55rem .5rem;text-align:center;border:1.5px solid;}
 .vb-card.vph{background:linear-gradient(135deg,#f3e5f5,#e1bee7);border-color:#ce93d8;color:#6a1b9a;}
@@ -566,6 +583,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .vb-action-btn svg{width:14px;height:14px;flex-shrink:0}
 .vb-action-btn.print{background:linear-gradient(135deg,#e8f5e9,#c8e6c9);color:#2e7d32;}
 .vb-action-btn.edit{background:linear-gradient(135deg,#e8eaf6,#c5cae9);color:#283593;}
+.vb-action-btn.preview{background:linear-gradient(135deg,#e0f7fa,#b2ebf2);color:#006064;}
 .vb-action-btn:hover{filter:brightness(.93);transform:translateY(-1px)}
 
 /* Modal edición vacunas */
@@ -705,6 +723,21 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
       <div class="menu-btn-text"><div class="mbt">Estadísticas y análisis</div><div class="mbs">Indicadores de salud comunitaria</div></div>
       <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
     </button>
+    <button class="menu-btn" onclick="openVacPreview()">
+      <div class="menu-btn-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/><path d="M14 4l6 6"/><path d="M8 10l6 6"/><line x1="8" y1="10" x2="14" y2="16"/><path d="M10 8l-2 2 6 6 2-2"/></svg></div>
+      <div class="menu-btn-text"><div class="mbt">Libro de Vacunas MEF</div><div class="mbs">Vista previa · VPH, DT Adulto y Neumococo</div></div>
+      <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </button>
+    <button class="menu-btn" onclick="openListadoPreview()">
+      <div class="menu-btn-icon" style="background:rgba(106,27,154,.32)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg></div>
+      <div class="menu-btn-text"><div class="mbt">Listado MEF</div><div class="mbs">Tabla completa de todas las pacientes</div></div>
+      <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </button>
+    <button class="menu-btn" onclick="openPFListado()">
+      <div class="menu-btn-icon" style="background:rgba(194,24,91,.32)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      <div class="menu-btn-text"><div class="mbt">Seguimiento PF</div><div class="mbs">Planificación familiar · métodos y citas</div></div>
+      <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </button>
 
     <div class="home-totals">
       <div class="home-total-chip"><div class="home-total-num" id="hs-total">0</div><div class="home-total-lbl">Total</div></div>
@@ -755,7 +788,8 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
     <div class="topbar-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="search-input" placeholder="Buscar nombre o DUI…" oninput="renderList()"/></div>
     <button class="topbar-btn primary" onclick="goTo('screen-form','new')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Nueva</span></button>
     <button class="topbar-btn teal" onclick="printListado()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>Imprimir</span></button>
-    <button class="topbar-btn" style="background:linear-gradient(135deg,#00796b,#26a69a);color:#fff" onclick="printVacunacion()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/><path d="M14 4l6 6"/><path d="M8 10l6 6"/><line x1="8" y1="10" x2="14" y2="16"/><path d="M10 8l-2 2 6 6 2-2"/></svg><span>Vacunas</span></button>
+    <button class="topbar-btn" style="background:linear-gradient(135deg,#6a1b9a,#ab47bc);color:#fff" onclick="openListadoPreview()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span>Ver listado</span></button>
+    <button class="topbar-btn" style="background:linear-gradient(135deg,#00796b,#26a69a);color:#fff" onclick="openVacPreview()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/><path d="M14 4l6 6"/><path d="M8 10l6 6"/><line x1="8" y1="10" x2="14" y2="16"/><path d="M10 8l-2 2 6 6 2-2"/></svg><span>Vacunas</span></button>
   </div>
   <div class="list-tabs">
     <button class="list-tab active" id="tab-pacientes" onclick="switchListTab('pacientes')">
@@ -1174,7 +1208,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
       <div class="fs-title green">7. Observaciones y responsable</div>
       <div class="fg c1">
         <div class="f-group"><label>Observaciones clínicas</label><textarea id="f-observaciones" placeholder="Antecedentes relevantes, alergias, seguimientos especiales, notas del promotor…" rows="3"></textarea></div>
-        <div class="f-group"><label>Personal de salud responsable</label><input type="text" id="f-personal" placeholder="Nombre, cargo y UCSF"/></div>
+        <div class="f-group"><label>Personal de salud responsable</label><input type="text" id="f-personal" placeholder="Nombre, cargo y UDS"/></div>
       </div>
 
       <!-- SECCIÓN 8: HISTORIAL DE SEGUIMIENTOS -->
@@ -1203,6 +1237,9 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
       <button class="btn teal" id="btn-print-ficha" onclick="printFichaActual()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir ficha</button>
       <button class="btn indigo" id="btn-print-hist" onclick="printHistorialPaciente()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Imprimir historial</button>
       <button class="btn" id="btn-print-vac" onclick="if(editingId)printTarjetaVacunas(editingId)" style="display:none;background:linear-gradient(135deg,#00796b,#26a69a);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><rect x="9" y="12" width="6" height="10" rx="1"/><path d="M9 7h1m2 0h1M9 4h1m2 0h1"/><circle cx="16" cy="5" r="1.5" fill="currentColor" stroke="none"/></svg>Tarjeta vacunas</button>
+      <button class="btn" id="btn-ver-ficha" onclick="if(editingId)openFichaPreview(editingId)" style="display:none;background:linear-gradient(135deg,#6a1b9a,#ab47bc);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Ver ficha</button>
+      <button class="btn" id="btn-ver-tarjeta" onclick="if(editingId)openTarjetaPreview(editingId)" style="display:none;background:linear-gradient(135deg,#004d40,#00796b);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10 8l-2 2 6 6 2-2"/><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/></svg>Ver tarjeta</button>
+      <button class="btn" id="btn-ver-hist" onclick="if(editingId)openHistorialPreview(editingId)" style="display:none;background:linear-gradient(135deg,#1a237e,#3949ab);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Ver historial</button>
       <button class="btn danger" id="btn-delete" onclick="deleteCurrentRecord()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Eliminar</button>
       <button class="btn secondary" onclick="goBack()" style="margin-left:auto">Volver</button>
     </div>
@@ -1211,12 +1248,57 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 </div>
 
 <!-- MODALES -->
+
+<!-- ════ MODAL VISTA PREVIA FICHA MEF ════ -->
+<div id="ficha-preview-bg" onclick="if(event.target===this)closeFichaPreview()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9700;align-items:flex-start;justify-content:center;overflow:hidden;">
+  <div style="background:#fff;width:100%;height:100%;display:flex;flex-direction:column;">
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;background:linear-gradient(135deg,#5c1a6e,#c2185b);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" style="width:20px;height:20px;flex-shrink:0"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span id="ficha-preview-name" style="font-size:.9rem;font-weight:800;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Ficha MEF</span>
+      <button id="ficha-preview-print-btn" style="display:flex;align-items:center;gap:.4rem;padding:.38rem .85rem;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);border-radius:8px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:800;cursor:pointer;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:14px;height:14px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir</button>
+      <button onclick="closeFichaPreview()" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;font-size:1.1rem;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0">✕</button>
+    </div>
+    <iframe id="ficha-preview-iframe" style="flex:1;width:100%;border:none;background:#f5f5f5;"></iframe>
+  </div>
+</div>
+
+<!-- ════ MODAL VISTA PREVIA HISTORIAL ════ -->
+<div id="hist-preview-bg" onclick="if(event.target===this)closeHistorialPreview()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9700;align-items:flex-start;justify-content:center;overflow:hidden;">
+  <div style="background:#fff;width:100%;height:100%;display:flex;flex-direction:column;">
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;background:linear-gradient(135deg,#1a237e,#3949ab);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" style="width:20px;height:20px;flex-shrink:0"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      <span id="hist-preview-name" style="font-size:.9rem;font-weight:800;color:#fff;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Historial</span>
+      <button id="hist-preview-print-btn" style="display:flex;align-items:center;gap:.4rem;padding:.38rem .85rem;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);border-radius:8px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:800;cursor:pointer;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:14px;height:14px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir</button>
+      <button onclick="closeHistorialPreview()" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;font-size:1.1rem;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0">✕</button>
+    </div>
+    <iframe id="hist-preview-iframe" style="flex:1;width:100%;border:none;background:#f5f5f5;"></iframe>
+  </div>
+</div>
+
+<!-- ════ MODAL ATENCIÓN RÁPIDA ════ -->
+<div id="atencion-modal-bg" onclick="if(event.target===this)closeAtencionRapida()">
+  <div id="atencion-modal">
+    <div class="am-header" id="am-header">
+      <svg id="am-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <div><div class="am-title" id="am-title">Registrar atención</div><div class="am-sub" id="am-sub">—</div></div>
+    </div>
+    <div class="am-body">
+      <div class="am-info" id="am-info"></div>
+      <div class="am-field"><label>📅 Fecha de atención</label><input type="date" id="am-fecha-atencion"/></div>
+      <div class="am-field" id="am-proxima-wrap"><label id="am-proxima-label">📅 Próxima cita</label><input type="date" id="am-fecha-proxima"/></div>
+    </div>
+    <div class="am-footer">
+      <button class="am-btn-cancel" onclick="closeAtencionRapida()">Cancelar</button>
+      <button class="am-btn-save" onclick="saveAtencionRapida()">✓ Guardar atención</button>
+    </div>
+  </div>
+</div>
 <div class="modal-bg" id="profile-modal-bg" onclick="if(event.target===this)closeProfileModal()">
   <div class="modal" style="max-width:355px">
     <h3><svg viewBox="0 0 24 24" fill="none" stroke="var(--rose2)" stroke-width="2" stroke-linecap="round" style="width:18px;height:18px"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Mi perfil</h3>
     <div class="profile-field"><label>Nombre completo</label><input type="text" id="profile-nombre" placeholder="Ej: María González" maxlength="80"/></div>
     <div class="profile-field"><label>Cargo / Especialidad</label><input type="text" id="profile-cargo" placeholder="Ej: Promotora de Salud" maxlength="60"/></div>
-    <div class="profile-field"><label>UCSF / Unidad de salud</label><input type="text" id="profile-ucsf" placeholder="Ej: UCSF San Marcos" maxlength="60"/></div>
+    <div class="profile-field"><label>UDS / Unidad de salud</label><input type="text" id="profile-ucsf" placeholder="Ej: UDS San Marcos" maxlength="60"/></div>
     <button class="profile-save-btn" onclick="saveProfile()">✓ Guardar perfil</button>
     <button class="btn secondary" onclick="closeProfileModal()" style="width:100%;margin-top:.42rem;justify-content:center">Cancelar</button>
   </div>
@@ -1333,36 +1415,36 @@ function calcVphNext(rec){if(!rec.vphFecha)return null;return addYears(rec.vphFe
 function getAllAlerts(){
   const byFolder={pf:[],pap:[],vph:[],promotor:[],arr:[],ent:[],dt:[]};
   records.forEach(r=>{
-    // PF — planificación familiar
-    if(r.nextDate){const d=diffDays(r.nextDate);if(d<=60)byFolder.pf.push({rec:r,type:'pf',date:r.nextDate,diff:d,label:'Próximo seguimiento PF'});}
-    // PAP anual
+    // PF — vencidas siempre · próximas 10d · esterilización excluida
+    if(r.nextDate && r.metodo!=='esteril'){const d=diffDays(r.nextDate);if(d<0||d<=10)byFolder.pf.push({rec:r,type:'pf',date:r.nextDate,diff:d,label:'Próximo seguimiento PF'});}
+    // PAP anual — vencidas siempre · próximas 30d
     const papNext=calcPapNext(r);
-    if(papNext){const d=diffDays(papNext);if(d<=60)byFolder.pap.push({rec:r,type:'pap',date:papNext,diff:d,label:'Citología PAP (anual)'});}
-    // VPH cada 5 años
+    if(papNext){const d=diffDays(papNext);if(d<0||d<=30)byFolder.pap.push({rec:r,type:'pap',date:papNext,diff:d,label:'Citología PAP (anual)'});}
+    // VPH cada 5 años — vencidas siempre · próximas 30d
     const vphNext=calcVphNext(r);
-    if(vphNext){const d=diffDays(vphNext);if(d<=60)byFolder.vph.push({rec:r,type:'vph',date:vphNext,diff:d,label:'VPH (cada 5 años)'});}
-    // Seguimiento anual promotor
-    if(r.atencionPreventiva){const apNext=addYears(r.atencionPreventiva,1);const d=diffDays(apNext);if(d<=60)byFolder.promotor.push({rec:r,type:'promotor',date:apNext,diff:d,label:'Atención preventiva promotor (anual)',thisMonth:isThisMonth(apNext)});}
-    // ARR — siempre visible si está activo
+    if(vphNext){const d=diffDays(vphNext);if(d<0||d<=30)byFolder.vph.push({rec:r,type:'vph',date:vphNext,diff:d,label:'VPH (cada 5 años)'});}
+    // Promotor anual — vencidas siempre · próximas 30d
+    if(r.atencionPreventiva){const apNext=addYears(r.atencionPreventiva,1);const d=diffDays(apNext);if(d<0||d<=30)byFolder.promotor.push({rec:r,type:'promotor',date:apNext,diff:d,label:'Atención preventiva promotor (anual)',thisMonth:isThisMonth(apNext)});}
+    // ARR — siempre visible
     if(r.arr==='si')byFolder.arr.push({rec:r,type:'arr',date:null,diff:0,label:'Alto Riesgo Reproductivo activo'});
-    // ENT — siempre visible si está activo
+    // ENT — siempre visible
     if(r.ent==='si')byFolder.ent.push({rec:r,type:'ent',date:r.fechaEnt||null,diff:r.fechaEnt?diffDays(addYears(r.fechaEnt,1)):0,label:'Control ENT/Discapacidad activo'});
-    // DT Adulto — alertas según modo
-    const dt = r.vacDt || {};
-    if(r.vacInfantil === 'completo'){
-      // 5 refuerzos cada 10 años: alertar el siguiente pendiente
-      const sig = [1,2,3,4,5].find(i => dt[i] && !dt[i+1]);
-      if(sig){
-        const next10 = addYears(dt[sig], 10);
-        const d = diffDays(next10);
-        if(d <= 365) byFolder.dt.push({rec:r,type:'dt',date:next10,diff:d,label:'DT — Refuerzo R'+(sig+1)+' (10 años desde R'+sig+')'});
+    // DT — vencidas siempre · próximas 10d · fix R5
+    const dt=r.vacDt||{};
+    if(r.vacInfantil==='completo'){
+      const lastApplied=[5,4,3,2,1].find(i=>dt[i]);
+      if(lastApplied){
+        const nextLabel=lastApplied<5?'R'+(lastApplied+1):'Próx. refuerzo';
+        const next10=addYears(dt[lastApplied],10);const d=diffDays(next10);
+        if(lastApplied<5&&!dt[lastApplied+1]){if(d<0||d<=10)byFolder.dt.push({rec:r,type:'dt',date:next10,diff:d,label:'DT — Refuerzo '+nextLabel+' (10 años desde R'+lastApplied+')'});}
+        else if(lastApplied===5){if(d<0||d<=10)byFolder.dt.push({rec:r,type:'dt',date:next10,diff:d,label:'DT — '+nextLabel+' (10 años desde R5)'});}
       }
-    } else if(r.vacInfantil === 'incompleto'){
-      // D1 contacto · D2 30d · D3 1año · R1 10a · R2 10a
-      if(dt[1] && !dt[2]){const next=addDays(dt[1],30);const d=diffDays(next);if(d<=60)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — 2ª dosis (30 días desde D1)'});}
-      if(dt[2] && !dt[3]){const next=addYears(dt[2],1);const d=diffDays(next);if(d<=365)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — 3ª dosis (1 año desde D2)'});}
-      if(dt[3] && !dt[4]){const next=addYears(dt[3],10);const d=diffDays(next);if(d<=365)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — Refuerzo R1 (10 años desde D3)'});}
-      if(dt[4] && !dt[5]){const next=addYears(dt[4],10);const d=diffDays(next);if(d<=365)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — Refuerzo R2 (10 años desde R1)'});}
+    } else if(r.vacInfantil==='incompleto'){
+      if(dt[1]&&!dt[2]){const next=addDays(dt[1],30);const d=diffDays(next);if(d<0||d<=10)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — 2ª dosis (30 días desde D1)'});}
+      if(dt[2]&&!dt[3]){const next=addYears(dt[2],1);const d=diffDays(next);if(d<0||d<=10)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — 3ª dosis (1 año desde D2)'});}
+      if(dt[3]&&!dt[4]){const next=addYears(dt[3],10);const d=diffDays(next);if(d<0||d<=10)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — Refuerzo R1 (10 años desde D3)'});}
+      if(dt[4]&&!dt[5]){const next=addYears(dt[4],10);const d=diffDays(next);if(d<0||d<=10)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — Refuerzo R2 (10 años desde R1)'});}
+      if(dt[5]){const next=addYears(dt[5],10);const d=diffDays(next);if(d<0||d<=10)byFolder.dt.push({rec:r,type:'dt',date:next,diff:d,label:'DT — Próx. refuerzo (10 años desde R2)'});}
     }
   });
   Object.keys(byFolder).forEach(k=>byFolder[k].sort((a,b)=>(a.diff??999)-(b.diff??999)));
@@ -1673,6 +1755,9 @@ function initNewForm(){
   document.getElementById('btn-print-ficha').style.display='none';
   document.getElementById('btn-print-hist').style.display='none';
   document.getElementById('btn-print-vac').style.display='none';
+  document.getElementById('btn-ver-ficha').style.display='none';
+  document.getElementById('btn-ver-tarjeta').style.display='none';
+  document.getElementById('btn-ver-hist').style.display='none';
   document.getElementById('btn-reg-seguimiento').style.display='none';
   document.getElementById('fh-num-display').textContent='Nueva ficha';
   document.getElementById('riesgo-display').style.display='none';
@@ -1709,6 +1794,9 @@ function loadFormFromRecord(rec){
   document.getElementById('btn-print-ficha').style.display='flex';
   document.getElementById('btn-print-hist').style.display='flex';
   document.getElementById('btn-print-vac').style.display='flex';
+  document.getElementById('btn-ver-ficha').style.display='flex';
+  document.getElementById('btn-ver-tarjeta').style.display='flex';
+  document.getElementById('btn-ver-hist').style.display='flex';
   document.getElementById('btn-reg-seguimiento').style.display='flex';
   editingId=rec.id;
   toggleENT();toggleDiscapacidad();calcRiesgo();
@@ -1781,6 +1869,9 @@ function saveRecord(){
   document.getElementById('btn-print-ficha').style.display='flex';
   document.getElementById('btn-print-hist').style.display='flex';
   document.getElementById('btn-print-vac').style.display='flex';
+  document.getElementById('btn-ver-ficha').style.display='flex';
+  document.getElementById('btn-ver-tarjeta').style.display='flex';
+  document.getElementById('btn-ver-hist').style.display='flex';
   document.getElementById('btn-reg-seguimiento').style.display='flex';
   document.getElementById('fh-num-display').textContent=`Ficha #${String(rec.num).padStart(3,'0')}`;
 }
@@ -1900,7 +1991,7 @@ function renderAlerts(){
           const thisMonthCount=arr.filter(x=>x.thisMonth).length;
           monthBanner=`<div class="promotor-month-highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><div class="promotor-month-highlight-text">📅 Seguimiento este mes — programar visitas</div><span class="promotor-month-highlight-count">${thisMonthCount}</span></div>`;
         }
-        return monthBanner+`<div class="falert" onclick="openRecord('${r.id}')"><div class="falert-dot ${dotCls}"></div><div class="falert-info"><div class="falert-name">${escHtml(r.nombre||'—')}${a.thisMonth&&f.key==='promotor'?' <span style=\'background:#e0f2f1;color:#00695c;font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:4px;\'>Este mes</span>':''}</div><div class="falert-detail">${dateStr?dateStr+' · ':''} ${f.key==='dt'?escHtml(a.label):escHtml(r.metodo?METODO_LABELS[r.metodo]||r.metodo:'')}${entInfo}</div></div><span class="falert-badge ${badgeCls2}">${badgeTxt2}</span></div>`;
+        return monthBanner+`<div class="falert" onclick="openRecord('${r.id}')"><div class="falert-dot ${dotCls}"></div><div class="falert-info"><div class="falert-name">${escHtml(r.nombre||'—')}${a.thisMonth&&f.key==='promotor'?' <span style=\'background:#e0f2f1;color:#00695c;font-size:.58rem;font-weight:800;padding:1px 5px;border-radius:4px;\'>Este mes</span>':''}</div><div class="falert-detail">${dateStr?dateStr+' · ':''} ${f.key==='dt'?escHtml(a.label):escHtml(r.metodo?METODO_LABELS[r.metodo]||r.metodo:'')}${entInfo}</div></div><span class="falert-badge ${badgeCls2}">${badgeTxt2}</span>${(f.key!=='arr'&&f.key!=='ent')?`<button class="falert-btn" onclick="event.stopPropagation();openAtencionRapida('${r.id}','${f.key}',${JSON.stringify(a.label)})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:11px;height:11px"><polyline points="20 6 9 17 4 12"/></svg>Atendida</button>`:''}</div>`;
       }).join('');
 
     return `<div class="folder ${f.cls}" id="folder-${f.key}">
@@ -1928,6 +2019,80 @@ function toggleFolder(key){
   if(el)el.classList.toggle('open');
 }
 
+/* ═══ ATENCIÓN RÁPIDA DESDE ALERTAS ═══ */
+let _arId=null,_arKey=null;
+function openAtencionRapida(id,key,label){
+  const r=records.find(x=>x.id===id);if(!r)return;
+  _arId=id;_arKey=key;
+  const cfg={
+    pf:      {color:'#7b2d8b',title:'Atención PF registrada',    icon:'💊',prox:true, proximaLbl:'📅 Próxima cita PF'},
+    pap:     {color:'#1565c0',title:'Citología PAP registrada',   icon:'🔬',prox:false},
+    vph:     {color:'#00695c',title:'Control VPH registrado',     icon:'💉',prox:false},
+    promotor:{color:'#e65100',title:'Atención preventiva registrada',icon:'👤',prox:false},
+    dt:      {color:'#1a237e',title:'Dosis DT registrada',        icon:'💉',prox:false},
+  };
+  const c=cfg[key]||{color:'#4a148c',title:'Atención registrada',icon:'✓',prox:false};
+  const hdr=document.getElementById('am-header');
+  hdr.style.background=`linear-gradient(135deg,${c.color},${c.color}cc)`;
+  hdr.style.color='#fff';
+  document.getElementById('am-icon').style.stroke='#fff';
+  document.getElementById('am-title').textContent=`${c.icon} ${c.title}`;
+  document.getElementById('am-sub').textContent=escHtml(r.nombre||'—');
+  document.getElementById('am-info').textContent=label||'Marcar como atendida para quitar la alerta';
+  const hoy=new Date().toISOString().split('T')[0];
+  document.getElementById('am-fecha-atencion').value=hoy;
+  const proxWrap=document.getElementById('am-proxima-wrap');
+  if(key==='pf'){
+    proxWrap.style.display='';
+    document.getElementById('am-proxima-label').textContent=c.proximaLbl;
+    const sug=calcNextDate({...r,inicioOral:hoy,inicioInject:hoy,inicioAnual:hoy});
+    document.getElementById('am-fecha-proxima').value=sug||'';
+  } else { proxWrap.style.display='none'; }
+  document.getElementById('atencion-modal-bg').style.display='flex';
+  setTimeout(()=>document.getElementById('am-fecha-atencion').focus(),100);
+}
+function closeAtencionRapida(){
+  document.getElementById('atencion-modal-bg').style.display='none';
+  _arId=null;_arKey=null;
+}
+function saveAtencionRapida(){
+  const r=records.find(x=>x.id===_arId);if(!r)return;
+  const fechaAtencion=document.getElementById('am-fecha-atencion').value;
+  if(!fechaAtencion){showToast('Ingrese la fecha de atención.','error');return;}
+  const prevRec=JSON.parse(JSON.stringify(r));
+  if(_arKey==='pf'){
+    const proxima=document.getElementById('am-fecha-proxima').value;
+    if(!proxima){showToast('Ingrese la próxima cita.','error');return;}
+    if(r.metodo==='oral')r.inicioOral=fechaAtencion;
+    else if(r.metodo==='inject-m'||r.metodo==='inject-t')r.inicioInject=fechaAtencion;
+    else if(['diu','implante'].includes(r.metodo))r.inicioAnual=fechaAtencion;
+    r.nextDate=proxima;
+  } else if(_arKey==='pap'){
+    r.papFecha=fechaAtencion;r.papNext=addYears(fechaAtencion,1);
+  } else if(_arKey==='vph'){
+    if(!r.vacVph)r.vacVph={};
+    if(!r.vacVph[1])r.vacVph[1]=fechaAtencion;
+    else if(!r.vacVph[2])r.vacVph[2]=fechaAtencion;
+    r.vphFecha=fechaAtencion;r.vphNext=addYears(fechaAtencion,5);
+  } else if(_arKey==='promotor'){
+    r.atencionPreventiva=fechaAtencion;
+  } else if(_arKey==='dt'){
+    if(!r.vacDt)r.vacDt={};
+    const dt=r.vacDt;
+    if(!dt[1])dt[1]=fechaAtencion;
+    else if(!dt[2])dt[2]=fechaAtencion;
+    else if(!dt[3])dt[3]=fechaAtencion;
+    else if(!dt[4])dt[4]=fechaAtencion;
+    else if(!dt[5])dt[5]=fechaAtencion;
+  }
+  const newEntries=_buildHistSnapshot(r,prevRec);
+  if(newEntries.length)r.historial=(r.historial||[]).concat(newEntries);
+  saveRecords();updateHomeStats();renderAlerts();
+  if(currentScreen==='screen-form'&&editingId===_arId)renderHistAcc(r.historial);
+  showToast(`✓ Atención registrada para ${r.nombre||'la paciente'}.`,'ok');
+  closeAtencionRapida();
+}
+
 /* ═══ PRINT INDIVIDUAL FICHA ═══ */
 
 /* ═══ MODAL EDICIÓN VACUNAS DESDE LIBRO ═══ */
@@ -1943,6 +2108,35 @@ function openVacEditModal(id){
     neum: JSON.parse(JSON.stringify(rec.vacNeum || {1:null,2:null}))
   };
   document.getElementById('vem-patient-name').textContent = rec.nombre || '—';
+
+  // Adaptar bloque DT según esquema infantil del paciente
+  const modo = rec.vacInfantil === 'completo' ? 'completo' : 'incompleto';
+  const dtTitle = document.getElementById('vem-dt-title');
+  const dtBadge = document.getElementById('vem-dt-badge');
+  if(modo === 'completo'){
+    if(dtTitle) dtTitle.textContent = '💉 Vacuna DT Adulto — 5 refuerzos cada 10 años';
+    if(dtBadge){ dtBadge.textContent='5 Ref·10a'; dtBadge.style.background='#e3f2fd'; dtBadge.style.color='#1565c0'; }
+    const labels    = ['R1','R2','R3','R4','R5'];
+    const sublabels = ['Refuerzo 1','Refuerzo 2','Refuerzo 3','Refuerzo 4','Refuerzo 5'];
+    [1,2,3,4,5].forEach(i=>{
+      const n = document.querySelector('#vem-dt-btn-'+i+' .vem-dose-num');
+      const s = document.querySelector('#vem-dt-btn-'+i+' .vem-dose-sub');
+      if(n) n.textContent = labels[i-1];
+      if(s) s.textContent = sublabels[i-1];
+    });
+  } else {
+    if(dtTitle) dtTitle.textContent = '💉 Vacuna DT Adulto — 3 dosis base + 2 refuerzos';
+    if(dtBadge){ dtBadge.textContent='3D+2Ref'; dtBadge.style.background='#fff3e0'; dtBadge.style.color='#e65100'; }
+    const labels    = ['D1','D2','D3','R1','R2'];
+    const sublabels = ['1ª Dosis','2ª Dosis','3ª Dosis','Refuerzo 1','Refuerzo 2'];
+    [1,2,3,4,5].forEach(i=>{
+      const n = document.querySelector('#vem-dt-btn-'+i+' .vem-dose-num');
+      const s = document.querySelector('#vem-dt-btn-'+i+' .vem-dose-sub');
+      if(n) n.textContent = labels[i-1];
+      if(s) s.textContent = sublabels[i-1];
+    });
+  }
+
   renderVemUI();
   document.getElementById('vac-edit-modal-bg').classList.add('open');
 }
@@ -2022,15 +2216,35 @@ function saveVacEdit(){
   if(!_vemId) return;
   const idx = records.findIndex(r=>r.id===_vemId);
   if(idx<0) return;
+
+  // Copia del estado anterior para comparar con _buildHistSnapshot
+  const prevRec = JSON.parse(JSON.stringify(records[idx]));
+
+  // Aplicar los cambios de vacunas
   records[idx].vacVph  = {..._vemState.vph};
   records[idx].vacDt   = {..._vemState.dt};
   records[idx].vacNeum = {..._vemState.neum};
   records[idx].updatedAt = new Date().toISOString();
+
+  // Generar entradas de historial igual que saveRecord
+  const newEntries = _buildHistSnapshot(records[idx], prevRec);
+  if(newEntries.length > 0){
+    records[idx].historial = (records[idx].historial||[]).concat(newEntries);
+  }
+
   saveRecords();
+  updateHomeStats();
+
+  // Si el formulario está abierto con este mismo paciente, actualizar su historial en pantalla
+  if(currentScreen === 'screen-form' && editingId === _vemId){
+    renderHistAcc(records[idx].historial);
+  }
+
   showToast('✓ Vacunas actualizadas','success');
   closeVacEditModal();
   renderVacBook();
-  // Also sync to cloud if available
+  renderList();
+  renderAlerts();
   if(typeof uploadToCloud==='function') uploadToCloud();
 }
 
@@ -2059,7 +2273,7 @@ function getDtInfoForRecord(r){
 function printTarjetaVacunas(id){
   const r = records.find(x=>x.id===id); if(!r) return;
   const profile = loadProfile();
-  const ucsf = profile.ucsf||'UCSF';
+  const ucsf = profile.ucsf||'UDS';
   const todayStr = new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
   const fmt = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}) : '—';
 
@@ -2067,11 +2281,11 @@ function printTarjetaVacunas(id){
   const dt   = r.vacDt   || {};
   const neum = r.vacNeum || {};
 
-  const doseRow = (label, date) => `
+  const doseRow = (label, date, cls) => `
     <tr>
-      <td>${label}</td>
-      <td class="${date?'done':'pending'}">${date ? fmt(date) : 'Pendiente'}</td>
-      <td class="${date?'done':'pending'}">${date ? '✓ Aplicada' : '—'}</td>
+      <td class="${cls}${date?' done':' pending'}">${label}</td>
+      <td class="${cls}${date?' done':' pending'}">${date ? fmt(date) : 'Pendiente'}</td>
+      <td class="${cls}${date?' done':' pending'}">${date ? '✓ Aplicada' : '—'}</td>
     </tr>`;
 
   const dtInfo = getDtInfoForRecord(r);
@@ -2098,11 +2312,20 @@ function printTarjetaVacunas(id){
     .badge-ok{background:rgba(255,255,255,.25);border-radius:10px;padding:2px 8px;font-size:8px}
     .badge-no{background:rgba(255,100,0,.35);border-radius:10px;padding:2px 8px;font-size:8px}
     table{width:100%;border-collapse:collapse}
-    th{background:#e0f2f1;color:#00695c;font-size:8px;font-weight:800;text-transform:uppercase;padding:4px 8px;border:1px solid #b2dfdb;text-align:left}
-    td{padding:4px 8px;border:1px solid #e0e0e0;font-size:9px;vertical-align:middle}
-    tr:nth-child(even) td{background:#f9f9f9}
-    td.done{color:#2e7d32;font-weight:700}
+    th{font-size:8px;font-weight:800;text-transform:uppercase;padding:4px 8px;text-align:left}
+    td{padding:5px 8px;font-size:9px;vertical-align:middle}
+    tr:nth-child(even) td{background:rgba(0,0,0,.02)}
+    td.done{font-weight:700}
     td.pending{color:#9e9e9e}
+    .th-vph{background:#e0f2f1;color:#00695c;border:1.5px solid #80cbc4}
+    .td-vph{border:1px solid #b2dfdb}
+    .td-vph.done{color:#00695c;background:#f5fffe}
+    .th-dt{background:#e8eaf6;color:#283593;border:1.5px solid #9fa8da}
+    .td-dt{border:1px solid #c5cae9}
+    .td-dt.done{color:#283593;background:#f5f6ff}
+    .th-neum{background:#f3e5f5;color:#6a1b9a;border:1.5px solid #ce93d8}
+    .td-neum{border:1px solid #e1bee7}
+    .td-neum.done{color:#6a1b9a;background:#fdf5ff}
     .summary-bar{display:flex;gap:8px;margin-top:10px}
     .sum-item{flex:1;border-radius:8px;padding:6px 8px;text-align:center;border:1.5px solid}
     .sum-item.ok{background:#e8f5e9;border-color:#a5d6a7;color:#2e7d32}
@@ -2134,29 +2357,29 @@ function printTarjetaVacunas(id){
 
   <div class="vac-section">
     <div class="vac-title">💉 Vacuna VPH <span class="${vphOk?'badge-ok':'badge-no'}">${vphOk?'✓ Completo':'Sin iniciar'}</span></div>
-    <table><thead><tr><th>Dosis</th><th>Fecha de aplicación</th><th>Estado</th></tr></thead><tbody>
-      ${doseRow('Dosis inicial (1ª)', vph[1])}
-      ${doseRow('Refuerzo (2ª)', vph[2])}
+    <table><thead><tr><th class="th-vph">Dosis</th><th class="th-vph">Fecha de aplicación</th><th class="th-vph">Estado</th></tr></thead><tbody>
+      ${doseRow('Dosis inicial (1ª)', vph[1], 'td-vph')}
+      ${doseRow('Refuerzo (2ª)', vph[2], 'td-vph')}
     </tbody></table>
   </div>
 
   <div class="vac-section">
     <div class="vac-title">💉 Vacuna DT Adulto <span class="${dtOk?'badge-ok':'badge-no'}">${dtOk?'✓ Completo ('+dtApplied+'/'+( dtInfo.modo==='completo'?'5 refuerzos':'3 dosis')+')':dtApplied+(dtInfo.modo==='completo'?'/5 ref':'/3 dosis')}</span></div>
-    <div style="font-size:7.5px;color:#546e7a;padding:3px 8px;background:#eceff1;border:1px solid #cfd8dc;border-top:none;margin-bottom:0">${dtModoLabel}</div>
-    <table><thead><tr><th>Dosis / Refuerzo</th><th>Fecha de aplicación</th><th>Estado</th></tr></thead><tbody>
-      ${doseRow(dtLabels[0], dt[1])}
-      ${doseRow(dtLabels[1], dt[2])}
-      ${doseRow(dtLabels[2], dt[3])}
-      ${doseRow(dtLabels[3], dt[4])}
-      ${doseRow(dtLabels[4], dt[5])}
+    <div style="font-size:7.5px;color:#283593;padding:3px 8px;background:#eef0fc;border-left:1.5px solid #9fa8da;border-right:1.5px solid #9fa8da;font-weight:700">${dtModoLabel}</div>
+    <table><thead><tr><th class="th-dt">Dosis / Refuerzo</th><th class="th-dt">Fecha de aplicación</th><th class="th-dt">Estado</th></tr></thead><tbody>
+      ${doseRow(dtLabels[0], dt[1], 'td-dt')}
+      ${doseRow(dtLabels[1], dt[2], 'td-dt')}
+      ${doseRow(dtLabels[2], dt[3], 'td-dt')}
+      ${doseRow(dtLabels[3], dt[4], 'td-dt')}
+      ${doseRow(dtLabels[4], dt[5], 'td-dt')}
     </tbody></table>
   </div>
 
   <div class="vac-section">
     <div class="vac-title">💉 Vacuna Neumococo 23V <span class="${neumOk?'badge-ok':'badge-no'}">${neum[1]&&neum[2]?'✓ Completo':neum[1]?'✓ Dosis aplicada':'Sin iniciar'}</span></div>
-    <table><thead><tr><th>Dosis</th><th>Fecha de aplicación</th><th>Estado</th></tr></thead><tbody>
-      ${doseRow('Dosis inicial', neum[1])}
-      ${doseRow('Refuerzo (5 años)', neum[2])}
+    <table><thead><tr><th class="th-neum">Dosis</th><th class="th-neum">Fecha de aplicación</th><th class="th-neum">Estado</th></tr></thead><tbody>
+      ${doseRow('Dosis inicial', neum[1], 'td-neum')}
+      ${doseRow('Refuerzo (5 años)', neum[2], 'td-neum')}
     </tbody></table>
   </div>
 
@@ -2181,7 +2404,7 @@ function printTarjetaVacunas(id){
 function printFicha(id){
   const r=records.find(x=>x.id===id);if(!r)return;
   const profile=loadProfile();
-  const ucsf=profile.ucsf||'UCSF';
+  const ucsf=profile.ucsf||'UDS';
   const personal=profile.nombre||'Personal de salud';
   const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
   const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'}):'—';
@@ -2302,17 +2525,26 @@ function printFicha(id){
     +'<div class="f"><label>Gestaciones / Partos</label><span>'+(r.gestaciones||'0')+' gest. &middot; '+(r.partos||'0')+' partos</span></div>'
     +'</div></div>'
 
-    +'<div class="sec"><div class="sec-t">6. Esquema de Vacunación</div><div class="g2">'
-    +'<div class="f"><label>VPH (dosis + refuerzo)</label><span>'
-    +[{i:1,l:'Dosis'},{i:2,l:'Refuerzo'}].map(x=>{const d=(r.vacVph||{})[x.i];return d?x.l+': '+fmt(d):x.l+': —';}).join(' · ')
-    +'</span></div>'
-    +'<div class="f"><label>DT Adulto (5 dosis)</label><span>'
-    +[1,2,3,4,5].map(i=>{const d=(r.vacDt||{})[i];return d?'D'+i+': '+fmt(d):'D'+i+': —';}).join(' · ')
-    +'</span></div>'
-    +'<div class="f"><label>Neumococo 23V</label><span>'
-    +[{i:1,l:'Dosis'},{i:2,l:'Refuerzo'}].map(x=>{const d=(r.vacNeum||{})[x.i];return d?x.l+': '+fmt(d):x.l+': —';}).join(' · ')
-    +'</span></div>'
-    +'</div></div>'
+    +'<div class="sec"><div class="sec-t">6. Esquema de Vacunación</div>'
+    +(()=>{
+      const fmts=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+      const thS=(bg,bc)=>`style="background:${bg};color:#fff;font-size:6.5px;font-weight:800;text-transform:uppercase;padding:3px 6px;border:1.5px solid ${bc};text-align:left"`;
+      const tdS=(bc,done)=>`style="padding:3px 6px;border:1.5px solid ${bc};font-size:7.5px;font-weight:${done?'800':'400'};color:${done?'inherit':'#9e9e9e'}"`;
+      const row=(lbl,ds,bc,doneFg,doneBg)=>{const d=(r.vacDt||r.vacVph||r.vacNeum)&&ds;const done=!!ds;return`<tr style="background:${done?doneBg:'#fff'}"><td ${tdS(bc,done)} style="padding:3px 6px;border:1.5px solid ${bc};font-size:7.5px;font-weight:600;color:#2d1a3a">${lbl}</td><td ${tdS(bc,done)} style="padding:3px 6px;border:1.5px solid ${bc};font-size:7.5px;font-weight:${done?'800':'400'};color:${done?doneFg:'#9e9e9e'}">${ds?fmts(ds):'Pendiente'}</td><td ${tdS(bc,done)} style="padding:3px 6px;border:1.5px solid ${bc};font-size:7.5px;color:${done?doneFg:'#9e9e9e'}">${done?'✓ Aplicada':'—'}</td></tr>`;};
+      const vphRows=[{i:1,l:'Dosis inicial (1ª)'},{i:2,l:'Refuerzo (2ª)'}].map(x=>row(x.l,(r.vacVph||{})[x.i],'#80cbc4','#00695c','#f5fffe')).join('');
+      const dtiRec=getDtInfoForRecord(r);
+      const dtRows=[1,2,3,4,5].map(i=>row(dtiRec.labels[i-1]||'D'+i,(r.vacDt||{})[i],'#9fa8da','#283593','#f5f6ff')).join('');
+      const neumRows=[{i:1,l:'Dosis inicial'},{i:2,l:'Refuerzo (5 años)'}].map(x=>row(x.l,(r.vacNeum||{})[x.i],'#ce93d8','#6a1b9a','#fdf5ff')).join('');
+      return `<div style="margin-bottom:5px">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#e0f2f1;color:#00695c;padding:3px 8px;border-radius:4px 4px 0 0;font-size:7px;font-weight:800;text-transform:uppercase;border:1px solid #80cbc4"><span>💉 VPH</span><span style="opacity:.8">${r.vacVph&&r.vacVph[1]?'✓ Iniciado':'Sin iniciar'}</span></div>
+        <table style="width:100%;border-collapse:collapse"><thead><tr><th ${thS('#00695c','#80cbc4')}>Dosis</th><th ${thS('#00695c','#80cbc4')}>Fecha</th><th ${thS('#00695c','#80cbc4')}>Estado</th></tr></thead><tbody>${vphRows}</tbody></table>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#e8eaf6;color:#283593;padding:3px 8px;margin-top:4px;border-radius:4px 4px 0 0;font-size:7px;font-weight:800;text-transform:uppercase;border:1px solid #9fa8da"><span>💉 DT Adulto — ${dtiRec.modo==='completo'?'5 Ref·10a':'3D+2Ref'}</span><span style="opacity:.8">${dtiRec.dtApplied||0}/${dtiRec.modo==='completo'?5:3} aplicadas</span></div>
+        <table style="width:100%;border-collapse:collapse"><thead><tr><th ${thS('#283593','#9fa8da')}>Dosis/Ref.</th><th ${thS('#283593','#9fa8da')}>Fecha</th><th ${thS('#283593','#9fa8da')}>Estado</th></tr></thead><tbody>${dtRows}</tbody></table>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#f3e5f5;color:#6a1b9a;padding:3px 8px;margin-top:4px;border-radius:4px 4px 0 0;font-size:7px;font-weight:800;text-transform:uppercase;border:1px solid #ce93d8"><span>💉 Neumococo 23V</span><span style="opacity:.8">${r.vacNeum&&r.vacNeum[1]?'✓ Iniciado':'Sin iniciar'}</span></div>
+        <table style="width:100%;border-collapse:collapse"><thead><tr><th ${thS('#6a1b9a','#ce93d8')}>Dosis</th><th ${thS('#6a1b9a','#ce93d8')}>Fecha</th><th ${thS('#6a1b9a','#ce93d8')}>Estado</th></tr></thead><tbody>${neumRows}</tbody></table>
+      </div>`;
+    })()
+    +'</div>'
 
     +'<div class="sec"><div class="sec-t">7. Observaciones</div>'
     +'<div class="f"><label>Notas clínicas</label><span style="min-height:24px">'+esc(r.observaciones||'—')+'</span></div>'
@@ -2377,10 +2609,19 @@ function switchListTab(tab){
   _activeListTab = tab;
   document.getElementById('tab-pacientes').classList.toggle('active', tab==='pacientes');
   document.getElementById('tab-vacunas').classList.toggle('active', tab==='vacunas');
-  document.getElementById('list-scroller').style.display = tab==='pacientes' ? '' : 'none';
+  const listScroller = document.getElementById('list-scroller');
+  const listSortBar  = document.getElementById('list-sort-bar');
   const vb = document.getElementById('vac-book');
-  if(tab==='vacunas'){ vb.classList.add('active'); renderVacBook(); }
-  else { vb.classList.remove('active'); }
+  if(tab==='vacunas'){
+    listScroller.style.display='none';
+    if(listSortBar) listSortBar.style.display='none';
+    vb.classList.add('active');
+    renderVacBook();
+  } else {
+    listScroller.style.display='';
+    if(listSortBar) listSortBar.style.display='';
+    vb.classList.remove('active');
+  }
 }
 
 function renderVacBook(){
@@ -2490,6 +2731,10 @@ function renderVacBook(){
       +   '<button class="vb-action-btn print" onclick="printTarjetaVacunas(\''+r.id+'\')">'
       +     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>'
       +     'Imprimir tarjeta'
+      +   '</button>'
+      +   '<button class="vb-action-btn preview" onclick="openTarjetaPreview(\''+r.id+'\')">'
+      +     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+      +     'Ver tarjeta'
       +   '</button>'
       +   '<button class="vb-action-btn" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);color:#880e4f" onclick="openRecord(\''+r.id+'\')">'
       +     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>'
@@ -2641,10 +2886,323 @@ function renderStats(){
 }
 
 /* ═══ IMPRIMIR ═══ */
+/* ════ VISTA PREVIA FICHA MEF (iframe) ════ */
+function openFichaPreview(id){
+  const r=records.find(x=>x.id===id);if(!r)return;
+  document.getElementById('ficha-preview-name').textContent=r.nombre||'Ficha MEF';
+  document.getElementById('ficha-preview-print-btn').onclick=()=>printFicha(id);
+  const origOpen=window.open;let capturedHTML='';
+  window.open=()=>({document:{write(h){capturedHTML=h;},close(){}}});
+  printFicha(id);window.open=origOpen;
+  if(capturedHTML){const d=document.getElementById('ficha-preview-iframe').contentDocument||document.getElementById('ficha-preview-iframe').contentWindow.document;d.open();d.write(capturedHTML);d.close();}
+  document.getElementById('ficha-preview-bg').style.display='flex';
+}
+function closeFichaPreview(){document.getElementById('ficha-preview-bg').style.display='none';}
+
+/* ════ VISTA PREVIA HISTORIAL (iframe) ════ */
+function openHistorialPreview(id){
+  const r=records.find(x=>x.id===id);if(!r)return;
+  document.getElementById('hist-preview-name').textContent=r.nombre||'Historial';
+  document.getElementById('hist-preview-print-btn').onclick=()=>{const p=editingId;editingId=id;printHistorialPaciente();editingId=p;};
+  const origOpen=window.open;let capturedHTML='';
+  window.open=()=>({document:{write(h){capturedHTML=h;},close(){}}});
+  const prev=editingId;editingId=id;printHistorialPaciente();editingId=prev;
+  window.open=origOpen;
+  if(capturedHTML){const d=document.getElementById('hist-preview-iframe').contentDocument||document.getElementById('hist-preview-iframe').contentWindow.document;d.open();d.write(capturedHTML);d.close();}
+  document.getElementById('hist-preview-bg').style.display='flex';
+}
+function closeHistorialPreview(){document.getElementById('hist-preview-bg').style.display='none';}
+
+function _buildListadoHTML(records, profile, landscape){
+  const ucsf=profile.ucsf||'UDS';
+  const personal=profile.nombre?`${profile.nombre}${profile.cargo?' · '+profile.cargo:''}`:'Personal de salud';
+  const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const today2=new Date();today2.setHours(0,0,0,0);
+  const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+
+  // Helper: última dosis DT aplicada
+  const lastDt=r=>{const dt=r.vacDt||{};for(let i=5;i>=1;i--)if(dt[i])return fmt(dt[i]);return'—';};
+  // Helper: Neumococo
+  const lastNeum=r=>{const n=r.vacNeum||{};if(n[2])return fmt(n[2])+' (R)';if(n[1])return fmt(n[1])+' (D1)';return'—';};
+  // Helper: VPH dosis
+  const vphDosis=r=>{const v=r.vacVph||{};const c=[v[1]?'D1':'',v[2]?'R2':''].filter(Boolean);return c.length?c.join('+'):'—';};
+  // Estado próxima cita
+  const estadoCita=(nextDate)=>{if(!nextDate)return{txt:'—',bg:'',co:'#9e9e9e'};const d=new Date(nextDate+'T12:00:00');d.setHours(0,0,0,0);const diff=Math.round((d-today2)/(1000*60*60*24));if(diff<0)return{txt:`Venc.${Math.abs(diff)}d`,bg:'#fce4e4',co:'#b71c1c'};if(diff===0)return{txt:'Hoy',bg:'#fff3e0',co:'#e65100'};if(diff<=10)return{txt:`${diff}d`,bg:'#fff8e1',co:'#f57f17'};return{txt:'Al día',bg:'#e8f5e9',co:'#2e7d32'};};
+
+  const byM={};METODO_ORDER.forEach(m=>{byM[m]=[];});
+  records.forEach(r=>{if(byM[r.metodo]!==undefined)byM[r.metodo].push(r);else byM['ninguno']=(byM['ninguno']||[]).concat(r);});
+
+  const fs=landscape?'6.5px':'7px';
+  const BDR='1px solid #d1b3e8', BDH='1.5px solid #7b1fa2';
+  const th=(extra='')=>`padding:4px 5px;font-size:${fs};font-weight:800;text-transform:uppercase;text-align:left;border:${BDH};white-space:nowrap;background:#5c1a6e;color:#fff;${extra}`;
+  const td=(extra='')=>`padding:3px 5px;font-size:${fs};border:${BDR};vertical-align:middle;${extra}`;
+
+  // Grupos de columnas por color de cabecera
+  const COLS=[
+    {label:'#',           thx:'text-align:center;width:18px',     tdx:'text-align:center;font-weight:800'},
+    {label:'Nombre completo', thx:'min-width:110px',             tdx:'font-weight:700;white-space:nowrap'},
+    {label:'DUI',         thx:'',                                 tdx:'white-space:nowrap'},
+    {label:'Edad',        thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'Teléfono',    thx:'',                                 tdx:'white-space:nowrap'},
+    {label:'Dirección',   thx:'min-width:110px',                  tdx:''},
+    {label:'F. Registro', thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
+    {label:'Gestas',      thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'Partos',      thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'Abortos',     thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'Método PF',   thx:'min-width:80px',                   tdx:''},
+    {label:'Inicio PF',   thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
+    {label:'Próx. PF',    thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
+    {label:'Estado',      thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'PAP próx.',   thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
+    {label:'VPH dosis',   thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'VPH próx.',   thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
+    {label:'DT últ.',     thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
+    {label:'Neum.',       thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
+    {label:'ARR',         thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'ENT',         thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'Tipo ENT',    thx:'min-width:70px',                   tdx:''},
+    {label:'Discapac.',   thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'Precon.',     thx:'text-align:center',                tdx:'text-align:center'},
+    {label:'Prom. prev.', thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
+  ];
+
+  let sections='',totalRecs=0;
+  METODO_ORDER.forEach(m=>{
+    const mrs=(byM[m]||[]).sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+    if(!mrs.length)return;totalRecs+=mrs.length;
+    const color=METODO_COLORS[m]||'#9c27b0';
+    const ini=r=>r.inicioOral||r.inicioInject||r.inicioAnual||'';
+    const rows=mrs.map((r,i)=>{
+      const est=estadoCita(r.nextDate);
+      const estCell=est.bg?`<span style="background:${est.bg};color:${est.co};font-weight:800;border-radius:3px;padding:1px 4px">${est.txt}</span>`:`<span style="color:${est.co}">${est.txt}</span>`;
+      const rb=i%2===1?'background:#fdf4ff':'background:#fff';
+      const cells=[
+        i+1,
+        escHtml(r.nombre||'—'),
+        escHtml(r.dui||'—'),
+        r.edad||'—',
+        escHtml(r.telefono||'—'),
+        escHtml(r.direccion||'—'),
+        fmt(r.fecha),
+        r.gestas??'—',
+        r.partos??'—',
+        r.abortos??'—',
+        escHtml(METODO_LABELS[r.metodo]||r.metodo||'—'),
+        fmt(ini(r)),
+        fmt(r.nextDate),
+        estCell,
+        fmt(r.papNext),
+        vphDosis(r),
+        fmt(r.vphNext),
+        lastDt(r),
+        lastNeum(r),
+        r.arr==='si'?`<span style="background:#fce4ec;color:#c2185b;font-weight:800;border-radius:3px;padding:1px 4px">Sí</span>`:'No',
+        r.ent==='si'?`<span style="background:#fff3e0;color:#e65100;font-weight:800;border-radius:3px;padding:1px 4px">Sí</span>`:'No',
+        escHtml(r.entEspecifica||'—'),
+        r.discapacidad==='si'?`<span style="background:#e8eaf6;color:#3949ab;font-weight:800;border-radius:3px;padding:1px 4px">Sí</span>`:'No',
+        r.preconcepcional==='si'?`<span style="background:#e8f5e9;color:#2e7d32;font-weight:800;border-radius:3px;padding:1px 4px">Sí</span>`:'No',
+        fmt(r.atencionPreventiva),
+      ];
+      return`<tr style="${rb}">${cells.map((c,ci)=>`<td style="${td(COLS[ci].tdx)}">${c}</td>`).join('')}</tr>`;
+    }).join('');
+    const thS2=`position:sticky;top:0;z-index:2;`;
+    const thead=`<thead><tr>${COLS.map(c=>`<th style="${th(c.thx)}${thS2}">${c.label}</th>`).join('')}</tr></thead>`;
+    sections+=`
+      <div style="margin-bottom:1.1rem;border-radius:8px;overflow:hidden;border:2px solid ${color}40;box-shadow:0 1px 4px rgba(0,0,0,.08)">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,${color},${color}bb);color:#fff;padding:6px 12px;">
+          <span style="font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em">${METODO_LABELS[m]||m}</span>
+          <span style="background:rgba(255,255,255,.25);border-radius:10px;padding:2px 10px;font-size:.72rem;font-weight:800">${mrs.length} paciente${mrs.length!==1?'s':''}</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse">${thead}<tbody>${rows}</tbody></table>
+      </div>`;
+  });
+
+  const header=`<div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #7b1fa2;padding-bottom:.6rem;margin-bottom:.85rem">
+    <div><div style="font-size:1.05rem;font-weight:800;color:#4a148c">📋 Control MEF · ${escHtml(ucsf)}</div>
+    <div style="font-size:.7rem;color:#8e6fa0;margin-top:2px">Listado completo · ${escHtml(personal)}</div></div>
+    <div style="text-align:right;font-size:.7rem;color:#8e6fa0">${todayStr}<br><strong style="color:#4a148c">${totalRecs}</strong> pacientes registradas</div></div>`;
+  const footer=`<div style="font-size:.62rem;color:#8e6fa0;margin-top:.5rem;border-top:1.5px solid #ce93d8;padding-top:.4rem;display:flex;justify-content:space-between"><span>Control MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>Total: ${totalRecs} registros · ${todayStr}</span></div>`;
+  return {header, sections, footer, totalRecs, ucsf, personal, todayStr};
+}
+
+function openListadoPreview(){
+  const profile=loadProfile();
+  const {header,sections,footer}=_buildListadoHTML(records,profile,false);
+  document.getElementById('listado-preview-body').innerHTML=header+sections+footer;
+  document.getElementById('listado-preview-bg').style.display='flex';
+}
+function closeListadoPreview(){document.getElementById('listado-preview-bg').style.display='none';}
+
+/* ════ SEGUIMIENTO PLANIFICACIÓN FAMILIAR ════ */
+function openPFListado(){
+  const profile=loadProfile(), ucsf=profile.ucsf||'UDS';
+  const personal=profile.nombre?`${profile.nombre}${profile.cargo?' · '+profile.cargo:''}`:'Personal de salud';
+  const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const today2=new Date(); today2.setHours(0,0,0,0);
+  const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+  const diffD=ds=>{if(!ds)return null;const d=new Date(ds+'T12:00:00');d.setHours(0,0,0,0);return Math.round((d-today2)/86400000);};
+
+  // Solo mujeres que planifican (excluye ninguno)
+  const planifican=records.filter(r=>r.metodo&&r.metodo!=='ninguno')
+    .sort((a,b)=>{
+      // Primero vencidas, luego próximas, luego al día
+      const da=diffD(a.nextDate)??999, db=diffD(b.nextDate)??999;
+      return da-db;
+    });
+
+  const BDR='1px solid #f8bbd0', BDH='1.5px solid #c2185b';
+  const th=(x='')=>`padding:5px 6px;font-size:.65rem;font-weight:800;text-transform:uppercase;text-align:left;border:${BDH};white-space:nowrap;background:#880e4f;color:#fff;position:sticky;top:0;z-index:2;${x}`;
+  const td=(x='')=>`padding:4px 6px;font-size:.75rem;border:${BDR};vertical-align:middle;${x}`;
+
+  const COLS=[
+    {l:'#',           tx:'text-align:center;width:20px',    dx:'text-align:center;font-weight:800'},
+    {l:'Nombre',      tx:'min-width:120px',                  dx:'font-weight:700;white-space:nowrap'},
+    {l:'Edad',        tx:'text-align:center',                dx:'text-align:center'},
+    {l:'Teléfono',    tx:'',                                 dx:'white-space:nowrap'},
+    {l:'Método',      tx:'min-width:110px',                  dx:'font-weight:700'},
+    {l:'Inicio',      tx:'text-align:center',                dx:'text-align:center;white-space:nowrap'},
+    {l:'Próx. cita',  tx:'text-align:center',                dx:'text-align:center;white-space:nowrap'},
+    {l:'Días',        tx:'text-align:center',                dx:'text-align:center;font-weight:800'},
+    {l:'Estado',      tx:'text-align:center',                dx:'text-align:center'},
+    {l:'ARR',         tx:'text-align:center',                dx:'text-align:center'},
+    {l:'Dirección',   tx:'min-width:100px',                  dx:''},
+  ];
+
+  // Resumen por estado
+  const vencidas=planifican.filter(r=>(diffD(r.nextDate)??1)<0).length;
+  const hoy=planifican.filter(r=>diffD(r.nextDate)===0).length;
+  const proximas=planifican.filter(r=>{const d=diffD(r.nextDate);return d!==null&&d>0&&d<=10;}).length;
+  const alDia=planifican.filter(r=>(diffD(r.nextDate)??-1)>10).length;
+
+  const resumen=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.9rem">
+    <div style="background:#fce4ec;border:1.5px solid #f48fb1;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #c2185b">
+      <div style="font-size:1.4rem;font-weight:800;color:#880e4f;line-height:1">${vencidas}</div>
+      <div style="font-size:.62rem;font-weight:800;color:#c2185b;text-transform:uppercase;margin-top:2px">Vencidas</div>
+    </div>
+    <div style="background:#fff3e0;border:1.5px solid #ffcc80;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #e65100">
+      <div style="font-size:1.4rem;font-weight:800;color:#e65100;line-height:1">${hoy}</div>
+      <div style="font-size:.62rem;font-weight:800;color:#e65100;text-transform:uppercase;margin-top:2px">Hoy</div>
+    </div>
+    <div style="background:#fff8e1;border:1.5px solid #ffe082;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #f9a825">
+      <div style="font-size:1.4rem;font-weight:800;color:#f57f17;line-height:1">${proximas}</div>
+      <div style="font-size:.62rem;font-weight:800;color:#f57f17;text-transform:uppercase;margin-top:2px">Próximas 10d</div>
+    </div>
+    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #2e7d32">
+      <div style="font-size:1.4rem;font-weight:800;color:#2e7d32;line-height:1">${alDia}</div>
+      <div style="font-size:.62rem;font-weight:800;color:#2e7d32;text-transform:uppercase;margin-top:2px">Al día</div>
+    </div>
+  </div>`;
+
+  // Agrupar por método
+  let sections='';
+  METODO_ORDER.filter(m=>m!=='ninguno').forEach(m=>{
+    const mrs=planifican.filter(r=>r.metodo===m);
+    if(!mrs.length)return;
+    const color=METODO_COLORS[m]||'#c2185b';
+    const rows=mrs.map((r,i)=>{
+      const ini=r.inicioOral||r.inicioInject||r.inicioAnual||'';
+      const diff=diffD(r.nextDate);
+      let estBg='',estCo='#9e9e9e',estTxt='Sin cita';
+      if(diff!==null){
+        if(diff<0){estBg='#fce4e4';estCo='#b71c1c';estTxt=`Venc. ${Math.abs(diff)}d`;}
+        else if(diff===0){estBg='#fff3e0';estCo='#e65100';estTxt='Hoy';}
+        else if(diff<=10){estBg='#fff8e1';estCo='#f57f17';estTxt=`En ${diff}d`;}
+        else{estBg='#e8f5e9';estCo='#2e7d32';estTxt='Al día';}
+      }
+      const estCell=estBg
+        ?`<span style="background:${estBg};color:${estCo};font-weight:800;border-radius:4px;padding:2px 6px;font-size:.68rem">${estTxt}</span>`
+        :`<span style="color:${estCo};font-size:.68rem">${estTxt}</span>`;
+      const diasCell=diff!==null
+        ?`<span style="font-weight:800;color:${diff<0?'#b71c1c':diff===0?'#e65100':diff<=10?'#f57f17':'#2e7d32'}">${diff<0?diff:'+'+diff}</span>`
+        :'—';
+      const arrCell=r.arr==='si'
+        ?`<span style="background:#fce4ec;color:#c2185b;font-weight:800;border-radius:3px;padding:1px 5px;font-size:.65rem">ARR</span>`:'—';
+      const rb=i%2===1?'background:#fff5f8':'background:#fff';
+      const cells=[
+        i+1,
+        escHtml(r.nombre||'—'),
+        r.edad?r.edad+' a':'—',
+        escHtml(r.telefono||'—'),
+        `<span style="background:${color}18;color:${color};font-weight:800;border-radius:4px;padding:2px 6px;font-size:.68rem">${escHtml(METODO_LABELS[m]||m)}</span>`,
+        fmt(ini),
+        fmt(r.nextDate),
+        diasCell,
+        estCell,
+        arrCell,
+        escHtml(r.direccion||'—'),
+      ];
+      return`<tr style="${rb}">${cells.map((c,ci)=>`<td style="${td(COLS[ci].dx)}">${c}</td>`).join('')}</tr>`;
+    }).join('');
+    sections+=`
+      <div style="margin-bottom:1rem;border-radius:8px;overflow:hidden;border:2px solid ${color}30;box-shadow:0 1px 4px rgba(0,0,0,.07)">
+        <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,${color},${color}cc);color:#fff;padding:6px 12px;">
+          <span style="font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em">💊 ${escHtml(METODO_LABELS[m]||m)}</span>
+          <span style="background:rgba(255,255,255,.25);border-radius:10px;padding:2px 10px;font-size:.72rem;font-weight:800">${mrs.length} paciente${mrs.length!==1?'s':''}</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr>${COLS.map(c=>`<th style="${th(c.tx)}">${c.l}</th>`).join('')}</tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  });
+
+  if(!planifican.length){
+    sections='<div style="text-align:center;padding:2rem;color:#9e9e9e;font-size:.88rem">No hay pacientes con método de planificación registrado.</div>';
+  }
+
+  const header=`<div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #c2185b;padding-bottom:.6rem;margin-bottom:.75rem">
+    <div>
+      <div style="font-size:1.05rem;font-weight:800;color:#880e4f">💊 Seguimiento Planificación Familiar · ${escHtml(ucsf)}</div>
+      <div style="font-size:.7rem;color:#9e6070;margin-top:2px">${escHtml(personal)}</div>
+    </div>
+    <div style="text-align:right;font-size:.7rem;color:#9e6070">${todayStr}<br><strong style="color:#880e4f">${planifican.length}</strong> mujeres planificando</div>
+  </div>`;
+  const footer=`<div style="font-size:.62rem;color:#9e6070;margin-top:.5rem;border-top:1.5px solid #f48fb1;padding-top:.4rem;display:flex;justify-content:space-between"><span>Planificación Familiar · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>Total: ${planifican.length} pacientes · ${todayStr}</span></div>`;
+
+  document.getElementById('pf-listado-body').innerHTML=header+resumen+sections+footer;
+  document.getElementById('pf-listado-bg').style.display='flex';
+}
+function closePFListado(){document.getElementById('pf-listado-bg').style.display='none';}
+
+function openTarjetaPreview(id){
+  const r=records.find(x=>x.id===id);if(!r)return;
+  const profile=loadProfile(),ucsf=profile.ucsf||'UDS';
+  const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
+  const vph=r.vacVph||{},dt=r.vacDt||{},neum=r.vacNeum||{};
+  const dtInfo=getDtInfoForRecord(r);
+  const{labels:dtLabels,modoLabel:dtModoLabel,completo:dtOk,dtApplied}=dtInfo;
+  const vphOk=!!vph[1],neumOk=!!neum[1];
+  const doseRow=(label,date,cls)=>{
+    const bg=date?(cls==='vph'?'#f5fffe':cls==='dt'?'#f5f6ff':'#fdf5ff'):'#fff';
+    const bc=cls==='vph'?'#80cbc4':cls==='dt'?'#9fa8da':'#ce93d8';
+    const tc=date?(cls==='vph'?'#00695c':cls==='dt'?'#283593':'#6a1b9a'):'#9e9e9e';
+    return`<tr style="background:${bg}"><td style="padding:5px 8px;border:1.5px solid ${bc};font-size:.78rem;font-weight:600;color:#2d1a3a">${label}</td><td style="padding:5px 8px;border:1.5px solid ${bc};font-size:.78rem;font-weight:${date?'800':'400'};color:${tc}">${date?fmt(date):'Pendiente'}</td><td style="padding:5px 8px;border:1.5px solid ${bc};font-size:.78rem;color:${tc}">${date?'✓ Aplicada':'—'}</td></tr>`;};
+  const thS=bc=>`padding:4px 8px;font-size:.65rem;font-weight:800;text-transform:uppercase;text-align:left;border:1.5px solid ${bc}`;
+  document.getElementById('tarjeta-preview-title').textContent=r.nombre||'Tarjeta de Vacunas';
+  document.getElementById('tarjeta-preview-print-btn').onclick=()=>printTarjetaVacunas(id);
+  document.getElementById('tarjeta-preview-body').innerHTML=`
+  <div style="background:#fff;border-radius:10px;padding:1rem;box-shadow:0 2px 12px rgba(0,0,0,.1);font-family:'Nunito',sans-serif;">
+    <div style="text-align:center;border-bottom:3px solid #00796b;padding-bottom:.7rem;margin-bottom:.9rem"><div style="font-size:1.1rem;font-weight:900;color:#00796b">💉 Tarjeta de Vacunación MEF</div><div style="font-size:.7rem;color:#8e6fa0;margin-top:3px">${escHtml(ucsf)} · MINSAL El Salvador · ${todayStr}</div></div>
+    <div style="background:linear-gradient(135deg,#f8f0ff,#fce4ec);border-radius:9px;padding:.75rem 1rem;margin-bottom:.9rem;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:1rem;font-weight:900;color:#5c1a6e">${escHtml(r.nombre||'—')}</div><div style="font-size:.7rem;color:#8e6fa0;margin-top:2px">${r.nacimiento?'F. Nac.: '+fmt(r.nacimiento)+' · ':''}${r.edad?'Edad: '+r.edad+' años · ':''}${r.dui?'DUI: '+escHtml(r.dui):''}</div>${r.direccion?`<div style="font-size:.7rem;color:#8e6fa0">📍 ${escHtml(r.direccion)}</div>`:''}</div><div style="font-size:.9rem;font-weight:800;color:#c2185b;flex-shrink:0">Ficha Nº ${String(r.num||'').padStart(3,'0')}</div></div>
+    <div style="margin-bottom:.8rem"><div style="display:flex;align-items:center;justify-content:space-between;background:#e0f2f1;color:#00695c;padding:6px 10px;border-radius:7px 7px 0 0;font-size:.72rem;font-weight:800;text-transform:uppercase;border:1.5px solid #80cbc4"><span>💉 Vacuna VPH</span><span style="background:rgba(0,105,92,.12);border-radius:10px;padding:2px 9px;font-size:.68rem">${vphOk?'✓ Completo':'Sin iniciar'}</span></div><table style="width:100%;border-collapse:collapse"><thead><tr><th style="${thS('#80cbc4')};background:#e0f2f1;color:#00695c">Dosis</th><th style="${thS('#80cbc4')};background:#e0f2f1;color:#00695c">Fecha aplicación</th><th style="${thS('#80cbc4')};background:#e0f2f1;color:#00695c">Estado</th></tr></thead><tbody>${doseRow('Dosis inicial (1ª)',vph[1],'vph')}${doseRow('Refuerzo (2ª)',vph[2],'vph')}</tbody></table></div>
+    <div style="margin-bottom:.8rem"><div style="display:flex;align-items:center;justify-content:space-between;background:#e8eaf6;color:#283593;padding:6px 10px;border-radius:7px 7px 0 0;font-size:.72rem;font-weight:800;text-transform:uppercase;border:1.5px solid #9fa8da"><span>💉 DT Adulto — ${dtInfo.modo==='completo'?'5 Ref·10a':'3D+2Ref'}</span><span style="background:rgba(40,53,147,.12);border-radius:10px;padding:2px 9px;font-size:.68rem">${dtApplied}/${dtInfo.modo==='completo'?5:3} aplicadas</span></div><div style="font-size:.68rem;color:#283593;padding:3px 8px;background:#eef0fc;border-left:1.5px solid #9fa8da;border-right:1.5px solid #9fa8da;font-weight:700">${dtModoLabel}</div><table style="width:100%;border-collapse:collapse"><thead><tr><th style="${thS('#9fa8da')};background:#e8eaf6;color:#283593">Dosis / Refuerzo</th><th style="${thS('#9fa8da')};background:#e8eaf6;color:#283593">Fecha aplicación</th><th style="${thS('#9fa8da')};background:#e8eaf6;color:#283593">Estado</th></tr></thead><tbody>${[1,2,3,4,5].map(i=>doseRow(dtLabels[i-1]||'Dosis '+i,dt[i],'dt')).join('')}</tbody></table></div>
+    <div style="margin-bottom:.9rem"><div style="display:flex;align-items:center;justify-content:space-between;background:#f3e5f5;color:#6a1b9a;padding:6px 10px;border-radius:7px 7px 0 0;font-size:.72rem;font-weight:800;text-transform:uppercase;border:1.5px solid #ce93d8"><span>💉 Neumococo 23V</span><span style="background:rgba(106,27,154,.12);border-radius:10px;padding:2px 9px;font-size:.68rem">${neum[1]&&neum[2]?'✓ Completo':neum[1]?'✓ Dosis aplicada':'Sin iniciar'}</span></div><table style="width:100%;border-collapse:collapse"><thead><tr><th style="${thS('#ce93d8')};background:#f3e5f5;color:#6a1b9a">Dosis</th><th style="${thS('#ce93d8')};background:#f3e5f5;color:#6a1b9a">Fecha aplicación</th><th style="${thS('#ce93d8')};background:#f3e5f5;color:#6a1b9a">Estado</th></tr></thead><tbody>${doseRow('Dosis inicial',neum[1],'neum')}${doseRow('Refuerzo (5 años)',neum[2],'neum')}</tbody></table></div>
+    <div style="display:flex;gap:.5rem;margin-bottom:.7rem">
+      <div style="flex:1;border-radius:8px;padding:.5rem;text-align:center;border:2px solid ${vphOk?'#a5d6a7':'#e0e0e0'};background:${vphOk?'#e8f5e9':'#fafafa'}"><div style="font-size:1.2rem;font-weight:900;color:${vphOk?'#2e7d32':'#9e9e9e'};line-height:1">${[1,2].filter(i=>vph[i]).length}/1</div><div style="font-size:.62rem;font-weight:700;color:${vphOk?'#2e7d32':'#9e9e9e'};margin-top:2px">VPH</div></div>
+      <div style="flex:1;border-radius:8px;padding:.5rem;text-align:center;border:2px solid ${dtOk?'#a5d6a7':dtApplied>0?'#90caf9':'#e0e0e0'};background:${dtOk?'#e8f5e9':dtApplied>0?'#e3f2fd':'#fafafa'}"><div style="font-size:1.2rem;font-weight:900;color:${dtOk?'#2e7d32':dtApplied>0?'#1565c0':'#9e9e9e'};line-height:1">${dtApplied}/${dtInfo.modo==='completo'?5:3}</div><div style="font-size:.62rem;font-weight:700;color:${dtOk?'#2e7d32':dtApplied>0?'#1565c0':'#9e9e9e'};margin-top:2px">DT Adulto</div></div>
+      <div style="flex:1;border-radius:8px;padding:.5rem;text-align:center;border:2px solid ${neum[1]&&neum[2]?'#a5d6a7':neum[1]?'#90caf9':'#e0e0e0'};background:${neum[1]&&neum[2]?'#e8f5e9':neum[1]?'#e3f2fd':'#fafafa'}"><div style="font-size:1.2rem;font-weight:900;color:${neum[1]&&neum[2]?'#2e7d32':neum[1]?'#1565c0':'#9e9e9e'};line-height:1">${[1,2].filter(i=>neum[i]).length}/2</div><div style="font-size:.62rem;font-weight:700;color:${neum[1]&&neum[2]?'#2e7d32':neum[1]?'#1565c0':'#9e9e9e'};margin-top:2px">Neumococo</div></div>
+    </div>
+    <div style="border-top:1px solid #e0e0e0;padding-top:.5rem;font-size:.65rem;color:#8e6fa0;display:flex;justify-content:space-between"><span>Seguimiento Integral MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>${todayStr}</span></div>
+  </div>`;
+  document.getElementById('tarjeta-preview-bg').style.display='flex';
+}
+function closeTarjetaPreview(){document.getElementById('tarjeta-preview-bg').style.display='none';}
+
 function buildPrintDoc(title,subtitle,recsGrouped){
   const profile=loadProfile();
   const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
-  const ucsf=profile.ucsf||'UCSF';const personal=profile.nombre?`${profile.nombre}${profile.cargo?' · '+profile.cargo:''}`:'Personal de salud';
+  const ucsf=profile.ucsf||'UDS';const personal=profile.nombre?`${profile.nombre}${profile.cargo?' · '+profile.cargo:''}`:'Personal de salud';
   const today2=new Date();today2.setHours(0,0,0,0);
   let html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>${escHtml(title)}</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/><style>@page{size:Letter landscape;margin:10mm 12mm}*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:'Nunito',sans-serif;font-size:9px;color:#2d1a3a}.ph{text-align:center;border-bottom:2.5px solid #7b2d8b;padding-bottom:.5rem;margin-bottom:.75rem}.ph h1{font-size:12px;font-weight:800;color:#5c1a6e}.ph p{font-size:7.5px;color:#8e6fa0;margin-top:2px}.st{background:linear-gradient(135deg,#5c1a6e,#c2185b);color:#fff;padding:3px 8px;border-radius:4px;font-size:8px;font-weight:800;text-transform:uppercase;margin:9px 0 4px;display:flex;align-items:center;justify-content:space-between}.sc{background:rgba(255,255,255,.25);border-radius:8px;padding:1px 5px;font-size:7.5px}table{width:100%;border-collapse:collapse;margin-bottom:3px}th{background:#f3e5f5;color:#5c1a6e;font-size:7px;font-weight:800;text-transform:uppercase;padding:3px 3px;border-bottom:1.5px solid #e1bee7;text-align:left}td{font-size:7.5px;padding:3px 3px;border-bottom:1px solid #f0e6f6;vertical-align:top}tr:nth-child(even) td{background:#fdf4f9}.bv{display:inline-block;border-radius:3px;padding:1px 4px;font-size:6.5px;font-weight:800}.bo{background:#fce4e4;color:#b71c1c}.bs{background:#fff3e0;color:#e65100}.bk{background:#e8f5e9;color:#2e7d32}.ba{background:#fce4ec;color:#c2185b}.ft{margin-top:8px;padding-top:5px;border-top:1px solid #e1bee7;display:flex;justify-content:space-between;font-size:7px;color:#8e6fa0}</style></head><body><div class="ph"><h1>${escHtml(title)}</h1><p>${escHtml(subtitle)} · ${todayStr} · Responsable: ${escHtml(personal)}</p></div>`;
   METODO_ORDER.forEach(m=>{
@@ -2665,9 +3223,124 @@ function buildPrintDoc(title,subtitle,recsGrouped){
   html+=`<div class="ft"><span>Control MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>Total: ${Object.values(recsGrouped).flat().length} registros · ${todayStr}</span></div></body></html>`;
   return html;
 }
+function openVacPreview(){
+  const profile=loadProfile();
+  const ucsf=profile.ucsf||'UDS';
+  const personal=profile.nombre||'Personal de salud';
+  const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+  const recs=[...records].sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+
+  const BG='1.5px solid #546e7a', BV='1.5px solid #00897b', BDT='1.5px solid #3949ab', BN='1.5px solid #7b1fa2';
+  const td=`padding:.3rem .35rem;vertical-align:middle;`;
+
+  const cell=(val,bc)=>val
+    ?`<td style="${td}border:${bc};color:#1b5e20;font-weight:800;text-align:center;font-size:.71rem;background:#f1f8f1">${fmt(val)}</td>`
+    :`<td style="${td}border:${bc};color:#90a4ae;text-align:center;font-size:.71rem">—</td>`;
+
+  const dtCell=(r,i)=>{
+    const dti=getDtInfoForRecord(r),val=(r.vacDt||{})[i];
+    const lbl=(dti.modo==='completo'?['R1','R2','R3','R4','R5']:['D1','D2','D3','R1','R2'])[i-1];
+    const bg=dti.modo==='completo'?'background:#f0f4ff':'';
+    if(val)return`<td style="${td}border:${BDT};color:#1a237e;font-weight:800;text-align:center;font-size:.71rem;${bg}" title="${lbl}">${fmt(val)}</td>`;
+    return`<td style="${td}border:${BDT};color:#90a4ae;text-align:center;font-size:.71rem;${bg}" title="${lbl}">—</td>`;
+  };
+  const stCell=(ok,par,txt,bc)=>!ok&&!par
+    ?`<td style="${td}border:${bc};color:#90a4ae;text-align:center">—</td>`
+    :ok?`<td style="${td}border:${bc};background:#e8f5e9;color:#1b5e20;font-weight:800;text-align:center;font-size:.7rem">${txt}</td>`
+    :`<td style="${td}border:${bc};background:#fff3e0;color:#e65100;font-weight:700;text-align:center;font-size:.7rem">${txt}</td>`;
+
+  const rows=recs.map((r,i)=>{
+    const dti=getDtInfoForRecord(r);
+    const bg=i%2===1?'#f7fffe':'#fff';
+    const vi=r.vacInfantil;
+    const iCell=vi==='completo'
+      ?`<td style="${td}border:${BN};background:#f3e5f5;color:#4a148c;font-weight:800;text-align:center;font-size:.7rem">✓ Compl.</td>`
+      :vi==='incompleto'
+      ?`<td style="${td}border:1.5px solid #f57c00;background:#fff3e0;color:#e65100;font-weight:700;text-align:center;font-size:.7rem">⚠ Inc.</td>`
+      :`<td style="${td}border:${BN};color:#90a4ae;text-align:center">—</td>`;
+    const d1=(r.vacVph||{})[1],d2=(r.vacVph||{})[2];
+    const n1=(r.vacNeum||{})[1],n2=(r.vacNeum||{})[2];
+    const dtA=dti.dtApplied,dtT=dti.modo==='completo'?5:3;
+    return`<tr style="background:${bg}">
+      <td style="${td}border:${BG};text-align:center;font-weight:800;font-size:.75rem">${String(i+1).padStart(2,'0')}</td>
+      <td style="${td}border:${BG};font-weight:700;font-size:.78rem;white-space:nowrap">${escHtml(r.nombre||'—')}${dti.modo==='completo'?'<span style="font-size:.55rem;background:#e3f2fd;color:#1565c0;border-radius:3px;padding:1px 3px;margin-left:3px;font-weight:800">5R</span>':''}</td>
+      <td style="${td}border:${BG};text-align:center;font-size:.72rem">${r.nacimiento?new Date(r.nacimiento+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—'}</td>
+      <td style="${td}border:${BG};text-align:center;font-size:.75rem">${r.edad||'—'}</td>
+      ${iCell}
+      ${cell(d1,BV)}${cell(d2,BV)}${stCell(d1,false,d2?'✓ +R':'✓',BV)}
+      ${dtCell(r,1)}${dtCell(r,2)}${dtCell(r,3)}${dtCell(r,4)}${dtCell(r,5)}${stCell(dti.completo,dtA>0,dti.completo?`✓ (${dtA}d)`:`${dtA}/${dtT}`,BDT)}
+      ${cell(n1,BN)}${cell(n2,BN)}${stCell(n1,false,n2?'✓ +R':'✓ D',BN)}
+    </tr>`;
+  }).join('');
+
+  const s1=`position:sticky;top:0;z-index:4;padding:.38rem .35rem;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center;`;
+  const s2=`position:sticky;z-index:4;padding:.28rem .3rem;font-size:.58rem;font-weight:800;text-transform:uppercase;text-align:center;`;
+
+  document.getElementById('vacpreview-thead').innerHTML=`
+    <tr>
+      <th rowspan="2" style="${s1}background:#263238;color:#fff;border:1.5px solid #37474f">#</th>
+      <th rowspan="2" style="${s1}background:#263238;color:#fff;border:1.5px solid #37474f;text-align:left;padding-left:.6rem">Nombre completo</th>
+      <th rowspan="2" style="${s1}background:#263238;color:#fff;border:1.5px solid #37474f">F. Nac.</th>
+      <th rowspan="2" style="${s1}background:#263238;color:#fff;border:1.5px solid #37474f">Edad</th>
+      <th rowspan="2" style="${s1}background:#4a148c;color:#fff;border:1.5px solid #7b1fa2">🧒 Esq.<br>Infantil</th>
+      <th colspan="3" style="${s1}background:#00695c;color:#fff;border:1.5px solid #00897b">💉 VPH</th>
+      <th colspan="6" style="${s1}background:#1a237e;color:#fff;border:1.5px solid #3949ab">💉 DT Adulto</th>
+      <th colspan="3" style="${s1}background:#4a148c;color:#fff;border:1.5px solid #7b1fa2">💉 Neumococo</th>
+    </tr>
+    <tr id="vacpreview-row2">
+      <th style="${s2}background:#00897b;color:#fff;border:1.5px solid #00695c">D1</th>
+      <th style="${s2}background:#00897b;color:#fff;border:1.5px solid #00695c">D2</th>
+      <th style="${s2}background:#00897b;color:#fff;border:1.5px solid #00695c">Est.</th>
+      <th style="${s2}background:#3949ab;color:#fff;border:1.5px solid #1a237e" title="Inc:D1·Comp:R1">D1/R1</th>
+      <th style="${s2}background:#3949ab;color:#fff;border:1.5px solid #1a237e" title="Inc:D2·Comp:R2">D2/R2</th>
+      <th style="${s2}background:#3949ab;color:#fff;border:1.5px solid #1a237e" title="Inc:D3·Comp:R3">D3/R3</th>
+      <th style="${s2}background:#3949ab;color:#fff;border:1.5px solid #1a237e" title="Inc:R1·Comp:R4">R1/R4</th>
+      <th style="${s2}background:#3949ab;color:#fff;border:1.5px solid #1a237e" title="Inc:R2·Comp:R5">R2/R5</th>
+      <th style="${s2}background:#3949ab;color:#fff;border:1.5px solid #1a237e">Est.</th>
+      <th style="${s2}background:#7b1fa2;color:#fff;border:1.5px solid #4a148c">D1</th>
+      <th style="${s2}background:#7b1fa2;color:#fff;border:1.5px solid #4a148c">Refuerzo</th>
+      <th style="${s2}background:#7b1fa2;color:#fff;border:1.5px solid #4a148c">Est.</th>
+    </tr>`;
+
+  document.getElementById('vacpreview-tbody').innerHTML=rows;
+
+  document.getElementById('vacpreview-header').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #00897b;padding-bottom:.6rem;margin-bottom:.75rem">
+      <div><div style="font-size:1.05rem;font-weight:800;color:#00695c">🩺 Esquema de Vacunación MEF</div>
+      <div style="font-size:.72rem;color:#8e6fa0;margin-top:2px">${escHtml(ucsf)} · ${escHtml(personal)}</div></div>
+      <div style="text-align:right;font-size:.72rem;color:#8e6fa0">${todayStr}<br><strong style="color:#00695c">${recs.length}</strong> pacientes</div>
+    </div>`;
+
+  const sc=[
+    {n:recs.filter(r=>r.vacInfantil==='completo').length,    l:'Esq. infantil completo',  c:'#6a1b9a',bg:'#f3e5f5',bc:'#9c27b0'},
+    {n:recs.filter(r=>r.vacInfantil==='incompleto').length,  l:'Esq. infantil incompleto',c:'#e65100',bg:'#fff8e1',bc:'#ff9800'},
+    {n:recs.filter(r=>!!((r.vacVph||{})[1])).length,         l:'VPH completo',            c:'#00695c',bg:'#e0f7fa',bc:'#009688'},
+    {n:recs.filter(r=>getDtInfoForRecord(r).completo).length,l:'DT completo',             c:'#1565c0',bg:'#e3f2fd',bc:'#1976d2'},
+    {n:recs.filter(r=>!!((r.vacNeum||{})[1])).length,        l:'Neumococo dosis',         c:'#4a148c',bg:'#f3e5f5',bc:'#7b1fa2'},
+    {n:recs.filter(r=>[1,2].filter(i=>(r.vacVph||{})[i]).length===0).length,l:'VPH sin iniciar',c:'#b71c1c',bg:'#ffebee',bc:'#e53935'},
+  ].map(s=>`<div style="border:2px solid ${s.bc};border-radius:9px;padding:.45rem .75rem;background:${s.bg};min-width:90px;text-align:center"><div style="font-size:1.4rem;font-weight:800;color:${s.c};line-height:1">${s.n}</div><div style="font-size:.62rem;font-weight:700;color:${s.c};margin-top:2px">${s.l}</div></div>`).join('');
+
+  document.getElementById('vacpreview-footer').innerHTML=`
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.85rem">${sc}</div>
+    <div style="font-size:.65rem;color:#8e6fa0;margin-top:.6rem;border-top:1.5px solid #b2dfdb;padding-top:.4rem">Seguimiento Integral MEF · MINSAL El Salvador · ${escHtml(ucsf)} · ${todayStr}</div>`;
+
+  document.getElementById('vacpreview-bg').style.display='flex';
+
+  requestAnimationFrame(()=>{
+    const row1=document.querySelector('#vacpreview-thead tr:first-child');
+    if(!row1)return;
+    const h=row1.getBoundingClientRect().height;
+    document.querySelectorAll('#vacpreview-row2 th').forEach(th=>{th.style.top=h+'px';});
+  });
+}
+function closeVacPreview(){
+  document.getElementById('vacpreview-bg').style.display='none';
+}
+
 function printVacunacion(){
   const profile=loadProfile();
-  const ucsf=profile.ucsf||'UCSF';
+  const ucsf=profile.ucsf||'UDS';
   const personal=profile.nombre||'Personal de salud';
   const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
   const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
@@ -2716,7 +3389,7 @@ function printVacunacion(){
     const dti = getDtInfoForRecord(r);
     const rowBg = dti.modo==='completo' ? 'background:#f8fbff' : '';
     return `<tr style="${rowBg}">
-    <td style="text-align:center;font-weight:700">${String(r.num||i+1).padStart(2,'0')}</td>
+    <td style="text-align:center;font-weight:700">${String(i+1).padStart(2,'0')}</td>
     <td style="font-weight:700">${escHtml(r.nombre||'—')}${dti.modo==='completo'?'<span style="font-size:6px;background:#e3f2fd;color:#1565c0;border-radius:3px;padding:1px 3px;margin-left:3px;font-weight:800">5R</span>':''}</td>
     <td style="text-align:center">${r.nacimiento?new Date(r.nacimiento+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—'}</td>
     <td style="text-align:center">${r.edad||'—'}</td>
@@ -2808,19 +3481,40 @@ function printVacunacion(){
 }
 
 function printListado(){
-  const byM={};METODO_ORDER.forEach(m=>{byM[m]=[];});records.forEach(r=>{if(byM[r.metodo])byM[r.metodo].push(r);else byM['ninguno']=(byM['ninguno']||[]).concat(r);});
-  const profile=loadProfile();const html=buildPrintDoc(`Control MEF · ${profile.ucsf||'UCSF'}`,`Listado completo — ${records.length} pacientes`,byM);
-  const w=window.open('','_blank','width=1000,height=700');if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
+  const profile=loadProfile();
+  const {header,sections,footer,ucsf}=_buildListadoHTML(records,profile,true);
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+  <title>Listado MEF · ${escHtml(ucsf)}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    @page{size:A4 landscape;margin:8mm 7mm}
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body{font-family:'Nunito',sans-serif;font-size:6.5px;color:#2d1a3a}
+    table{border-collapse:collapse;width:100%}
+    th,td{padding:3px 4px;border:1px solid #d1b3e8;vertical-align:middle}
+    th{background:#5c1a6e!important;color:#fff!important;font-size:6px;font-weight:800;text-transform:uppercase;white-space:nowrap}
+    tr:nth-child(even){background:#fdf4ff}
+    .sec-header{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;color:#fff;font-size:8px;font-weight:800;text-transform:uppercase;border-radius:5px 5px 0 0;margin-top:8px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .page-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #7b1fa2;padding-bottom:4px;margin-bottom:7px}
+    .ph-title{font-size:11px;font-weight:800;color:#4a148c}
+    .ph-sub{font-size:6px;color:#8e6fa0;margin-top:1px}
+    .ph-right{text-align:right;font-size:6px;color:#8e6fa0}
+    .footer{margin-top:5px;border-top:1px solid #ce93d8;padding-top:3px;font-size:6px;color:#8e6fa0;display:flex;justify-content:space-between}
+    span[style*="border-radius"]{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    @media print{body{font-size:6px}}
+  </style></head><body>${header}${sections}${footer}</body></html>`;
+  const w=window.open('','_blank','width=1200,height=800');
+  if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),800);}
 }
 function printMonthView(){
   const monthLabel=document.getElementById('month-view-h2').textContent;
   const recs=records.filter(r=>{if(!r.fecha)return false;const d=new Date(r.fecha+'T12:00:00');return `${MONTHS_ES[d.getMonth()]} ${d.getFullYear()}`===monthLabel;});
   const byM={};METODO_ORDER.forEach(m=>{byM[m]=[];});recs.forEach(r=>{if(byM[r.metodo])byM[r.metodo].push(r);else byM['ninguno']=(byM['ninguno']||[]).concat(r);});
-  const profile=loadProfile();const html=buildPrintDoc(`Control MEF · ${monthLabel} · ${profile.ucsf||'UCSF'}`,`${recs.length} pacientes en ${monthLabel}`,byM);
+  const profile=loadProfile();const html=buildPrintDoc(`Control MEF · ${monthLabel} · ${profile.ucsf||'UDS'}`,`${recs.length} pacientes en ${monthLabel}`,byM);
   const w=window.open('','_blank','width=1000,height=700');if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),700);}
 }
 function printStats(){
-  const profile=loadProfile();const ucsf=profile.ucsf||'UCSF';const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const profile=loadProfile();const ucsf=profile.ucsf||'UDS';const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
   const n=records.length;const byMetodo={};METODO_ORDER.forEach(m=>{byMetodo[m]=0;});records.forEach(r=>{if(byMetodo[r.metodo]!==undefined)byMetodo[r.metodo]++;});
   const arrCount=records.filter(r=>r.arr==='si').length;const entCount=records.filter(r=>r.ent==='si').length;const papOk=records.filter(r=>r.papFecha).length;const vphOk=records.filter(r=>r.vphFecha).length;const precon=records.filter(r=>r.preconcepcional==='si').length;const sinM=records.filter(r=>!r.metodo||r.metodo==='ninguno').length;
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Estadísticas MEF · ${ucsf}</title><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet"/><style>*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:'Nunito',sans-serif;font-size:11px;color:#2d1a3a;padding:15mm}h1{font-size:16px;font-weight:800;color:#5c1a6e;margin-bottom:4px}p.sub{font-size:9px;color:#8e6fa0;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}.card{border:1px solid #e1bee7;border-radius:8px;padding:10px;border-top:3px solid #7b2d8b}.num{font-size:22px;font-weight:800;color:#5c1a6e;line-height:1}.lbl{font-size:8px;color:#8e6fa0;font-weight:700;margin-top:3px}.bar{margin-bottom:6px}.bar-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}.bar-lbl{font-size:8px;color:#5c1a6e;width:140px;font-weight:600}.bar-track{flex:1;height:7px;background:#f3e5f5;border-radius:4px;overflow:hidden}.bar-fill{height:100%;border-radius:4px}.bar-cnt{font-size:8px;font-weight:800;color:#3d1a4a;width:22px;text-align:right}h2{font-size:11px;font-weight:800;color:#7b2d8b;margin:10px 0 5px;text-transform:uppercase;letter-spacing:.06em}footer{margin-top:14px;border-top:1px solid #e1bee7;padding-top:6px;font-size:8px;color:#8e6fa0;display:flex;justify-content:space-between}</style></head><body><h1>Estadísticas MEF · ${escHtml(ucsf)}</h1><p class="sub">Indicadores de Salud Comunitaria · ${todayStr} · ${escHtml(profile.nombre||'Personal de salud')}</p><h2>Indicadores generales</h2><div class="grid"><div class="card"><div class="num">${n}</div><div class="lbl">Total MEF</div></div><div class="card" style="border-top-color:#e53935"><div class="num">${arrCount}</div><div class="lbl">Alto Riesgo Reproductivo (${n?Math.round(arrCount/n*100):0}%)</div></div><div class="card" style="border-top-color:#26a69a"><div class="num">${papOk}</div><div class="lbl">Con citología PAP (${n?Math.round(papOk/n*100):0}%)</div></div><div class="card" style="border-top-color:#5c6bc0"><div class="num">${vphOk}</div><div class="lbl">Con VPH registrado (${n?Math.round(vphOk/n*100):0}%)</div></div><div class="card" style="border-top-color:#43a047"><div class="num">${precon}</div><div class="lbl">Atención Preconcepcional</div></div><div class="card" style="border-top-color:#e65100"><div class="num">${entCount}</div><div class="lbl">Padecen ENT</div></div><div class="card"><div class="num">${sinM}</div><div class="lbl">Sin método anticonceptivo</div></div></div><h2>Distribución por método</h2><div class="bar">${Object.entries(byMetodo).filter(([m,v])=>v>0).map(([m,v])=>`<div class="bar-row"><div class="bar-lbl">${METODO_LABELS[m]||m}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/Math.max(...Object.values(byMetodo),1)*100)}%;background:${METODO_COLORS[m]||'#9c27b0'}"></div></div><div class="bar-cnt">${v}</div></div>`).join('')}</div><footer><span>Control MEF · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>${todayStr}</span></footer></body></html>`;
@@ -2878,15 +3572,17 @@ const HIST_DOT_CLS = {
 function _buildHistSnapshot(rec, prevRec){
   const entries = [];
   const localDate = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  const fechaHoy = rec.fecha || localDate(new Date());
+  const fechaHoy    = rec.fecha || localDate(new Date());  // fecha registro ficha
+  const fechaAhora  = localDate(new Date());               // fecha real de hoy (para seguimientos)
   const profile  = loadProfile();
   const personal = rec.personal || (profile.nombre ? [profile.nombre,profile.cargo].filter(Boolean).join(' · ') : '');
   const hist     = prevRec ? (prevRec.historial||[]) : [];
 
   // ── Helpers ──────────────────────────────────────────────────────────────
-  // ¿Ya existe en el historial una entrada auto de ese tipo con ese valor de referencia?
-  const yaExiste = (tipo, campoVal) =>
-    hist.some(e => e.auto && e.tipo === tipo && e.fecha === campoVal);
+  // ¿Ya existe entrada auto de ese tipo con esa fecha Y ese detalle?
+  const yaExiste = (tipo, campoVal, detalleContiene) =>
+    hist.some(e => e.auto && e.tipo === tipo && e.fecha === campoVal
+      && (!detalleContiene || (e.detalle||'').includes(detalleContiene)));
 
   const mk = (sufijo, tipo, fecha, detalle, proxCita, obs) => ({
     id: Date.now().toString(36)+'_'+sufijo,
@@ -2902,7 +3598,7 @@ function _buildHistSnapshot(rec, prevRec){
     // Entrada general de registro
     entries.push(mk('ini','general', fechaHoy,
       'Registro inicial MEF · Método: '+(METODO_LABELS[rec.metodo]||rec.metodo||'Sin método'),
-      rec.nextDate, rec.observaciones||''));
+      rec.nextDate, ''));
 
     // PF — solo si tiene fecha de inicio
     const iniFecha = rec.inicioOral || rec.inicioInject || rec.inicioAnual;
@@ -2967,14 +3663,22 @@ function _buildHistSnapshot(rec, prevRec){
 
   // ── Ficha EXISTENTE: solo campos que cambiaron Y que no tienen ya esa entrada ──
 
-  // PF
-  if(changedAny('metodo','inicioOral','inicioInject','inicioAnual','blisters','nextDate')){
-    const iniFecha = rec.inicioOral || rec.inicioInject || rec.inicioAnual || fechaHoy;
-    // No duplicar si ya hay una entrada pf con esa misma fecha de inicio
-    if(!yaExiste('pf', iniFecha)){
-      entries.push(mk('pf','pf', iniFecha,
-        'Método: '+(METODO_LABELS[rec.metodo]||rec.metodo||'Sin método')+(rec.blisters?' · Blisters: '+rec.blisters:''),
-        rec.nextDate));
+  // PF — cambió método o fecha de inicio: registrar con la fecha de inicio real
+  if(changedAny('metodo','inicioOral','inicioInject','inicioAnual','blisters')){
+    const iniFecha  = rec.inicioOral || rec.inicioInject || rec.inicioAnual || fechaAhora;
+    const detallePF = 'Método: '+(METODO_LABELS[rec.metodo]||rec.metodo||'Sin método')+(rec.blisters?' · Blisters: '+rec.blisters:'');
+    // Solo omitir si ya existe una entrada con exactamente esa fecha Y ese mismo detalle
+    if(!yaExiste('pf', iniFecha, detallePF)){
+      entries.push(mk('pf','pf', iniFecha, detallePF, rec.nextDate));
+    }
+  }
+
+  // SEGUIMIENTO PF — solo cambió la próxima cita sin cambiar método ni inicio
+  if(changed('nextDate') && rec.nextDate && rec.metodo && rec.metodo!=='ninguno'
+     && !changedAny('metodo','inicioOral','inicioInject','inicioAnual','blisters')){
+    const detSeg = 'Seguimiento PF · '+(METODO_LABELS[rec.metodo]||rec.metodo);
+    if(!yaExiste('pf', fechaAhora, detSeg)){
+      entries.push(mk('seg-pf','pf', fechaAhora, detSeg, rec.nextDate));
     }
   }
 
@@ -3059,10 +3763,6 @@ function _buildHistSnapshot(rec, prevRec){
     entries.push(mk('vac-infantil','vacuna', fechaHoy,
       'Esquema infantil actualizado: '+(rec.vacInfantil==='completo'?'Completo — 5 refuerzos c/10 años':'Incompleto — 3 dosis base + refuerzos c/10a'),
       ''));
-
-  // Observaciones
-  if(rec.observaciones && changed('observaciones'))
-    entries.push(mk('obs','general', fechaHoy, 'Actualización de notas clínicas', '', rec.observaciones));
 
   return entries;
 }
@@ -3487,7 +4187,7 @@ function closeCatHistModal(){ document.getElementById('cat-hist-modal-bg').class
 
 function printCatHist(){
   const profile = loadProfile();
-  const ucsf = profile.ucsf||'UCSF';
+  const ucsf = profile.ucsf||'UDS';
   const todayStr = new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
   const fmtD = ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
   const entries = _getEntriesForCat(_catHistKey);
@@ -3567,7 +4267,7 @@ function renderCatHistModal(){
 /* ═══ IMPRIMIR HISTORIAL POR CATEGORÍAS ═══ */
 function printHistorialCategorias(){
   const profile = loadProfile();
-  const ucsf = profile.ucsf||'UCSF';
+  const ucsf = profile.ucsf||'UDS';
   const todayStr = new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
   const fmtD = ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
   const TIPO_LBL = {pf:'Plan. Familiar',pap:'Citología PAP',vph:'VPH',arr:'ARR',preventiva:'At. Preventiva',vacuna:'Vacunación',ent:'ENT/Discapacidad',general:'General'};
@@ -3735,7 +4435,7 @@ function printHistorialPaciente(){
   if(!rec) return;
   const hist = rec.historial || [];
   const profile = loadProfile();
-  const ucsf = profile.ucsf||'UCSF';
+  const ucsf = profile.ucsf||'UDS';
   const todayStr = new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
   const fmtD = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}) : '—';
   const fmtL = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'}) : '—';
@@ -3891,13 +4591,16 @@ if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.sta
     </div>
 
     <div class="vem-vac-block">
-      <div class="vem-vac-label">💉 Vacuna DT Adulto — 5 dosis (completo: 3)</div>
+      <div class="vem-vac-label">
+        <span id="vem-dt-title">💉 Vacuna DT Adulto — 5 dosis (completo: 3)</span>
+        <span id="vem-dt-badge" style="margin-left:.5rem;font-size:.65rem;font-weight:800;padding:2px 6px;border-radius:5px;background:#e8eaf6;color:#3949ab;vertical-align:middle"></span>
+      </div>
       <div class="vem-doses">
-        <div class="vem-dose" id="vem-dt-1"><button type="button" class="vem-dose-btn" id="vem-dt-btn-1" onclick="toggleVemDose('dt',1)"><span style="font-size:.8rem;font-weight:900">1</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-1"></div><div class="vem-date-wrap" id="vem-dt-wrap-1"><input type="date" id="vem-dt-date-1" onchange="setVemDate('dt',1)"/></div></div>
-        <div class="vem-dose" id="vem-dt-2"><button type="button" class="vem-dose-btn" id="vem-dt-btn-2" onclick="toggleVemDose('dt',2)"><span style="font-size:.8rem;font-weight:900">2</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-2"></div><div class="vem-date-wrap" id="vem-dt-wrap-2"><input type="date" id="vem-dt-date-2" onchange="setVemDate('dt',2)"/></div></div>
-        <div class="vem-dose" id="vem-dt-3"><button type="button" class="vem-dose-btn" id="vem-dt-btn-3" onclick="toggleVemDose('dt',3)"><span style="font-size:.8rem;font-weight:900">3</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-3"></div><div class="vem-date-wrap" id="vem-dt-wrap-3"><input type="date" id="vem-dt-date-3" onchange="setVemDate('dt',3)"/></div></div>
-        <div class="vem-dose" id="vem-dt-4"><button type="button" class="vem-dose-btn" id="vem-dt-btn-4" onclick="toggleVemDose('dt',4)"><span style="font-size:.8rem;font-weight:900">4</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-4"></div><div class="vem-date-wrap" id="vem-dt-wrap-4"><input type="date" id="vem-dt-date-4" onchange="setVemDate('dt',4)"/></div></div>
-        <div class="vem-dose" id="vem-dt-5"><button type="button" class="vem-dose-btn" id="vem-dt-btn-5" onclick="toggleVemDose('dt',5)"><span style="font-size:.8rem;font-weight:900">5</span><span>D</span></button><div class="vem-dose-date" id="vem-dt-lbl-5"></div><div class="vem-date-wrap" id="vem-dt-wrap-5"><input type="date" id="vem-dt-date-5" onchange="setVemDate('dt',5)"/></div></div>
+        <div class="vem-dose" id="vem-dt-1"><button type="button" class="vem-dose-btn" id="vem-dt-btn-1" onclick="toggleVemDose('dt',1)"><span class="vem-dose-num" style="font-size:.8rem;font-weight:900">1</span><span class="vem-dose-sub">D</span></button><div class="vem-dose-date" id="vem-dt-lbl-1"></div><div class="vem-date-wrap" id="vem-dt-wrap-1"><input type="date" id="vem-dt-date-1" onchange="setVemDate('dt',1)"/></div></div>
+        <div class="vem-dose" id="vem-dt-2"><button type="button" class="vem-dose-btn" id="vem-dt-btn-2" onclick="toggleVemDose('dt',2)"><span class="vem-dose-num" style="font-size:.8rem;font-weight:900">2</span><span class="vem-dose-sub">D</span></button><div class="vem-dose-date" id="vem-dt-lbl-2"></div><div class="vem-date-wrap" id="vem-dt-wrap-2"><input type="date" id="vem-dt-date-2" onchange="setVemDate('dt',2)"/></div></div>
+        <div class="vem-dose" id="vem-dt-3"><button type="button" class="vem-dose-btn" id="vem-dt-btn-3" onclick="toggleVemDose('dt',3)"><span class="vem-dose-num" style="font-size:.8rem;font-weight:900">3</span><span class="vem-dose-sub">D</span></button><div class="vem-dose-date" id="vem-dt-lbl-3"></div><div class="vem-date-wrap" id="vem-dt-wrap-3"><input type="date" id="vem-dt-date-3" onchange="setVemDate('dt',3)"/></div></div>
+        <div class="vem-dose" id="vem-dt-4"><button type="button" class="vem-dose-btn" id="vem-dt-btn-4" onclick="toggleVemDose('dt',4)"><span class="vem-dose-num" style="font-size:.8rem;font-weight:900">4</span><span class="vem-dose-sub">D</span></button><div class="vem-dose-date" id="vem-dt-lbl-4"></div><div class="vem-date-wrap" id="vem-dt-wrap-4"><input type="date" id="vem-dt-date-4" onchange="setVemDate('dt',4)"/></div></div>
+        <div class="vem-dose" id="vem-dt-5"><button type="button" class="vem-dose-btn" id="vem-dt-btn-5" onclick="toggleVemDose('dt',5)"><span class="vem-dose-num" style="font-size:.8rem;font-weight:900">5</span><span class="vem-dose-sub">D</span></button><div class="vem-dose-date" id="vem-dt-lbl-5"></div><div class="vem-date-wrap" id="vem-dt-wrap-5"><input type="date" id="vem-dt-date-5" onchange="setVemDate('dt',5)"/></div></div>
       </div>
     </div>
 
@@ -3941,6 +4644,72 @@ if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.sta
       <button onclick="closeHistCatView()" style="padding:.38rem .65rem;background:#f5f5f5;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.72rem;font-weight:800;cursor:pointer;color:#555;flex-shrink:0">✕</button>
     </div>
     <div class="hcv-scroller" id="hcv-body"></div>
+  </div>
+</div>
+
+<!-- ════ MODAL VISTA PREVIA LISTADO CONTROL MEF ════ -->
+<div id="listado-preview-bg" onclick="if(event.target===this)closeListadoPreview()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9550;align-items:flex-start;justify-content:center;overflow:hidden;">
+  <div style="background:#fff;width:100%;height:100%;display:flex;flex-direction:column;">
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;background:linear-gradient(135deg,#4a148c,#7b1fa2);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" style="width:20px;height:20px;flex-shrink:0"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span style="font-size:.95rem;font-weight:800;color:#fff;flex:1">Control MEF — Listado de Pacientes</span>
+      <button onclick="printListado()" style="display:flex;align-items:center;gap:.4rem;padding:.38rem .85rem;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);border-radius:8px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:800;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:14px;height:14px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir</button>
+      <button onclick="closeListadoPreview()" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;font-size:1.1rem;font-weight:800;cursor:pointer;font-family:inherit;">✕</button>
+    </div>
+    <div id="listado-preview-scroll" style="flex:1;overflow:auto;background:#f8f0ff;padding:.9rem 1rem 2rem;">
+      <div id="listado-preview-body" style="min-width:max-content;width:100%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL SEGUIMIENTO PLANIFICACIÓN FAMILIAR ════ -->
+<div id="pf-listado-bg" onclick="if(event.target===this)closePFListado()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9555;align-items:flex-start;justify-content:center;overflow:hidden;">
+  <div style="background:#fff;width:100%;height:100%;display:flex;flex-direction:column;">
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;background:linear-gradient(135deg,#880e4f,#c2185b);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" style="width:20px;height:20px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+      <span style="font-size:.95rem;font-weight:800;color:#fff;flex:1">Seguimiento Planificación Familiar</span>
+      <button onclick="closePFListado();setTimeout(()=>{const w=window.open('','_blank','width=1200,height=800');if(w){const h=document.getElementById('pf-listado-body').innerHTML;w.document.write('<!DOCTYPE html><html><head><meta charset=UTF-8><link href=https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap rel=stylesheet><style>@page{size:A4 landscape;margin:8mm}*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}body{font-family:Nunito,sans-serif;font-size:7px;color:#2d1a3a;padding:0}table{border-collapse:collapse;width:100%}th,td{padding:3px 5px;border:1px solid #f48fb1}th{background:#880e4f!important;color:#fff!important;font-size:6.5px;font-weight:800;text-transform:uppercase;white-space:nowrap}tr:nth-child(even){background:#fff5f8}span{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body>'+h+'</body></html>');w.document.close();setTimeout(()=>w.print(),700);}},100)" style="display:flex;align-items:center;gap:.4rem;padding:.38rem .85rem;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);border-radius:8px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:800;cursor:pointer;flex-shrink:0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:14px;height:14px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir</button>
+      <button onclick="closePFListado()" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;font-size:1.1rem;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0">✕</button>
+    </div>
+    <div style="flex:1;overflow:auto;background:#fff5f8;padding:.9rem 1rem 2rem;">
+      <div id="pf-listado-body" style="min-width:max-content;width:100%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL VISTA PREVIA TARJETA DE VACUNAS ════ -->
+<div id="tarjeta-preview-bg" onclick="if(event.target===this)closeTarjetaPreview()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9600;align-items:flex-start;justify-content:center;overflow:hidden;">
+  <div style="background:#fff;width:100%;max-width:580px;height:100%;display:flex;flex-direction:column;margin:0 auto;">
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;background:linear-gradient(135deg,#004d40,#00796b);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0"><path d="M10 8l-2 2 6 6 2-2"/><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/></svg>
+      <span style="font-size:.95rem;font-weight:800;color:#fff;flex:1" id="tarjeta-preview-title">Tarjeta de Vacunas</span>
+      <button id="tarjeta-preview-print-btn" onclick="" style="display:flex;align-items:center;gap:.4rem;padding:.38rem .85rem;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);border-radius:8px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:800;cursor:pointer;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:14px;height:14px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir</button>
+      <button onclick="closeTarjetaPreview()" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;font-size:1.1rem;font-weight:800;cursor:pointer;font-family:inherit;">✕</button>
+    </div>
+    <div id="tarjeta-preview-body" style="flex:1;overflow:auto;padding:1rem;background:#f5f5f5;"></div>
+  </div>
+</div>
+
+<!-- ════ MODAL VISTA PREVIA LIBRO DE VACUNAS ════ -->
+<div id="vacpreview-bg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9500;align-items:flex-start;justify-content:center;overflow:hidden;">
+  <div style="background:#fff;width:100%;height:100%;display:flex;flex-direction:column;">
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;background:linear-gradient(135deg,#004d40,#00796b);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0"><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/><path d="M14 4l6 6"/><path d="M8 10l6 6"/><line x1="8" y1="10" x2="14" y2="16"/><path d="M10 8l-2 2 6 6 2-2"/></svg>
+      <span style="font-family:'Playfair Display',serif;font-size:1rem;color:#fff;flex:1">Libro de Vacunas MEF</span>
+      <button onclick="printVacunacion()" style="display:flex;align-items:center;gap:.4rem;padding:.38rem .85rem;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);border-radius:8px;color:#fff;font-family:inherit;font-size:.78rem;font-weight:800;cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:14px;height:14px"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Imprimir
+      </button>
+      <button onclick="closeVacPreview()" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;font-size:1.1rem;font-weight:800;cursor:pointer;font-family:inherit;">✕</button>
+    </div>
+    <div id="vacpreview-scroll" style="flex:1;overflow:auto;background:#f5fdfc;padding:.9rem 1rem 2rem;">
+      <div id="vacpreview-header"></div>
+      <table id="vacpreview-table" style="width:100%;border-collapse:collapse;min-width:750px;">
+        <thead id="vacpreview-thead"></thead>
+        <tbody id="vacpreview-tbody"></tbody>
+      </table>
+      <div id="vacpreview-footer"></div>
+    </div>
   </div>
 </div>
 
@@ -4018,7 +4787,7 @@ if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.sta
     </div>
     <div class="hm-field">
       <label>Personal responsable</label>
-      <input type="text" id="hm-personal" placeholder="Nombre, cargo y UCSF"/>
+      <input type="text" id="hm-personal" placeholder="Nombre, cargo y UDS"/>
     </div>
     <div class="hm-actions">
       <button class="btn save" style="flex:1" onclick="saveHistEntry()">
