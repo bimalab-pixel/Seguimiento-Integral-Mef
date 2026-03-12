@@ -4145,7 +4145,9 @@ function saveHistEntry(){
   r.updatedAt = new Date().toISOString();
   saveRecords();
   loadFormFromRecord(r);
+  // Reabrir historial (loadFormFromRecord lo cierra) y refrescar con los datos nuevos
   document.getElementById('hist-section').classList.add('open');
+  renderHistAcc(r.historial);
   const msg = camposActualizados.length
     ? '\u2713 Seguimiento registrado \u00b7 Actualizado: ' + camposActualizados.join(', ')
     : '\u2713 Seguimiento registrado en historial';
@@ -4365,7 +4367,10 @@ function openHistCatView(){
   const rec = records.find(r=>r.id===editingId);
   if(!rec) return;
   document.getElementById('hcv-patient-name').textContent = '📋 ' + (rec.nombre||'Paciente') + ' · Historial';
+  // Leer historial fresco del record en memoria
   renderHistCatView(rec.historial||[]);
+  // También refrescar el acordeón inline por si acaso
+  renderHistAcc(rec.historial||[]);
   document.getElementById('hist-cat-view-bg').classList.add('open');
 }
 function closeHistCatView(){
