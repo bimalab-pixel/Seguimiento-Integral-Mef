@@ -120,7 +120,31 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .hcv-field span{font-size:.73rem;color:var(--text);}
 .hcv-field.full{grid-column:1/-1;}
 .hcv-personal{font-size:.6rem;color:var(--muted);margin-top:.28rem;padding-top:.25rem;border-top:1px dashed var(--border);}
+.hcv-entry-actions{display:flex;gap:.3rem;margin-top:.38rem;justify-content:flex-end;}
+.hcv-action-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;border:1.5px solid;cursor:pointer;background:#fff;transition:all .18s;flex-shrink:0;}
+.hcv-action-btn:hover{filter:brightness(.92);transform:scale(1.08);}
+.hcv-action-btn svg{width:13px;height:13px;}
+.hcv-action-btn.edit{border-color:#c5cae9;color:#3949ab;}.hcv-action-btn.edit:hover{background:#e8eaf6;}
+.hcv-action-btn.del{border-color:#ffcdd2;color:#c62828;}.hcv-action-btn.del:hover{background:#ffebee;}
 .hcv-no-hist{text-align:center;padding:1.5rem;color:var(--muted);font-size:.82rem;}
+
+/* ══ VISTAS PREVIAS RESPONSIVE ══ */
+.pv-cards{display:flex;flex-direction:column;gap:.6rem;}
+.pv-card{background:#fff;border-radius:12px;border:1.5px solid #e1bee7;overflow:hidden;box-shadow:0 1px 4px rgba(123,45,139,.08);}
+.pv-card-header{display:flex;align-items:center;gap:.55rem;padding:.55rem .8rem;background:linear-gradient(135deg,#f8f0ff,#fce4ec);}
+.pv-card-num{font-size:.6rem;font-weight:800;color:var(--purple2);background:rgba(123,45,139,.1);border-radius:5px;padding:.1rem .38rem;flex-shrink:0}
+.pv-card-name{font-weight:800;font-size:.88rem;color:var(--text);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pv-card-body{padding:.5rem .8rem .65rem;display:grid;grid-template-columns:1fr 1fr;gap:.25rem .6rem;}
+.pv-field{display:flex;flex-direction:column;}
+.pv-field label{font-size:.56rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.pv-field span{font-size:.78rem;color:var(--text);font-weight:600;}
+.pv-field.full{grid-column:1/-1;}
+.pv-badge{display:inline-block;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:6px;}
+.pv-section-hdr{display:flex;align-items:center;justify-content:space-between;padding:.45rem .8rem;color:#fff;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;border-radius:8px;margin-bottom:.38rem;}
+.pv-vac-row{display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.25rem;}
+.pv-vac-chip{font-size:.62rem;font-weight:700;padding:.2rem .45rem;border-radius:6px;border:1.5px solid;}
+.pv-pf-status{display:flex;align-items:center;gap:.4rem;margin-top:.15rem;}
+
 .scroller{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1rem}
 .scroller::-webkit-scrollbar{width:4px}
 .scroller::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
@@ -736,6 +760,11 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
     <button class="menu-btn" onclick="openPFListado()">
       <div class="menu-btn-icon" style="background:rgba(194,24,91,.32)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
       <div class="menu-btn-text"><div class="mbt">Seguimiento PF</div><div class="mbs">Planificación familiar · métodos y citas</div></div>
+      <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </button>
+    <button class="menu-btn" onclick="openQuickSeguimientoModal()">
+      <div class="menu-btn-icon" style="background:rgba(0,150,136,.32)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+      <div class="menu-btn-text"><div class="mbt">Registrar seguimiento</div><div class="mbs">Selecciona paciente y tipo de atención</div></div>
       <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
     </button>
 
@@ -3005,7 +3034,7 @@ function _buildListadoHTML(records, profile, landscape){
       ];
       return`<tr style="${rb}">${cells.map((c,ci)=>`<td style="${td(COLS[ci].tdx)}">${c}</td>`).join('')}</tr>`;
     }).join('');
-    const thS2=`position:sticky;top:0;z-index:2;`;
+    const thS2=``;
     const thead=`<thead><tr>${COLS.map(c=>`<th style="${th(c.thx)}${thS2}">${c.label}</th>`).join('')}</tr></thead>`;
     sections+=`
       <div style="margin-bottom:1.1rem;border-radius:8px;overflow:hidden;border:2px solid ${color}40;box-shadow:0 1px 4px rgba(0,0,0,.08)">
@@ -3013,7 +3042,7 @@ function _buildListadoHTML(records, profile, landscape){
           <span style="font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em">${METODO_LABELS[m]||m}</span>
           <span style="background:rgba(255,255,255,.25);border-radius:10px;padding:2px 10px;font-size:.72rem;font-weight:800">${mrs.length} paciente${mrs.length!==1?'s':''}</span>
         </div>
-        <table style="width:100%;border-collapse:collapse">${thead}<tbody>${rows}</tbody></table>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="width:100%;border-collapse:collapse;min-width:700px">${thead}<tbody>${rows}</tbody></table></div>
       </div>`;
   });
 
@@ -3027,11 +3056,71 @@ function _buildListadoHTML(records, profile, landscape){
 
 function openListadoPreview(){
   const profile=loadProfile();
+  const body=document.getElementById('listado-preview-body');
+  body.style.minWidth='';
   const {header,sections,footer}=_buildListadoHTML(records,profile,false);
-  document.getElementById('listado-preview-body').innerHTML=header+sections+footer;
+  body.innerHTML=header+sections+footer;
   document.getElementById('listado-preview-bg').style.display='flex';
 }
 function closeListadoPreview(){document.getElementById('listado-preview-bg').style.display='none';}
+
+function _renderListadoCards(profile){
+  const ucsf=profile.ucsf||'UDS';
+  const personal=profile.nombre?`${profile.nombre}${profile.cargo?' · '+profile.cargo:''}`:'Personal de salud';
+  const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const today2=new Date();today2.setHours(0,0,0,0);
+  const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+  const diffD=ds=>{if(!ds)return null;const d=new Date(ds+'T12:00:00');d.setHours(0,0,0,0);return Math.round((d-today2)/86400000);};
+  const estadoColor=d=>d===null?'#9e9e9e':d<0?'#b71c1c':d===0?'#e65100':d<=10?'#f57f17':'#2e7d32';
+  const estadoBg=d=>d===null?'':d<0?'#fce4e4':d===0?'#fff3e0':d<=10?'#fff8e1':'#e8f5e9';
+  const estadoTxt=d=>d===null?'—':d<0?`Venc. ${Math.abs(d)}d`:d===0?'Hoy':d<=10?`${d}d`:'Al día';
+  const vphDosis=r=>{const v=r.vacVph||{};const c=[v[1]?'D1':'',v[2]?'R2':''].filter(Boolean);return c.length?c.join('+'):'—';};
+  const lastDt=r=>{const dt=r.vacDt||{};for(let i=5;i>=1;i--)if(dt[i])return fmt(dt[i]);return'—';};
+  const lastNeum=r=>{const n=r.vacNeum||{};if(n[2])return fmt(n[2])+' (R)';if(n[1])return fmt(n[1])+' (D1)';return'—';};
+
+  const sorted=[...records].sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+
+  const header=`<div style="border-bottom:2.5px solid #7b1fa2;padding-bottom:.6rem;margin-bottom:.85rem">
+    <div style="font-size:1rem;font-weight:800;color:#4a148c">📋 Control MEF · ${escHtml(ucsf)}</div>
+    <div style="font-size:.68rem;color:#8e6fa0;margin-top:2px">${escHtml(personal)} · ${todayStr}</div>
+    <div style="font-size:.72rem;font-weight:800;color:#7b2d8b;margin-top:.3rem">${sorted.length} pacientes registradas</div>
+  </div>`;
+
+  const cards=sorted.map((r,i)=>{
+    const d=diffD(r.nextDate);
+    const metLbl=METODO_LABELS[r.metodo]||r.metodo||'Sin método';
+    const metColor=METODO_COLORS[r.metodo]||'#9c27b0';
+    const estTxt=estadoTxt(d), estBg=estadoBg(d), estCo=estadoColor(d);
+    const ini=r.inicioOral||r.inicioInject||r.inicioAnual||'';
+    return `<div class="pv-card">
+      <div class="pv-card-header">
+        <span class="pv-card-num">${String(i+1).padStart(3,'0')}</span>
+        <span class="pv-card-name">${escHtml(r.nombre||'Sin nombre')}</span>
+        ${r.arr==='si'?'<span class="pv-badge" style="background:#fce4ec;color:#c2185b">ARR</span>':''}
+        ${r.ent==='si'?'<span class="pv-badge" style="background:#fff3e0;color:#e65100">ENT</span>':''}
+      </div>
+      <div class="pv-card-body">
+        <div class="pv-field"><label>Edad</label><span>${r.edad||'—'} años</span></div>
+        <div class="pv-field"><label>Teléfono</label><span>${escHtml(r.telefono||'—')}</span></div>
+        <div class="pv-field full"><label>Dirección</label><span>${escHtml(r.direccion||'—')}</span></div>
+        <div class="pv-field full"><label>Método PF</label><span><span class="pv-badge" style="background:${metColor}22;color:${metColor};border:1px solid ${metColor}55">${escHtml(metLbl)}</span></span></div>
+        <div class="pv-field"><label>Inicio PF</label><span>${fmt(ini)}</span></div>
+        <div class="pv-field"><label>Próx. PF</label><span style="font-weight:800;color:${estCo};background:${estBg};border-radius:5px;padding:1px 5px">${fmt(r.nextDate)} ${estTxt!=='—'?'· '+estTxt:''}</span></div>
+        <div class="pv-field"><label>PAP próx.</label><span>${fmt(r.papNext)}</span></div>
+        <div class="pv-field"><label>VPH dosis</label><span>${vphDosis(r)}</span></div>
+        <div class="pv-field"><label>DT últ.</label><span>${lastDt(r)}</span></div>
+        <div class="pv-field"><label>Neumococo</label><span>${lastNeum(r)}</span></div>
+        <div class="pv-field"><label>Gestas/Partos</label><span>${r.gestaciones||0}G · ${r.partos||0}P</span></div>
+        <div class="pv-field"><label>Preconcepcional</label><span>${r.preconcepcional==='si'?'Sí':'No'}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const footer=`<div style="font-size:.62rem;color:#8e6fa0;margin-top:.5rem;border-top:1.5px solid #ce93d8;padding-top:.4rem;text-align:center">Control MEF · MINSAL El Salvador · ${escHtml(ucsf)} · ${sorted.length} registros</div>`;
+  const body=document.getElementById('listado-preview-body');
+  body.style.minWidth='';
+  body.innerHTML=header+'<div class="pv-cards">'+cards+'</div>'+footer;
+}
 
 /* ════ SEGUIMIENTO PLANIFICACIÓN FAMILIAR ════ */
 function openPFListado(){
@@ -3042,58 +3131,44 @@ function openPFListado(){
   const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
   const diffD=ds=>{if(!ds)return null;const d=new Date(ds+'T12:00:00');d.setHours(0,0,0,0);return Math.round((d-today2)/86400000);};
 
-  // Solo mujeres que planifican (excluye ninguno)
   const planifican=records.filter(r=>r.metodo&&r.metodo!=='ninguno')
-    .sort((a,b)=>{
-      // Primero vencidas, luego próximas, luego al día
-      const da=diffD(a.nextDate)??999, db=diffD(b.nextDate)??999;
-      return da-db;
-    });
+    .sort((a,b)=>{const da=diffD(a.nextDate)??999, db=diffD(b.nextDate)??999;return da-db;});
 
-  const BDR='1px solid #f8bbd0', BDH='1.5px solid #c2185b';
-  const th=(x='')=>`padding:5px 6px;font-size:.65rem;font-weight:800;text-transform:uppercase;text-align:left;border:${BDH};white-space:nowrap;background:#880e4f;color:#fff;position:sticky;top:0;z-index:2;${x}`;
-  const td=(x='')=>`padding:4px 6px;font-size:.75rem;border:${BDR};vertical-align:middle;${x}`;
-
-  const COLS=[
-    {l:'#',           tx:'text-align:center;width:20px',    dx:'text-align:center;font-weight:800'},
-    {l:'Nombre',      tx:'min-width:120px',                  dx:'font-weight:700;white-space:nowrap'},
-    {l:'Edad',        tx:'text-align:center',                dx:'text-align:center'},
-    {l:'Teléfono',    tx:'',                                 dx:'white-space:nowrap'},
-    {l:'Método',      tx:'min-width:110px',                  dx:'font-weight:700'},
-    {l:'Inicio',      tx:'text-align:center',                dx:'text-align:center;white-space:nowrap'},
-    {l:'Próx. cita',  tx:'text-align:center',                dx:'text-align:center;white-space:nowrap'},
-    {l:'Días',        tx:'text-align:center',                dx:'text-align:center;font-weight:800'},
-    {l:'Estado',      tx:'text-align:center',                dx:'text-align:center'},
-    {l:'ARR',         tx:'text-align:center',                dx:'text-align:center'},
-    {l:'Dirección',   tx:'min-width:100px',                  dx:''},
-  ];
-
-  // Resumen por estado
   const vencidas=planifican.filter(r=>(diffD(r.nextDate)??1)<0).length;
   const hoy=planifican.filter(r=>diffD(r.nextDate)===0).length;
   const proximas=planifican.filter(r=>{const d=diffD(r.nextDate);return d!==null&&d>0&&d<=10;}).length;
   const alDia=planifican.filter(r=>(diffD(r.nextDate)??-1)>10).length;
 
-  const resumen=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.9rem">
-    <div style="background:#fce4ec;border:1.5px solid #f48fb1;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #c2185b">
-      <div style="font-size:1.4rem;font-weight:800;color:#880e4f;line-height:1">${vencidas}</div>
-      <div style="font-size:.62rem;font-weight:800;color:#c2185b;text-transform:uppercase;margin-top:2px">Vencidas</div>
-    </div>
-    <div style="background:#fff3e0;border:1.5px solid #ffcc80;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #e65100">
-      <div style="font-size:1.4rem;font-weight:800;color:#e65100;line-height:1">${hoy}</div>
-      <div style="font-size:.62rem;font-weight:800;color:#e65100;text-transform:uppercase;margin-top:2px">Hoy</div>
-    </div>
-    <div style="background:#fff8e1;border:1.5px solid #ffe082;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #f9a825">
-      <div style="font-size:1.4rem;font-weight:800;color:#f57f17;line-height:1">${proximas}</div>
-      <div style="font-size:.62rem;font-weight:800;color:#f57f17;text-transform:uppercase;margin-top:2px">Próximas 10d</div>
-    </div>
-    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #2e7d32">
-      <div style="font-size:1.4rem;font-weight:800;color:#2e7d32;line-height:1">${alDia}</div>
-      <div style="font-size:.62rem;font-weight:800;color:#2e7d32;text-transform:uppercase;margin-top:2px">Al día</div>
-    </div>
+  const header=`<div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #c2185b;padding-bottom:.6rem;margin-bottom:.75rem">
+    <div><div style="font-size:1.05rem;font-weight:800;color:#880e4f">💊 Seguimiento Planificación Familiar · ${escHtml(ucsf)}</div>
+    <div style="font-size:.7rem;color:#9e6070;margin-top:2px">${escHtml(personal)}</div></div>
+    <div style="text-align:right;font-size:.7rem;color:#9e6070">${todayStr}<br><strong style="color:#880e4f">${planifican.length}</strong> mujeres planificando</div>
   </div>`;
 
-  // Agrupar por método
+  const resumen=`<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.9rem">
+    <div style="background:#fce4ec;border:1.5px solid #f48fb1;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #c2185b"><div style="font-size:1.4rem;font-weight:800;color:#880e4f;line-height:1">${vencidas}</div><div style="font-size:.62rem;font-weight:800;color:#c2185b;text-transform:uppercase;margin-top:2px">Vencidas</div></div>
+    <div style="background:#fff3e0;border:1.5px solid #ffcc80;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #e65100"><div style="font-size:1.4rem;font-weight:800;color:#e65100;line-height:1">${hoy}</div><div style="font-size:.62rem;font-weight:800;color:#e65100;text-transform:uppercase;margin-top:2px">Hoy</div></div>
+    <div style="background:#fff8e1;border:1.5px solid #ffe082;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #f9a825"><div style="font-size:1.4rem;font-weight:800;color:#f57f17;line-height:1">${proximas}</div><div style="font-size:.62rem;font-weight:800;color:#f57f17;text-transform:uppercase;margin-top:2px">Próximas 10d</div></div>
+    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:.55rem .75rem;border-left:4px solid #2e7d32"><div style="font-size:1.4rem;font-weight:800;color:#2e7d32;line-height:1">${alDia}</div><div style="font-size:.62rem;font-weight:800;color:#2e7d32;text-transform:uppercase;margin-top:2px">Al día</div></div>
+  </div>`;
+
+  const BDR='1px solid #f8bbd0', BDH='1.5px solid #c2185b';
+  const th=(x='')=>`padding:5px 6px;font-size:.65rem;font-weight:800;text-transform:uppercase;text-align:left;border:${BDH};white-space:nowrap;background:#880e4f;color:#fff;${x}`;
+  const td=(x='')=>`padding:4px 6px;font-size:.75rem;border:${BDR};vertical-align:middle;${x}`;
+  const COLS=[
+    {l:'#',          tx:'text-align:center;width:20px', dx:'text-align:center;font-weight:800'},
+    {l:'Nombre',     tx:'min-width:120px',               dx:'font-weight:700;white-space:nowrap'},
+    {l:'Edad',       tx:'text-align:center',             dx:'text-align:center'},
+    {l:'Teléfono',   tx:'',                              dx:'white-space:nowrap'},
+    {l:'Método',     tx:'min-width:110px',               dx:'font-weight:700'},
+    {l:'Inicio',     tx:'text-align:center',             dx:'text-align:center;white-space:nowrap'},
+    {l:'Próx. cita', tx:'text-align:center',             dx:'text-align:center;white-space:nowrap'},
+    {l:'Días',       tx:'text-align:center',             dx:'text-align:center;font-weight:800'},
+    {l:'Estado',     tx:'text-align:center',             dx:'text-align:center'},
+    {l:'ARR',        tx:'text-align:center',             dx:'text-align:center'},
+    {l:'Dirección',  tx:'min-width:100px',               dx:''},
+  ];
+
   let sections='';
   METODO_ORDER.filter(m=>m!=='ninguno').forEach(m=>{
     const mrs=planifican.filter(r=>r.metodo===m);
@@ -3109,57 +3184,28 @@ function openPFListado(){
         else if(diff<=10){estBg='#fff8e1';estCo='#f57f17';estTxt=`En ${diff}d`;}
         else{estBg='#e8f5e9';estCo='#2e7d32';estTxt='Al día';}
       }
-      const estCell=estBg
-        ?`<span style="background:${estBg};color:${estCo};font-weight:800;border-radius:4px;padding:2px 6px;font-size:.68rem">${estTxt}</span>`
-        :`<span style="color:${estCo};font-size:.68rem">${estTxt}</span>`;
-      const diasCell=diff!==null
-        ?`<span style="font-weight:800;color:${diff<0?'#b71c1c':diff===0?'#e65100':diff<=10?'#f57f17':'#2e7d32'}">${diff<0?diff:'+'+diff}</span>`
-        :'—';
-      const arrCell=r.arr==='si'
-        ?`<span style="background:#fce4ec;color:#c2185b;font-weight:800;border-radius:3px;padding:1px 5px;font-size:.65rem">ARR</span>`:'—';
+      const estCell=estBg?`<span style="background:${estBg};color:${estCo};font-weight:800;border-radius:4px;padding:2px 6px;font-size:.68rem">${estTxt}</span>`:`<span style="color:${estCo};font-size:.68rem">${estTxt}</span>`;
+      const diasCell=diff!==null?`<span style="font-weight:800;color:${diff<0?'#b71c1c':diff===0?'#e65100':diff<=10?'#f57f17':'#2e7d32'}">${diff<0?diff:'+'+diff}</span>`:'—';
+      const arrCell=r.arr==='si'?`<span style="background:#fce4ec;color:#c2185b;font-weight:800;border-radius:3px;padding:1px 5px;font-size:.65rem">ARR</span>`:'—';
       const rb=i%2===1?'background:#fff5f8':'background:#fff';
-      const cells=[
-        i+1,
-        escHtml(r.nombre||'—'),
-        r.edad?r.edad+' a':'—',
-        escHtml(r.telefono||'—'),
-        `<span style="background:${color}18;color:${color};font-weight:800;border-radius:4px;padding:2px 6px;font-size:.68rem">${escHtml(METODO_LABELS[m]||m)}</span>`,
-        fmt(ini),
-        fmt(r.nextDate),
-        diasCell,
-        estCell,
-        arrCell,
-        escHtml(r.direccion||'—'),
-      ];
+      const cells=[i+1,escHtml(r.nombre||'—'),r.edad?r.edad+' a':'—',escHtml(r.telefono||'—'),`<span style="background:${color}18;color:${color};font-weight:800;border-radius:4px;padding:2px 6px;font-size:.68rem">${escHtml(METODO_LABELS[m]||m)}</span>`,fmt(ini),fmt(r.nextDate),diasCell,estCell,arrCell,escHtml(r.direccion||'—')];
       return`<tr style="${rb}">${cells.map((c,ci)=>`<td style="${td(COLS[ci].dx)}">${c}</td>`).join('')}</tr>`;
     }).join('');
-    sections+=`
-      <div style="margin-bottom:1rem;border-radius:8px;overflow:hidden;border:2px solid ${color}30;box-shadow:0 1px 4px rgba(0,0,0,.07)">
-        <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,${color},${color}cc);color:#fff;padding:6px 12px;">
-          <span style="font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em">💊 ${escHtml(METODO_LABELS[m]||m)}</span>
-          <span style="background:rgba(255,255,255,.25);border-radius:10px;padding:2px 10px;font-size:.72rem;font-weight:800">${mrs.length} paciente${mrs.length!==1?'s':''}</span>
-        </div>
-        <table style="width:100%;border-collapse:collapse">
-          <thead><tr>${COLS.map(c=>`<th style="${th(c.tx)}">${c.l}</th>`).join('')}</tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>`;
+    sections+=`<div style="margin-bottom:1rem;border-radius:8px;overflow:hidden;border:2px solid ${color}30;box-shadow:0 1px 4px rgba(0,0,0,.07)">
+      <div style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,${color},${color}cc);color:#fff;padding:6px 12px;">
+        <span style="font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em">💊 ${escHtml(METODO_LABELS[m]||m)}</span>
+        <span style="background:rgba(255,255,255,.25);border-radius:10px;padding:2px 10px;font-size:.72rem;font-weight:800">${mrs.length} paciente${mrs.length!==1?'s':''}</span>
+      </div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="border-collapse:collapse;min-width:620px;width:100%"><thead><tr>${COLS.map(c=>`<th style="${th(c.tx)}">${c.l}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>
+    </div>`;
   });
+  if(!planifican.length) sections='<div style="text-align:center;padding:2rem;color:#9e9e9e;font-size:.88rem">No hay pacientes con método de planificación registrado.</div>';
 
-  if(!planifican.length){
-    sections='<div style="text-align:center;padding:2rem;color:#9e9e9e;font-size:.88rem">No hay pacientes con método de planificación registrado.</div>';
-  }
-
-  const header=`<div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #c2185b;padding-bottom:.6rem;margin-bottom:.75rem">
-    <div>
-      <div style="font-size:1.05rem;font-weight:800;color:#880e4f">💊 Seguimiento Planificación Familiar · ${escHtml(ucsf)}</div>
-      <div style="font-size:.7rem;color:#9e6070;margin-top:2px">${escHtml(personal)}</div>
-    </div>
-    <div style="text-align:right;font-size:.7rem;color:#9e6070">${todayStr}<br><strong style="color:#880e4f">${planifican.length}</strong> mujeres planificando</div>
-  </div>`;
   const footer=`<div style="font-size:.62rem;color:#9e6070;margin-top:.5rem;border-top:1.5px solid #f48fb1;padding-top:.4rem;display:flex;justify-content:space-between"><span>Planificación Familiar · MINSAL El Salvador · ${escHtml(ucsf)}</span><span>Total: ${planifican.length} pacientes · ${todayStr}</span></div>`;
 
-  document.getElementById('pf-listado-body').innerHTML=header+resumen+sections+footer;
+  const body=document.getElementById('pf-listado-body');
+  body.style.minWidth='';
+  body.innerHTML=header+resumen+sections+footer;
   document.getElementById('pf-listado-bg').style.display='flex';
 }
 function closePFListado(){document.getElementById('pf-listado-bg').style.display='none';}
@@ -3224,12 +3270,114 @@ function buildPrintDoc(title,subtitle,recsGrouped){
   return html;
 }
 function openVacPreview(){
+  _renderVacTable();
+  document.getElementById('vacpreview-bg').style.display='flex';
+}
+
+function _renderVacCards(){
   const profile=loadProfile();
   const ucsf=profile.ucsf||'UDS';
   const personal=profile.nombre||'Personal de salud';
   const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
   const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
   const recs=[...records].sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+
+  const chip=(lbl,val,color,bg,bc)=>val
+    ?`<span class="pv-vac-chip" style="background:${bg};color:${color};border-color:${bc}">✓ ${lbl}: ${fmt(val)}</span>`
+    :`<span class="pv-vac-chip" style="background:#f5f5f5;color:#bbb;border-color:#e0e0e0">${lbl}: —</span>`;
+
+  document.getElementById('vacpreview-header').innerHTML=`
+    <div style="border-bottom:2.5px solid #00897b;padding-bottom:.6rem;margin-bottom:.75rem">
+      <div style="font-size:1rem;font-weight:800;color:#00695c">🩺 Esquema de Vacunación MEF</div>
+      <div style="font-size:.68rem;color:#8e6fa0;margin-top:2px">${escHtml(ucsf)} · ${escHtml(personal)} · ${todayStr}</div>
+      <div style="font-size:.72rem;font-weight:800;color:#00695c;margin-top:.3rem">${recs.length} pacientes</div>
+    </div>`;
+
+  document.getElementById('vacpreview-table').style.display='none';
+
+  const cards=recs.map((r,i)=>{
+    const dti=getDtInfoForRecord(r);
+    const dtLabels=dti.modo==='completo'
+      ?['R1','R2','R3','R4','R5']:['D1','D2','D3','R1','R2'];
+    const dtChips=[1,2,3,4,5].map(n=>chip(dtLabels[n-1],(r.vacDt||{})[n],'#1a237e','#e8eaf6','#9fa8da')).join('');
+    const infantilBadge=r.vacInfantil==='completo'
+      ?`<span class="pv-badge" style="background:#f3e5f5;color:#6a1b9a;border:1px solid #ce93d8">✓ Completo</span>`
+      :r.vacInfantil==='incompleto'
+      ?`<span class="pv-badge" style="background:#fff3e0;color:#e65100;border:1px solid #ffcc80">⚠ Incompleto</span>`
+      :`<span class="pv-badge" style="background:#f5f5f5;color:#9e9e9e;border:1px solid #e0e0e0">Sin datos</span>`;
+    return `<div class="pv-card">
+      <div class="pv-card-header" style="background:linear-gradient(135deg,#e0f7fa,#f3e5f5)">
+        <span class="pv-card-num">${String(i+1).padStart(3,'0')}</span>
+        <span class="pv-card-name">${escHtml(r.nombre||'Sin nombre')}</span>
+        <span style="font-size:.68rem;color:#8e6fa0;flex-shrink:0">${r.edad||'—'} a.</span>
+      </div>
+      <div style="padding:.5rem .8rem .65rem;display:flex;flex-direction:column;gap:.5rem;">
+        <div>
+          <div style="font-size:.6rem;font-weight:800;color:#6a1b9a;text-transform:uppercase;margin-bottom:.25rem">🧒 Esquema infantil</div>
+          ${infantilBadge}
+        </div>
+        <div>
+          <div style="font-size:.6rem;font-weight:800;color:#00695c;text-transform:uppercase;margin-bottom:.25rem">💉 VPH</div>
+          <div class="pv-vac-row">
+            ${chip('D1',(r.vacVph||{})[1],'#00695c','#e0f7fa','#80cbc4')}
+            ${chip('D2',(r.vacVph||{})[2],'#00695c','#e0f7fa','#80cbc4')}
+          </div>
+        </div>
+        <div>
+          <div style="font-size:.6rem;font-weight:800;color:#1a237e;text-transform:uppercase;margin-bottom:.25rem">💉 DT Adulto · ${dti.modo==='completo'?'5R/10a':'3D+2R'} · ${dti.dtApplied||0} aplicadas</div>
+          <div class="pv-vac-row">${dtChips}</div>
+        </div>
+        <div>
+          <div style="font-size:.6rem;font-weight:800;color:#4a148c;text-transform:uppercase;margin-bottom:.25rem">💉 Neumococo 23V</div>
+          <div class="pv-vac-row">
+            ${chip('Dosis',(r.vacNeum||{})[1],'#4a148c','#f3e5f5','#ce93d8')}
+            ${chip('Refuerzo',(r.vacNeum||{})[2],'#4a148c','#f3e5f5','#ce93d8')}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const sc=[
+    {n:recs.filter(r=>r.vacInfantil==='completo').length,    l:'Esq. infantil ✓', c:'#6a1b9a',bg:'#f3e5f5',bc:'#ce93d8'},
+    {n:recs.filter(r=>!!((r.vacVph||{})[1])).length,         l:'VPH iniciado',     c:'#00695c',bg:'#e0f7fa',bc:'#80cbc4'},
+    {n:recs.filter(r=>getDtInfoForRecord(r).completo).length,l:'DT completo',      c:'#1a237e',bg:'#e8eaf6',bc:'#9fa8da'},
+    {n:recs.filter(r=>!!((r.vacNeum||{})[1])).length,        l:'Neumococo D1',     c:'#4a148c',bg:'#f3e5f5',bc:'#ce93d8'},
+  ].map(s=>`<div style="border:2px solid ${s.bc};border-radius:9px;padding:.38rem .6rem;background:${s.bg};flex:1;text-align:center"><div style="font-size:1.3rem;font-weight:800;color:${s.c};line-height:1">${s.n}</div><div style="font-size:.58rem;font-weight:700;color:${s.c};margin-top:2px">${s.l}</div></div>`).join('');
+
+  document.getElementById('vacpreview-footer').innerHTML=`
+    <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.85rem">${sc}</div>
+    <div style="font-size:.65rem;color:#8e6fa0;margin-top:.6rem;border-top:1.5px solid #b2dfdb;padding-top:.4rem;text-align:center">MEF · MINSAL El Salvador · ${escHtml(ucsf)} · ${todayStr}</div>`;
+
+  document.getElementById('vacpreview-scroll').innerHTML='';
+  document.getElementById('vacpreview-scroll').appendChild(document.getElementById('vacpreview-header'));
+
+  const cardsWrap=document.createElement('div');
+  cardsWrap.className='pv-cards';
+  cardsWrap.innerHTML=cards;
+  document.getElementById('vacpreview-scroll').appendChild(cardsWrap);
+  document.getElementById('vacpreview-scroll').appendChild(document.getElementById('vacpreview-footer'));
+}
+
+function _renderVacTable(){
+  const profile=loadProfile();
+  const ucsf=profile.ucsf||'UDS';
+  const personal=profile.nombre||'Personal de salud';
+  const todayStr=new Date().toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});
+  const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}):'—';
+  const recs=[...records].sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es'));
+
+  // Restaurar estructura tabla en caso de que esté en modo cards
+  const scroll=document.getElementById('vacpreview-scroll');
+  if(!document.getElementById('vacpreview-header').parentNode.id){
+    scroll.innerHTML='';
+    scroll.appendChild(document.getElementById('vacpreview-header'));
+    const tableWrap=document.createElement('div');
+    tableWrap.innerHTML=`<table id="vacpreview-table" style="width:100%;border-collapse:collapse;min-width:750px;"><thead id="vacpreview-thead"></thead><tbody id="vacpreview-tbody"></tbody></table>`;
+    scroll.appendChild(tableWrap.firstChild);
+    scroll.appendChild(document.getElementById('vacpreview-footer'));
+  }
+  document.getElementById('vacpreview-table').style.display='';
 
   const BG='1.5px solid #546e7a', BV='1.5px solid #00897b', BDT='1.5px solid #3949ab', BN='1.5px solid #7b1fa2';
   const td=`padding:.3rem .35rem;vertical-align:middle;`;
@@ -3324,16 +3472,8 @@ function openVacPreview(){
   document.getElementById('vacpreview-footer').innerHTML=`
     <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.85rem">${sc}</div>
     <div style="font-size:.65rem;color:#8e6fa0;margin-top:.6rem;border-top:1.5px solid #b2dfdb;padding-top:.4rem">Seguimiento Integral MEF · MINSAL El Salvador · ${escHtml(ucsf)} · ${todayStr}</div>`;
-
-  document.getElementById('vacpreview-bg').style.display='flex';
-
-  requestAnimationFrame(()=>{
-    const row1=document.querySelector('#vacpreview-thead tr:first-child');
-    if(!row1)return;
-    const h=row1.getBoundingClientRect().height;
-    document.querySelectorAll('#vacpreview-row2 th').forEach(th=>{th.style.top=h+'px';});
-  });
 }
+
 function closeVacPreview(){
   document.getElementById('vacpreview-bg').style.display='none';
 }
@@ -3791,7 +3931,7 @@ function renderHistAcc(histArr){
     let entriesHTML = n === 0
       ? `<div class="hcv-empty-cat">Sin registros en esta categoría.</div>`
       : entries.map(e => `
-          <div class="hcv-entry">
+          <div class="hcv-entry" id="hentry-${e.id}">
             <div class="hcv-entry-top">
               <span class="hcv-entry-date">${fmtD(e.fecha)}</span>
               ${e.tipo==='pf' && e.metodo ? `<span class="hcv-entry-origin" style="background:#fce4ec;color:#880e4f;font-size:.6rem">${escHtml(METODO_LABELS[e.metodo]||e.metodo)}</span>` : ''}
@@ -3804,6 +3944,14 @@ function renderHistAcc(histArr){
               ${e.obs ? `<div class="hcv-field full"><label>Observaciones</label><span>${escHtml(e.obs)}</span></div>` : ''}
             </div>
             ${e.personal ? `<div class="hcv-personal">👤 ${escHtml(e.personal)}</div>` : ''}
+            <div class="hcv-entry-actions">
+              <button class="hcv-action-btn edit" title="Editar entrada" onclick="openEditHistEntry('${e.id}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button class="hcv-action-btn del" title="Eliminar entrada" onclick="confirmDeleteHistEntry('${e.id}')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+              </button>
+            </div>
           </div>`).join('');
 
     html += `
@@ -3842,8 +3990,36 @@ function openHistModal(){
   hmAdaptModal();
   document.getElementById('hist-modal-bg').classList.add('open');
 }
+/* Versión pública: permite abrir el modal de seguimiento desde fuera del scope
+   (ej: desde el menú principal) pasando directamente el id del record */
+window.openHistModalForId = function(id){
+  const rec = records.find(r=>r.id===id);
+  if(!rec){ showToast('⚠ Paciente no encontrada','error'); return; }
+  editingId = rec.id;
+  document.getElementById('hm-fecha').value = (d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'))(new Date());
+  document.getElementById('hm-prox').value    = '';
+  document.getElementById('hm-detalle').value = '';
+  document.getElementById('hm-obs').value     = '';
+  document.getElementById('hm-blisters').value= '';
+  const _vsel = document.getElementById('hm-vacuna-sel'); if(_vsel) _vsel.value='';
+  const p = loadProfile();
+  document.getElementById('hm-personal').value = p.nombre ? [p.nombre,p.cargo].filter(Boolean).join(' · ') : '';
+  document.getElementById('hm-tipo').value   = (rec.metodo && rec.metodo!=='ninguno') ? 'pf' : 'general';
+  document.getElementById('hm-metodo').value = rec.metodo || 'oral';
+  hmAdaptModal();
+  document.getElementById('hist-modal-bg').classList.add('open');
+};
+
 function closeHistModal(){
   document.getElementById('hist-modal-bg').classList.remove('open');
+  // Restaurar título y botón al modo de nueva entrada (por si se cerró desde una edición)
+  const titleEl = document.querySelector('#hist-modal .hm-title');
+  if(titleEl) titleEl.textContent = '📋 Registrar seguimiento';
+  const saveBtn = document.querySelector('#hist-modal .hm-actions .btn.save');
+  if(saveBtn){
+    saveBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar entrada';
+    saveBtn.onclick = saveHistEntry;
+  }
 }
 function hmSelVacuna(id, label, color, bg){
   document.getElementById('hm-vacuna-sel').value = id;
@@ -4401,7 +4577,7 @@ function renderHistCatView(histArr){
       entriesHTML = `<div class="hcv-empty-cat">Sin registros en esta categoría.</div>`;
     } else {
       entriesHTML = entries.map(e => `
-        <div class="hcv-entry">
+        <div class="hcv-entry" id="hentry-${e.id}">
           <div class="hcv-entry-top">
             <span class="hcv-entry-date">${fmtD(e.fecha)}</span>
             <span class="hcv-entry-origin ${e.auto?'auto':'manual'}">${e.auto?'AUTO':'MANUAL'}</span>
@@ -4412,6 +4588,14 @@ function renderHistCatView(histArr){
             ${e.obs ? `<div class="hcv-field full"><label>Observaciones</label><span>${escHtml(e.obs)}</span></div>` : ''}
           </div>
           ${e.personal ? `<div class="hcv-personal">👤 ${escHtml(e.personal)}</div>` : ''}
+          <div class="hcv-entry-actions">
+            <button class="hcv-action-btn edit" title="Editar entrada" onclick="openEditHistEntry('${e.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="hcv-action-btn del" title="Eliminar entrada" onclick="confirmDeleteHistEntry('${e.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+          </div>
         </div>`).join('');
     }
 
@@ -4551,6 +4735,125 @@ function printHistorialPaciente(){
   if(w){ w.document.write(html); w.document.close(); setTimeout(()=>w.print(),700); }
 }
 
+/* ═══ EDITAR / ELIMINAR ENTRADAS DE HISTORIAL ═══ */
+
+function _findHistEntry(entryId){
+  if(!editingId) return null;
+  const rec = records.find(r=>r.id===editingId);
+  if(!rec) return null;
+  const idx = (rec.historial||[]).findIndex(e=>e.id===entryId);
+  if(idx<0) return null;
+  return {rec, idx, entry: rec.historial[idx]};
+}
+
+/* ── ELIMINAR ── */
+function confirmDeleteHistEntry(entryId){
+  const found = _findHistEntry(entryId);
+  if(!found){ showToast('⚠ Entrada no encontrada','error'); return; }
+  const fecha = found.entry.fecha || '—';
+  const tipo  = (HIST_TIPO_LABELS[found.entry.tipo]||found.entry.tipo||'entrada');
+  showModal(
+    'Eliminar entrada',
+    `¿Eliminar la entrada de <strong>${tipo}</strong> del <strong>${fecha}</strong>?<br><br>Esta acción no se puede deshacer.`,
+    () => {
+      found.rec.historial.splice(found.idx, 1);
+      saveRecords();
+      renderHistAcc(found.rec.historial);
+      // Si el modal de vista por categoría está abierto, refrescarlo también
+      const catBg = document.getElementById('hist-cat-view-bg');
+      if(catBg && catBg.classList.contains('open')) renderHistCatView(found.rec.historial);
+      showToast('🗑 Entrada eliminada','error');
+    }
+  );
+}
+
+/* ── EDITAR ── */
+function openEditHistEntry(entryId){
+  const found = _findHistEntry(entryId);
+  if(!found){ showToast('⚠ Entrada no encontrada','error'); return; }
+  const e = found.entry;
+
+  // Reutilizamos el modal de historial manual, pero en modo edición
+  document.getElementById('hm-fecha').value    = e.fecha  || '';
+  document.getElementById('hm-prox').value     = e.proxCita || '';
+  document.getElementById('hm-detalle').value  = e.detalle || '';
+  document.getElementById('hm-obs').value      = e.obs    || '';
+  document.getElementById('hm-personal').value = e.personal || '';
+  document.getElementById('hm-blisters').value = '';
+  const _vsel = document.getElementById('hm-vacuna-sel'); if(_vsel) _vsel.value = e.vacuna||'';
+  document.getElementById('hm-tipo').value     = e.tipo   || 'general';
+  document.getElementById('hm-metodo').value   = e.metodo || 'oral';
+
+  // Cambiar título del modal y botón guardar para indicar modo edición
+  const titleEl = document.querySelector('#hist-modal .hm-title');
+  if(titleEl) titleEl.textContent = '✏️ Editar seguimiento';
+  const saveBtn = document.querySelector('#hist-modal .hm-actions .btn.save');
+  if(saveBtn){
+    saveBtn.textContent = '';
+    saveBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar cambios';
+    saveBtn.onclick = () => saveEditHistEntry(entryId);
+  }
+
+  hmAdaptModal();
+
+  // Si es vacuna, re-seleccionar el chip
+  if(e.tipo === 'vacuna' && e.vacuna){
+    setTimeout(()=>{
+      const chip = document.querySelector(`#hm-vacuna-chips .hcv-vac-chip[data-id="${e.vacuna}"]`);
+      if(chip) chip.click();
+    }, 50);
+  }
+
+  document.getElementById('hist-modal-bg').classList.add('open');
+}
+
+function saveEditHistEntry(entryId){
+  const found = _findHistEntry(entryId);
+  if(!found){ showToast('⚠ Entrada no encontrada','error'); return; }
+
+  const fecha = document.getElementById('hm-fecha').value;
+  if(!fecha){ showToast('⚠ Ingresa la fecha','error'); return; }
+
+  const tipo      = document.getElementById('hm-tipo').value;
+  const mUsado    = document.getElementById('hm-metodo')?.value || '';
+  const proxInput = document.getElementById('hm-prox').value;
+  const detalle   = document.getElementById('hm-detalle').value.trim();
+  const obs       = document.getElementById('hm-obs').value.trim();
+  const personal  = document.getElementById('hm-personal').value.trim();
+  const vacSel    = document.getElementById('hm-vacuna-sel')?.value || '';
+
+  if(tipo === 'vacuna' && !vacSel){ showToast('⚠ Selecciona la vacuna','error'); return; }
+
+  // Actualizar la entrada en memoria
+  const entry = found.rec.historial[found.idx];
+  entry.fecha     = fecha;
+  entry.tipo      = tipo;
+  entry.detalle   = tipo==='vacuna' ? (detalle || vacSel) : detalle;
+  entry.proxCita  = proxInput;
+  entry.obs       = obs;
+  entry.personal  = personal;
+  entry.metodo    = tipo==='pf' ? mUsado : undefined;
+  entry.vacuna    = tipo==='vacuna' ? vacSel : undefined;
+  entry.editedAt  = new Date().toISOString();
+
+  saveRecords();
+  closeHistModal();
+
+  // Restaurar título y botón a modo normal
+  const titleEl = document.querySelector('#hist-modal .hm-title');
+  if(titleEl) titleEl.textContent = '📋 Registrar seguimiento';
+  const saveBtn = document.querySelector('#hist-modal .hm-actions .btn.save');
+  if(saveBtn){
+    saveBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar entrada';
+    saveBtn.onclick = saveHistEntry;
+  }
+
+  renderHistAcc(found.rec.historial);
+  const catBg = document.getElementById('hist-cat-view-bg');
+  if(catBg && catBg.classList.contains('open')) renderHistCatView(found.rec.historial);
+  showToast('✓ Entrada actualizada','success');
+}
+
 /* ═══ INIT ═══ */
 loadRecords();
 window.records=records;
@@ -4677,7 +4980,7 @@ if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.sta
       <button onclick="closePFListado()" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;font-size:1.1rem;font-weight:800;cursor:pointer;font-family:inherit;flex-shrink:0">✕</button>
     </div>
     <div style="flex:1;overflow:auto;background:#fff5f8;padding:.9rem 1rem 2rem;">
-      <div id="pf-listado-body" style="min-width:max-content;width:100%"></div>
+      <div id="pf-listado-body"></div>
     </div>
   </div>
 </div>
@@ -4707,12 +5010,14 @@ if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.sta
       </button>
       <button onclick="closeVacPreview()" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;font-size:1.1rem;font-weight:800;cursor:pointer;font-family:inherit;">✕</button>
     </div>
-    <div id="vacpreview-scroll" style="flex:1;overflow:auto;background:#f5fdfc;padding:.9rem 1rem 2rem;">
+    <div id="vacpreview-scroll" style="flex:1;overflow-y:auto;overflow-x:hidden;background:#f5fdfc;padding:.9rem 1rem 2rem;">
       <div id="vacpreview-header"></div>
-      <table id="vacpreview-table" style="width:100%;border-collapse:collapse;min-width:750px;">
-        <thead id="vacpreview-thead"></thead>
-        <tbody id="vacpreview-tbody"></tbody>
-      </table>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+        <table id="vacpreview-table" style="width:100%;border-collapse:collapse;min-width:750px;">
+          <thead id="vacpreview-thead"></thead>
+          <tbody id="vacpreview-tbody"></tbody>
+        </table>
+      </div>
       <div id="vacpreview-footer"></div>
     </div>
   </div>
@@ -4803,6 +5108,89 @@ if(window.matchMedia('(display-mode: standalone)').matches||window.navigator.sta
     </div>
   </div>
 </div>
+
+<!-- ════ MODAL REGISTRAR SEGUIMIENTO RÁPIDO (desde menú) ════ -->
+<div id="quick-seg-bg" onclick="if(event.target===this)closeQuickSeguimientoModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9800;align-items:flex-end;justify-content:center;">
+  <div id="quick-seg-modal" style="background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:88vh;display:flex;flex-direction:column;">
+    <!-- Header -->
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:.6rem;padding:.9rem 1.1rem .7rem;background:linear-gradient(135deg,#00695c,#26a69a);border-radius:20px 20px 0 0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" style="width:20px;height:20px;flex-shrink:0"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <span style="font-size:.95rem;font-weight:800;color:#fff;flex:1">Registrar seguimiento</span>
+      <button onclick="closeQuickSeguimientoModal()" style="background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;width:30px;height:30px;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>
+    <!-- Buscador de paciente -->
+    <div style="flex-shrink:0;padding:.8rem 1.1rem .5rem;border-bottom:1px solid #e1bee7;">
+      <div style="font-size:.7rem;font-weight:800;color:#00695c;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.45rem;">¿A quién le registramos?</div>
+      <div style="display:flex;align-items:center;gap:.45rem;background:#f5f5f5;border:1.5px solid #e1bee7;border-radius:10px;padding:.42rem .7rem;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#8e6fa0" stroke-width="2" stroke-linecap="round" style="width:15px;height:15px;flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="qs-search" type="text" placeholder="Buscar paciente por nombre…" oninput="renderQsList()" style="border:none;background:none;font-family:inherit;font-size:.84rem;color:#3d1a4a;flex:1;outline:none;"/>
+      </div>
+    </div>
+    <!-- Lista de pacientes -->
+    <div id="qs-list" style="flex:1;overflow-y:auto;padding:.55rem .8rem 1.5rem;"></div>
+  </div>
+</div>
+
+<script>
+/* ═══ MODAL REGISTRO RÁPIDO DE SEGUIMIENTO (desde menú principal) ═══ */
+function openQuickSeguimientoModal(){
+  if(!records || records.length === 0){
+    showToast('⚠ No hay pacientes registradas aún','error');
+    return;
+  }
+  document.getElementById('qs-search').value = '';
+  renderQsList();
+  const bg = document.getElementById('quick-seg-bg');
+  bg.style.display = 'flex';
+  setTimeout(()=>document.getElementById('qs-search').focus(), 120);
+}
+
+function closeQuickSeguimientoModal(){
+  document.getElementById('quick-seg-bg').style.display = 'none';
+}
+
+function renderQsList(){
+  const q = (document.getElementById('qs-search').value||'').toLowerCase().trim();
+  const cont = document.getElementById('qs-list');
+  const lista = records
+    .filter(r => !q || (r.nombre||'').toLowerCase().includes(q) || (r.dui||'').includes(q))
+    .sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
+
+  if(!lista.length){
+    cont.innerHTML = '<div style="text-align:center;padding:2rem 1rem;color:#8e6fa0;font-size:.82rem">No se encontraron pacientes.</div>';
+    return;
+  }
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  cont.innerHTML = lista.map(r => {
+    const metLbl = (window.METODO_LABELS||{})[r.metodo] || r.metodo || 'Sin método';
+    let badge = '';
+    if(r.nextDate){
+      const d=new Date(r.nextDate+'T12:00:00');d.setHours(0,0,0,0);
+      const diff=Math.round((d-today)/(1000*60*60*24));
+      if(diff<0) badge=`<span style="font-size:.58rem;font-weight:800;padding:2px 6px;border-radius:8px;background:#ffebee;color:#c62828;margin-left:.3rem">PF vencida</span>`;
+      else if(diff<=7) badge=`<span style="font-size:.58rem;font-weight:800;padding:2px 6px;border-radius:8px;background:#fff8e1;color:#e65100;margin-left:.3rem">PF en ${diff}d</span>`;
+    }
+    return `<div onclick="selectQsPatient('${r.id}')" style="display:flex;align-items:center;gap:.65rem;padding:.62rem .75rem;border-radius:10px;border:1.5px solid #e1bee7;margin-bottom:.38rem;cursor:pointer;background:#fff;transition:all .17s;" onmouseover="this.style.background='#f3e5f5';this.style.borderColor='#ce93d8'" onmouseout="this.style.background='#fff';this.style.borderColor='#e1bee7'">
+      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#c2185b,#7b2d8b);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85rem;flex-shrink:0">${((r.nombre||'?').trim().split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('')).toUpperCase()}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:800;font-size:.86rem;color:#3d1a4a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(r.nombre||'Sin nombre')}${badge}</div>
+        <div style="font-size:.66rem;color:#8e6fa0;margin-top:1px">${r.edad?r.edad+' años · ':''}${escHtml(metLbl)}</div>
+      </div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ce93d8" stroke-width="2.5" stroke-linecap="round" style="width:15px;height:15px;flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>`;
+  }).join('');
+}
+
+function selectQsPatient(id){
+  closeQuickSeguimientoModal();
+  const rec = records.find(r=>r.id===id);
+  if(!rec){ showToast('⚠ Paciente no encontrada','error'); return; }
+  setTimeout(()=>{
+    window.openHistModalForId(id);
+  }, 180);
+}
+</script>
 
 <!-- ════ FIREBASE MODULE ════ -->
 <script type="module">
