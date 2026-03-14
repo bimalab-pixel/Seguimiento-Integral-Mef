@@ -262,6 +262,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .icon-btn{width:27px;height:27px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--muted);}
 .icon-btn svg{width:12px;height:12px}
 .icon-btn.view:hover{background:var(--rose2);border-color:var(--rose2);color:#fff}.icon-btn.del:hover{background:var(--danger);border-color:var(--danger);color:#fff}
+.lf-icon-btn.arch:hover{background:#e65100;border-color:#e65100;color:#fff}
 .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--muted)}
 .empty-state svg{width:44px;height:44px;margin:0 auto .85rem;opacity:.3}
 .empty-state h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--purple);margin-bottom:.25rem}
@@ -659,7 +660,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
 .hist-entry-title .hist-type-tag{font-size:.58rem;font-weight:800;padding:1px 6px;border-radius:10px;white-space:nowrap;}
 .hist-entry-title .tag-pf{background:#fce4ec;color:#880e4f;}
 .hist-entry-title .tag-pap{background:#e8eaf6;color:#283593;}
-.hist-entry-title .tag-vph{background:#e0f2f1;color:#00695c;}
+.hist-entry-title .tag-vph{background:#e0f2f1;color:#00695c;}.hist-entry-title .tag-vacuna{background:#e3f2fd;color:#1565c0;}
 .hist-entry-title .tag-general{background:#f3e5f5;color:#6a1b9a;}
 .hist-fields{display:grid;grid-template-columns:1fr 1fr;gap:.2rem .7rem;}
 .hist-field{display:flex;flex-direction:column;gap:1px;}
@@ -765,6 +766,11 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
     <button class="menu-btn" onclick="openQuickSeguimientoModal()">
       <div class="menu-btn-icon" style="background:rgba(0,150,136,.32)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
       <div class="menu-btn-text"><div class="mbt">Registrar seguimiento</div><div class="mbs">Selecciona paciente y tipo de atención</div></div>
+      <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </button>
+    <button class="menu-btn" onclick="openArchivoModal()">
+      <div class="menu-btn-icon" style="background:rgba(120,85,40,.35)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></div>
+      <div class="menu-btn-text"><div class="mbt">Archivo de pacientes <span class="menu-badge" id="home-badge-arch" style="display:none">0</span></div><div class="mbs">Fichas archivadas · mayores de 50 años</div></div>
       <div class="menu-btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
     </button>
 
@@ -948,7 +954,7 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
         <div class="f-group"><label>DUI / Documento</label><input type="text" id="f-dui" placeholder="Ej: 12345678-9" maxlength="30"/></div>
         <div class="f-group"><label>N° de vivienda</label><input type="text" id="f-vivienda" placeholder="Ej: 126" maxlength="20"/></div>
         <div class="f-group"><label>Fecha de nacimiento</label><input type="date" id="f-nacimiento" onchange="calcEdad()"/></div>
-        <div class="f-group"><label>Edad (años)</label><input type="number" id="f-edad" min="18" max="49" placeholder="18–49" oninput="calcRiesgo()"/></div>
+        <div class="f-group"><label>Edad (años)</label><input type="number" id="f-edad" min="0" max="49" placeholder="0–49" oninput="calcRiesgo()"/></div>
         <div class="f-group sp"><label>Dirección / Comunidad / Cantón</label><input type="text" id="f-direccion" placeholder="Colonia, municipio, cantón…" maxlength="150"/></div>
         <div class="f-group"><label>Teléfono</label><input type="tel" id="f-telefono" placeholder="7XXX-XXXX" maxlength="20"/></div>
         <div class="f-group"><label>Fecha de registro</label><input type="date" id="f-fecha"/></div>
@@ -1040,8 +1046,8 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
       <div class="fg c2">
         <div class="f-group"><label>Última citología (PAP)</label><input type="date" id="f-pap-fecha" onchange="recalcAlerta()"/></div>
         <div class="f-group"><label>Próxima citología (calculada)</label><input type="text" id="f-pap-prox" readonly placeholder="Un año desde la última" style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
-        <div class="f-group"><label>Último VPH</label><input type="date" id="f-vph-fecha" onchange="recalcAlerta()"/></div>
-        <div class="f-group"><label>Próximo VPH (calculado)</label><input type="text" id="f-vph-prox" readonly placeholder="5 años desde el último" style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
+        <div class="f-group"><label>Última prueba VPH (tamizaje)</label><input type="date" id="f-vph-fecha" onchange="recalcAlerta()"/></div>
+        <div class="f-group"><label>Próxima prueba VPH (calculada)</label><input type="text" id="f-vph-prox" readonly placeholder="5 años desde la última" style="background:#f8f0ff;color:var(--purple2);font-weight:700"/></div>
         <div class="f-group"><label>Resultado PAP / VPH</label>
           <select id="f-pap-resultado">
             <option value="">— Sin resultado —</option>
@@ -1270,9 +1276,26 @@ body{font-family:'Nunito',sans-serif;background:var(--light);color:var(--text);f
       <button class="btn" id="btn-ver-tarjeta" onclick="if(editingId)openTarjetaPreview(editingId)" style="display:none;background:linear-gradient(135deg,#004d40,#00796b);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10 8l-2 2 6 6 2-2"/><line x1="5" y1="19" x2="3" y2="21"/><line x1="9" y1="15" x2="5" y2="19"/><path d="M20 4l-6 6"/></svg>Ver tarjeta</button>
       <button class="btn" id="btn-ver-hist" onclick="if(editingId)openHistorialPreview(editingId)" style="display:none;background:linear-gradient(135deg,#1a237e,#3949ab);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Ver historial</button>
       <button class="btn danger" id="btn-delete" onclick="deleteCurrentRecord()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>Eliminar</button>
+      <button class="btn" id="btn-archivar" onclick="confirmArchivarCurrent()" style="display:none;background:linear-gradient(135deg,#78552a,#a1700f);color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>Archivar</button>
       <button class="btn secondary" onclick="goBack()" style="margin-left:auto">Volver</button>
     </div>
    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL ARCHIVO DE PACIENTES ════ -->
+<div id="archivo-modal-bg" onclick="if(event.target===this)closeArchivoModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9600;align-items:flex-end;justify-content:center;">
+  <div style="background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;">
+    <div style="flex-shrink:0;display:flex;align-items:center;gap:.6rem;padding:.9rem 1.1rem .7rem;background:linear-gradient(135deg,#78552a,#a1700f);border-radius:20px 20px 0 0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" style="width:20px;height:20px;flex-shrink:0"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+      <div style="flex:1;font-weight:800;font-size:1rem;color:#fff">Archivo de pacientes</div>
+      <span id="archivo-count-badge" style="background:rgba(255,255,255,.25);border-radius:10px;padding:2px 10px;font-size:.75rem;font-weight:800;color:#fff"></span>
+      <button onclick="closeArchivoModal()" style="width:30px;height:30px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);border-radius:8px;color:#fff;font-size:1.1rem;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <div style="flex-shrink:0;padding:.55rem 1.1rem;background:#fdf6ec;border-bottom:1px solid #e8d5b5;font-size:.72rem;color:#78552a;font-weight:700">
+      📦 Las fichas archivadas se conservan completas y pueden restaurarse al listado activo en cualquier momento.
+    </div>
+    <div id="archivo-modal-body" style="flex:1;overflow-y:auto;padding:.8rem 1rem 2rem;background:#fdf4f9;"></div>
   </div>
 </div>
 
@@ -1421,7 +1444,7 @@ function goBack(){
 
 /* ═══ DATE UTILS ═══ */
 function addDays(ds,d){const x=new Date(ds+'T12:00:00');x.setDate(x.getDate()+d);return x.toISOString().split('T')[0];}
-function addMonths(ds,m){const x=new Date(ds+'T12:00:00');x.setMonth(x.getMonth()+m);return x.toISOString().split('T')[0];}
+function addMonths(ds,m){const x=new Date(ds+'T12:00:00');const day=x.getDate();x.setDate(1);x.setMonth(x.getMonth()+m);const maxDay=new Date(x.getFullYear(),x.getMonth()+1,0).getDate();x.setDate(Math.min(day,maxDay));return x.toISOString().split('T')[0];}
 function addYears(ds,y){const x=new Date(ds+'T12:00:00');x.setFullYear(x.getFullYear()+y);return x.toISOString().split('T')[0];}
 function formatDate(ds){if(!ds)return'—';const d=new Date(ds+'T12:00:00');return d.toLocaleDateString('es-SV',{day:'2-digit',month:'long',year:'numeric'});}
 function formatDateShort(ds){if(!ds)return'—';const d=new Date(ds+'T12:00:00');return d.toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'});}
@@ -1434,7 +1457,8 @@ function calcNextDate(rec){
   if(m==='oral'){if(!rec.inicioOral||!rec.blisters)return null;return addDays(rec.inicioOral,parseInt(rec.blisters)*28);}
   if(m==='inject-m'){if(!rec.inicioInject)return null;return addMonths(rec.inicioInject,1);}
   if(m==='inject-t'){if(!rec.inicioInject)return null;return addMonths(rec.inicioInject,3);}
-  if(['diu','implante','esteril'].includes(m)){if(!rec.inicioAnual)return null;return addYears(rec.inicioAnual,1);}
+  if(['diu','implante'].includes(m)){if(!rec.inicioAnual)return null;return addYears(rec.inicioAnual,1);}
+  if(m==='esteril') return null; // Permanente — sin próxima cita
   return null;
 }
 function calcPapNext(rec){if(!rec.papFecha)return null;return addYears(rec.papFecha,1);}
@@ -1443,7 +1467,7 @@ function calcVphNext(rec){if(!rec.vphFecha)return null;return addYears(rec.vphFe
 /* ═══ ALERTAS MÚLTIPLES ═══ */
 function getAllAlerts(){
   const byFolder={pf:[],pap:[],vph:[],promotor:[],arr:[],ent:[],dt:[]};
-  records.forEach(r=>{
+  records.filter(r=>!r.archivada).forEach(r=>{
     // PF — vencidas siempre · próximas 10d · esterilización excluida
     if(r.nextDate && r.metodo!=='esteril'){const d=diffDays(r.nextDate);if(d<0||d<=10)byFolder.pf.push({rec:r,type:'pf',date:r.nextDate,diff:d,label:'Próximo seguimiento PF'});}
     // PAP anual — vencidas siempre · próximas 30d
@@ -1451,7 +1475,7 @@ function getAllAlerts(){
     if(papNext){const d=diffDays(papNext);if(d<0||d<=30)byFolder.pap.push({rec:r,type:'pap',date:papNext,diff:d,label:'Citología PAP (anual)'});}
     // VPH cada 5 años — vencidas siempre · próximas 30d
     const vphNext=calcVphNext(r);
-    if(vphNext){const d=diffDays(vphNext);if(d<0||d<=30)byFolder.vph.push({rec:r,type:'vph',date:vphNext,diff:d,label:'VPH (cada 5 años)'});}
+    if(vphNext){const d=diffDays(vphNext);if(d<0||d<=30)byFolder.vph.push({rec:r,type:'vph',date:vphNext,diff:d,label:'Prueba VPH (tamizaje cada 5 años)'});}
     // Promotor anual — vencidas siempre · próximas 30d
     if(r.atencionPreventiva){const apNext=addYears(r.atencionPreventiva,1);const d=diffDays(apNext);if(d<0||d<=30)byFolder.promotor.push({rec:r,type:'promotor',date:apNext,diff:d,label:'Atención preventiva promotor (anual)',thisMonth:isThisMonth(apNext)});}
     // ARR — siempre visible
@@ -1712,7 +1736,8 @@ function recalcAlerta(){
   if(m==='oral'){const b=parseInt(document.getElementById('f-blisters').value)||0,i=document.getElementById('f-inicio-oral').value;if(b>0&&i)pfDate=addDays(i,b*28);}
   else if(m==='inject-m'){const i=document.getElementById('f-inicio-inject').value;if(i){pfDate=addMonths(i,1);document.getElementById('f-prox-inject').value=formatDate(pfDate);}}
   else if(m==='inject-t'){const i=document.getElementById('f-inicio-inject').value;if(i){pfDate=addMonths(i,3);document.getElementById('f-prox-inject').value=formatDate(pfDate);}}
-  else if(['diu','implante','esteril'].includes(m)){const i=document.getElementById('f-inicio-anual').value;if(i){pfDate=addYears(i,1);document.getElementById('f-prox-anual').value=formatDate(pfDate);}}
+  else if(['diu','implante'].includes(m)){const i=document.getElementById('f-inicio-anual').value;if(i){pfDate=addYears(i,1);document.getElementById('f-prox-anual').value=formatDate(pfDate);}}
+  else if(m==='esteril'){const el=document.getElementById('f-prox-anual');if(el)el.value='Permanente';}
   // PAP
   const papFecha=document.getElementById('f-pap-fecha').value;
   const papProx=papFecha?addYears(papFecha,1):null;
@@ -1744,9 +1769,58 @@ function toggleDiscapacidad(){
 function calcEdad(){
   const nac=document.getElementById('f-nacimiento').value;
   if(!nac)return;
-  const d=new Date(nac+'T12:00:00'),t=new Date();
-  let a=t.getFullYear()-d.getFullYear();const mo=t.getMonth()-d.getMonth();if(mo<0||(mo===0&&t.getDate()<d.getDate()))a--;
-  document.getElementById('f-edad').value=a;calcRiesgo();
+  const det=_calcAgeDetail(nac);
+  document.getElementById('f-edad').value=det.años;
+  // Mostrar desglose
+  let disp=document.getElementById('edad-detalle-disp');
+  if(!disp){
+    disp=document.createElement('div');disp.id='edad-detalle-disp';
+    disp.style.cssText='font-size:.72rem;color:#7b2d8b;font-weight:700;margin-top:3px;';
+    document.getElementById('f-edad').parentNode.appendChild(disp);
+  }
+  disp.textContent=`${det.años} a, ${det.meses} m, ${det.dias} d`;
+  calcRiesgo();
+}
+function _calcAgeDetail(nacStr){
+  if(!nacStr)return{años:0,meses:0,dias:0};
+  // Fecha actual en zona horaria El Salvador (UTC-6)
+  const nowUTC=new Date();
+  const svOffset=-6*60; // minutos
+  const svNow=new Date(nowUTC.getTime()+svOffset*60000);
+  const hoy={y:svNow.getUTCFullYear(),m:svNow.getUTCMonth(),d:svNow.getUTCDate()};
+  const nac=new Date(nacStr+'T12:00:00Z');
+  const nacSV=new Date(nac.getTime()+svOffset*60000);
+  const nbd={y:nacSV.getUTCFullYear(),m:nacSV.getUTCMonth(),d:nacSV.getUTCDate()};
+  let años=hoy.y-nbd.y, meses=hoy.m-nbd.m, dias=hoy.d-nbd.d;
+  if(dias<0){
+    meses--;
+    // Días en el mes anterior
+    const prevMonth=new Date(Date.UTC(hoy.y,hoy.m,0));
+    dias+=prevMonth.getUTCDate();
+  }
+  if(meses<0){años--;meses+=12;}
+  return{años,meses,dias};
+}
+function _calcAge(nacStr){
+  if(!nacStr)return null;
+  return _calcAgeDetail(nacStr).años;
+}
+function actualizarEdades(){
+  let changed=false;
+  records.forEach(r=>{
+    if(!r.nacimiento)return;
+    const edad=_calcAge(r.nacimiento);
+    if(edad!==null&&String(r.edad)!==String(edad)){r.edad=String(edad);changed=true;}
+    // Archivar automáticamente al cumplir 50 años
+    if(edad>=50&&!r.archivada){
+      r.archivada=true;
+      r.fechaArchivo=new Date().toISOString();
+      r.motivoArchivo='auto_50';
+      changed=true;
+    }
+  });
+  if(changed){saveRecords();return true;}
+  return false;
 }
 function calcRiesgo(){
   const checks=['rr-menor20','rr-mayor35','rr-ent','rr-gesta','rr-espacio','rr-aborto','rr-cesarea','rr-discap'];
@@ -1781,6 +1855,7 @@ function initNewForm(){
   document.getElementById('method-details').style.display='none';
   document.getElementById('multi-alert-preview').innerHTML='';
   document.getElementById('btn-delete').style.display='none';
+  document.getElementById('btn-archivar').style.display='none';
   document.getElementById('btn-print-ficha').style.display='none';
   document.getElementById('btn-print-hist').style.display='none';
   document.getElementById('btn-print-vac').style.display='none';
@@ -1804,6 +1879,13 @@ function loadFormFromRecord(rec){
   const setV=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||'';};
   setV('f-nombre',rec.nombre);setV('f-dui',rec.dui);setV('f-vivienda',rec.vivienda);
   setV('f-nacimiento',rec.nacimiento);setV('f-edad',rec.edad);setV('f-direccion',rec.direccion);
+  // Mostrar desglose de edad si hay nacimiento
+  if(rec.nacimiento){
+    const det=_calcAgeDetail(rec.nacimiento);
+    let disp=document.getElementById('edad-detalle-disp');
+    if(!disp){disp=document.createElement('div');disp.id='edad-detalle-disp';disp.style.cssText='font-size:.72rem;color:#7b2d8b;font-weight:700;margin-top:3px;';document.getElementById('f-edad').parentNode.appendChild(disp);}
+    disp.textContent=`${det.años} a, ${det.meses} m, ${det.dias} d`;
+  }
   setV('f-telefono',rec.telefono);setV('f-fecha',rec.fecha);setV('f-vida-sexual',rec.vidaSexual);
   setV('f-preconcepcional',rec.preconcepcional);setV('f-arr',rec.arr);
   setV('f-atencion-preventiva',rec.atencionPreventiva);
@@ -1820,6 +1902,7 @@ function loadFormFromRecord(rec){
   checks.forEach(id=>{const el=document.getElementById(id);if(el)el.checked=!!(rec.riesgos&&rec.riesgos.includes(id));});
   document.getElementById('fh-num-display').textContent=`Ficha #${String(rec.num||0).padStart(3,'0')}`;
   document.getElementById('btn-delete').style.display='flex';
+  document.getElementById('btn-archivar').style.display='flex';
   document.getElementById('btn-print-ficha').style.display='flex';
   document.getElementById('btn-print-hist').style.display='flex';
   document.getElementById('btn-print-vac').style.display='flex';
@@ -1857,7 +1940,7 @@ function saveRecord(){
     id:editingId||Date.now().toString(36)+Math.random().toString(36).slice(2),
     num:editingId?(records.find(r=>r.id===editingId)?.num||records.length+1):records.length+1,
     nombre,dui:getV('f-dui'),vivienda:getV('f-vivienda'),
-    nacimiento:getV('f-nacimiento'),edad:getV('f-edad'),
+    nacimiento:getV('f-nacimiento'),edad:getV('f-nacimiento')?String(_calcAge(getV('f-nacimiento'))):getV('f-edad'),
     direccion:getV('f-direccion'),telefono:getV('f-telefono'),
     fecha:getV('f-fecha'),vidaSexual:getV('f-vida-sexual'),
     preconcepcional:getV('f-preconcepcional'),arr:getV('f-arr'),
@@ -1895,6 +1978,7 @@ function saveRecord(){
   // hist-section stays closed until user opens it
   showToast('✓ Ficha guardada correctamente','success');
   document.getElementById('btn-delete').style.display='flex';
+  document.getElementById('btn-archivar').style.display='flex';
   document.getElementById('btn-print-ficha').style.display='flex';
   document.getElementById('btn-print-hist').style.display='flex';
   document.getElementById('btn-print-vac').style.display='flex';
@@ -1909,6 +1993,58 @@ function deleteCurrentRecord(){
   const rec=records.find(r=>r.id===editingId);
   showModal('Eliminar ficha',`¿Eliminar la ficha de <strong>${rec?.nombre||'esta paciente'}</strong>?`,()=>{records=records.filter(r=>r.id!==editingId);saveRecords();updateHomeStats();goHome();showToast('Ficha eliminada.','error');});
 }
+function confirmArchivarCurrent(){
+  if(!editingId)return;
+  const rec=records.find(r=>r.id===editingId);
+  showModal('Archivar ficha',`¿Archivar la ficha de <strong>${rec?.nombre||'esta paciente'}</strong>? Dejará de aparecer en el listado activo.`,()=>{
+    const i=records.findIndex(r=>r.id===editingId);
+    if(i>-1){records[i].archivada=true;records[i].fechaArchivo=new Date().toISOString();}
+    saveRecords();updateHomeStats();goHome();showToast('Ficha archivada.','warn');
+  });
+}
+function confirmArchivar(id){
+  const rec=records.find(r=>r.id===id);
+  showModal('Archivar ficha',`¿Archivar la ficha de <strong>${rec?.nombre||'?'}</strong>? Dejará de aparecer en el listado activo.`,()=>{
+    const i=records.findIndex(r=>r.id===id);
+    if(i>-1){records[i].archivada=true;records[i].fechaArchivo=new Date().toISOString();}
+    saveRecords();updateHomeStats();renderList();showToast('Ficha archivada.','warn');
+  });
+}
+function restaurarFicha(id){
+  const i=records.findIndex(r=>r.id===id);
+  if(i>-1){records[i].archivada=false;delete records[i].fechaArchivo;}
+  saveRecords();updateHomeStats();renderArchivoModal();showToast('✓ Ficha restaurada al listado activo.','success');
+}
+function openArchivoModal(){
+  updateHomeStats();
+  renderArchivoModal();
+  document.getElementById('archivo-modal-bg').style.display='flex';
+}
+function closeArchivoModal(){document.getElementById('archivo-modal-bg').style.display='none';}
+function renderArchivoModal(){
+  const archivadas=records.filter(r=>r.archivada);
+  const fmt=ds=>ds?new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
+  const cont=document.getElementById('archivo-modal-body');
+  if(!archivadas.length){
+    cont.innerHTML='<div style="text-align:center;padding:2.5rem 1rem;color:#8e6fa0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:44px;height:44px;margin:0 auto .8rem;display:block;opacity:.3"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg><div style="font-weight:800;font-size:.95rem;color:#7b2d8b;margin-bottom:.3rem">Sin fichas archivadas</div><div style="font-size:.8rem">Las fichas archivadas aparecerán aquí</div></div>';
+    return;
+  }
+  cont.innerHTML=archivadas.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es')).map(r=>{
+    const motivo=r.edad>=50?'Mayor de 50 años':'Archivada manualmente';
+    const fa=r.fechaArchivo?new Date(r.fechaArchivo).toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—';
+    return`<div style="background:#fff;border:1.5px solid #e1bee7;border-radius:11px;padding:.7rem .9rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.7rem">
+      <div style="width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,#78552a,#a1700f);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.9rem;font-weight:700;flex-shrink:0">${String(r.num||'?').padStart(2,'0')}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:800;font-size:.88rem;color:#3d1a4a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.nombre||'Sin nombre'}</div>
+        <div style="font-size:.68rem;color:#8e6fa0;margin-top:2px">${r.edad?r.edad+' años · ':''} ${motivo}</div>
+        <div style="font-size:.65rem;color:#b0a0b8;margin-top:1px">Archivada: ${fa}</div>
+      </div>
+      <button onclick="restaurarFicha('${r.id}')" style="flex-shrink:0;display:flex;align-items:center;gap:.3rem;padding:.35rem .7rem;background:linear-gradient(135deg,#2e7d32,#43a047);border:none;border-radius:8px;color:#fff;font-family:inherit;font-size:.72rem;font-weight:800;cursor:pointer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width:13px;height:13px"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>Restaurar
+      </button>
+    </div>`;
+  }).join('');
+}
 function confirmDelete(id){
   const rec=records.find(r=>r.id===id);
   showModal('Eliminar ficha',`¿Eliminar la ficha de <strong>${rec?.nombre||'?'}</strong>?`,()=>{records=records.filter(r=>r.id!==id);saveRecords();updateHomeStats();renderList();showToast('Ficha eliminada.','error');});
@@ -1917,14 +2053,22 @@ function openRecord(id){const rec=records.find(r=>r.id===id);if(!rec)return;load
 
 /* ═══ HOME STATS ═══ */
 function updateHomeStats(){
+  const active=records.filter(r=>!r.archivada);
+  const archivadas=records.filter(r=>r.archivada);
   const alerts=getAllAlertsFlat();
   const uniqAlerts=new Set(alerts.map(a=>a.rec.id));
-  document.getElementById('hs-total').textContent=records.length;
-  document.getElementById('hs-active').textContent=records.filter(r=>r.metodo&&r.metodo!=='ninguno'&&r.nextDate).length;
+  document.getElementById('hs-total').textContent=active.length;
+  document.getElementById('hs-active').textContent=active.filter(r=>r.metodo&&r.metodo!=='ninguno'&&r.nextDate).length;
   document.getElementById('hs-alerts').textContent=uniqAlerts.size;
   const hba=document.getElementById('home-badge-alerts');
   if(uniqAlerts.size>0){hba.textContent=uniqAlerts.size;hba.style.display='';}else hba.style.display='none';
   document.getElementById('hs-alert-card').style.background=uniqAlerts.size>0?'rgba(229,57,53,.22)':'';
+  // Badge archivo
+  const hbarch=document.getElementById('home-badge-arch');
+  if(hbarch){if(archivadas.length>0){hbarch.textContent=archivadas.length;hbarch.style.display='';}else hbarch.style.display='none';}
+  // Badge contador en modal
+  const acb=document.getElementById('archivo-count-badge');
+  if(acb)acb.textContent=archivadas.length+' ficha'+(archivadas.length!==1?'s':'');
   renderHomeMonthCards();
 }
 
@@ -1972,7 +2116,7 @@ function renderAlerts(){
      icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>`},
     {key:'pap',   label:'Citología PAP',           sub:'Control anual de cáncer cérvico uterino', cls:'pap',
      icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`},
-    {key:'vph',   label:'VPH',                     sub:'Control cada 5 años',                     cls:'vph',
+    {key:'vph',   label:'Prueba VPH',                  sub:'Tamizaje cada 5 años (no vacuna)',        cls:'vph',
      icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`},
     {key:'promotor',label:'Atención Preventiva',   sub:'Seguimiento anual por Promotor de Salud', cls:'promotor',
      icon:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`},
@@ -2056,7 +2200,7 @@ function openAtencionRapida(id,key,label){
   const cfg={
     pf:      {color:'#7b2d8b',title:'Atención PF registrada',    icon:'💊',prox:true, proximaLbl:'📅 Próxima cita PF'},
     pap:     {color:'#1565c0',title:'Citología PAP registrada',   icon:'🔬',prox:false},
-    vph:     {color:'#00695c',title:'Control VPH registrado',     icon:'💉',prox:false},
+    vph:     {color:'#00695c',title:'Prueba VPH registrada',      icon:'🔬',prox:false},
     promotor:{color:'#e65100',title:'Atención preventiva registrada',icon:'👤',prox:false},
     dt:      {color:'#1a237e',title:'Dosis DT registrada',        icon:'💉',prox:false},
   };
@@ -2099,10 +2243,9 @@ function saveAtencionRapida(){
   } else if(_arKey==='pap'){
     r.papFecha=fechaAtencion;r.papNext=addYears(fechaAtencion,1);
   } else if(_arKey==='vph'){
-    if(!r.vacVph)r.vacVph={};
-    if(!r.vacVph[1])r.vacVph[1]=fechaAtencion;
-    else if(!r.vacVph[2])r.vacVph[2]=fechaAtencion;
-    r.vphFecha=fechaAtencion;r.vphNext=addYears(fechaAtencion,5);
+    // Solo actualiza el examen VPH (tamizaje) — NO toca la vacuna VPH
+    r.vphFecha=fechaAtencion;
+    r.vphNext=addYears(fechaAtencion,5);
   } else if(_arKey==='promotor'){
     r.atencionPreventiva=fechaAtencion;
   } else if(_arKey==='dt'){
@@ -2613,7 +2756,8 @@ function lfItemHTML(r){
   if(r.arr==='si')tags+=`<span class="record-tag arr">ARR</span>`;
   if(r.ent==='si')tags+=`<span class="record-tag" style="background:#fff3e0;color:#e65100">ENT</span>`;
   if(r.preconcepcional==='si')tags+=`<span class="record-tag" style="background:#e8f5e9;color:#2e7d32">Precon.</span>`;
-  const meta=`${r.edad?r.edad+' a.':''} · ${r.direccion?escHtml(r.direccion.slice(0,30)):'Sin dirección'}`;
+  const edadStr=r.nacimiento?(()=>{const d=_calcAgeDetail(r.nacimiento);return`${d.años}a ${d.meses}m ${d.dias}d`;})():(r.edad?r.edad+' a.':'');
+  const meta=`${edadStr} · ${r.direccion?escHtml(r.direccion.slice(0,30)):'Sin dirección'}`;
   const pf=r.nextDate?formatDateShort(r.nextDate):'—';
   return `<div class="lf-item">
     <div class="lf-item-num">${String(r.num||0).padStart(2,'0')}</div>
@@ -2625,6 +2769,7 @@ function lfItemHTML(r){
     <div class="lf-item-actions">
       <button class="lf-icon-btn edit" title="Editar" onclick="openRecord('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
       <button class="lf-icon-btn print" title="Imprimir ficha" onclick="printFicha('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></button>
+      <button class="lf-icon-btn arch" title="Archivar" onclick="confirmArchivar('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg></button>
       <button class="lf-icon-btn del" title="Eliminar" onclick="confirmDelete('${r.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
     </div>
   </div>`;
@@ -2778,10 +2923,11 @@ function renderVacBook(){
 
 function renderList(){
   const q=(document.getElementById('search-input')?.value||'').toLowerCase().trim();
-  const n=records.length;
-  const entCount   =records.filter(r=>r.ent==='si').length;
-  const preconCount=records.filter(r=>r.preconcepcional==='si').length;
-  const arrCount   =records.filter(r=>r.arr==='si').length;
+  const active=records.filter(r=>!r.archivada);
+  const n=active.length;
+  const entCount   =active.filter(r=>r.ent==='si').length;
+  const preconCount=active.filter(r=>r.preconcepcional==='si').length;
+  const arrCount   =active.filter(r=>r.arr==='si').length;
 
   // Tarjetas resumen
   const summEl=document.getElementById('list-summary-cards');
@@ -2817,7 +2963,7 @@ function renderList(){
 
   var html='';
   folderDefs.forEach(function(fd){
-    var recs=records.filter(fd.filter);
+    var recs=active.filter(fd.filter);
     if(q)recs=recs.filter(function(r){return (r.nombre||'').toLowerCase().includes(q)||(r.dui||'').toLowerCase().includes(q);});
     recs=_applySort(recs,_listSort);
 
@@ -2961,10 +3107,10 @@ function _buildListadoHTML(records, profile, landscape){
   const byM={};METODO_ORDER.forEach(m=>{byM[m]=[];});
   records.forEach(r=>{if(byM[r.metodo]!==undefined)byM[r.metodo].push(r);else byM['ninguno']=(byM['ninguno']||[]).concat(r);});
 
-  const fs=landscape?'6.5px':'7px';
+  const fs=landscape?'8px':'1rem';
   const BDR='1px solid #d1b3e8', BDH='1.5px solid #7b1fa2';
-  const th=(extra='')=>`padding:4px 5px;font-size:${fs};font-weight:800;text-transform:uppercase;text-align:left;border:${BDH};white-space:nowrap;background:#5c1a6e;color:#fff;${extra}`;
-  const td=(extra='')=>`padding:3px 5px;font-size:${fs};border:${BDR};vertical-align:middle;${extra}`;
+  const th=(extra='')=>`padding:5px 6px;font-size:${fs};font-weight:800;text-transform:uppercase;text-align:left;border:${BDH};white-space:nowrap;background:#5c1a6e;color:#fff;${extra}`;
+  const td=(extra='')=>`padding:4px 6px;font-size:${fs};border:${BDR};vertical-align:middle;${extra}`;
 
   // Grupos de columnas por color de cabecera
   const COLS=[
@@ -2983,10 +3129,6 @@ function _buildListadoHTML(records, profile, landscape){
     {label:'Próx. PF',    thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
     {label:'Estado',      thx:'text-align:center',                tdx:'text-align:center'},
     {label:'PAP próx.',   thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
-    {label:'VPH dosis',   thx:'text-align:center',                tdx:'text-align:center'},
-    {label:'VPH próx.',   thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
-    {label:'DT últ.',     thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
-    {label:'Neum.',       thx:'text-align:center',                tdx:'text-align:center;white-space:nowrap'},
     {label:'ARR',         thx:'text-align:center',                tdx:'text-align:center'},
     {label:'ENT',         thx:'text-align:center',                tdx:'text-align:center'},
     {label:'Tipo ENT',    thx:'min-width:70px',                   tdx:''},
@@ -3021,10 +3163,6 @@ function _buildListadoHTML(records, profile, landscape){
         fmt(r.nextDate),
         estCell,
         fmt(r.papNext),
-        vphDosis(r),
-        fmt(r.vphNext),
-        lastDt(r),
-        lastNeum(r),
         r.arr==='si'?`<span style="background:#fce4ec;color:#c2185b;font-weight:800;border-radius:3px;padding:1px 4px">Sí</span>`:'No',
         r.ent==='si'?`<span style="background:#fff3e0;color:#e65100;font-weight:800;border-radius:3px;padding:1px 4px">Sí</span>`:'No',
         escHtml(r.entEspecifica||'—'),
@@ -3153,8 +3291,8 @@ function openPFListado(){
   </div>`;
 
   const BDR='1px solid #f8bbd0', BDH='1.5px solid #c2185b';
-  const th=(x='')=>`padding:5px 6px;font-size:.65rem;font-weight:800;text-transform:uppercase;text-align:left;border:${BDH};white-space:nowrap;background:#880e4f;color:#fff;${x}`;
-  const td=(x='')=>`padding:4px 6px;font-size:.75rem;border:${BDR};vertical-align:middle;${x}`;
+  const th=(x='')=>`padding:7px 10px;font-size:1rem;font-weight:800;text-transform:uppercase;text-align:left;border:${BDH};white-space:nowrap;background:#880e4f;color:#fff;${x}`;
+  const td=(x='')=>`padding:6px 10px;font-size:1rem;border:${BDR};vertical-align:middle;${x}`;
   const COLS=[
     {l:'#',          tx:'text-align:center;width:20px', dx:'text-align:center;font-weight:800'},
     {l:'Nombre',     tx:'min-width:120px',               dx:'font-weight:700;white-space:nowrap'},
@@ -3380,41 +3518,41 @@ function _renderVacTable(){
   document.getElementById('vacpreview-table').style.display='';
 
   const BG='1.5px solid #546e7a', BV='1.5px solid #00897b', BDT='1.5px solid #3949ab', BN='1.5px solid #7b1fa2';
-  const td=`padding:.3rem .35rem;vertical-align:middle;`;
+  const td=`padding:.5rem .6rem;vertical-align:middle;`;
 
   const cell=(val,bc)=>val
-    ?`<td style="${td}border:${bc};color:#1b5e20;font-weight:800;text-align:center;font-size:.71rem;background:#f1f8f1">${fmt(val)}</td>`
-    :`<td style="${td}border:${bc};color:#90a4ae;text-align:center;font-size:.71rem">—</td>`;
+    ?`<td style="${td}border:${bc};color:#1b5e20;font-weight:800;text-align:center;font-size:1rem;background:#f1f8f1">${fmt(val)}</td>`
+    :`<td style="${td}border:${bc};color:#90a4ae;text-align:center;font-size:1rem">—</td>`;
 
   const dtCell=(r,i)=>{
     const dti=getDtInfoForRecord(r),val=(r.vacDt||{})[i];
     const lbl=(dti.modo==='completo'?['R1','R2','R3','R4','R5']:['D1','D2','D3','R1','R2'])[i-1];
     const bg=dti.modo==='completo'?'background:#f0f4ff':'';
-    if(val)return`<td style="${td}border:${BDT};color:#1a237e;font-weight:800;text-align:center;font-size:.71rem;${bg}" title="${lbl}">${fmt(val)}</td>`;
-    return`<td style="${td}border:${BDT};color:#90a4ae;text-align:center;font-size:.71rem;${bg}" title="${lbl}">—</td>`;
+    if(val)return`<td style="${td}border:${BDT};color:#1a237e;font-weight:800;text-align:center;font-size:1rem;${bg}" title="${lbl}">${fmt(val)}</td>`;
+    return`<td style="${td}border:${BDT};color:#90a4ae;text-align:center;font-size:1rem;${bg}" title="${lbl}">—</td>`;
   };
   const stCell=(ok,par,txt,bc)=>!ok&&!par
     ?`<td style="${td}border:${bc};color:#90a4ae;text-align:center">—</td>`
-    :ok?`<td style="${td}border:${bc};background:#e8f5e9;color:#1b5e20;font-weight:800;text-align:center;font-size:.7rem">${txt}</td>`
-    :`<td style="${td}border:${bc};background:#fff3e0;color:#e65100;font-weight:700;text-align:center;font-size:.7rem">${txt}</td>`;
+    :ok?`<td style="${td}border:${bc};background:#e8f5e9;color:#1b5e20;font-weight:800;text-align:center;font-size:1rem">${txt}</td>`
+    :`<td style="${td}border:${bc};background:#fff3e0;color:#e65100;font-weight:700;text-align:center;font-size:1rem">${txt}</td>`;
 
   const rows=recs.map((r,i)=>{
     const dti=getDtInfoForRecord(r);
     const bg=i%2===1?'#f7fffe':'#fff';
     const vi=r.vacInfantil;
     const iCell=vi==='completo'
-      ?`<td style="${td}border:${BN};background:#f3e5f5;color:#4a148c;font-weight:800;text-align:center;font-size:.7rem">✓ Compl.</td>`
+      ?`<td style="${td}border:${BN};background:#f3e5f5;color:#4a148c;font-weight:800;text-align:center;font-size:1rem">✓ Compl.</td>`
       :vi==='incompleto'
-      ?`<td style="${td}border:1.5px solid #f57c00;background:#fff3e0;color:#e65100;font-weight:700;text-align:center;font-size:.7rem">⚠ Inc.</td>`
+      ?`<td style="${td}border:1.5px solid #f57c00;background:#fff3e0;color:#e65100;font-weight:700;text-align:center;font-size:1rem">⚠ Inc.</td>`
       :`<td style="${td}border:${BN};color:#90a4ae;text-align:center">—</td>`;
     const d1=(r.vacVph||{})[1],d2=(r.vacVph||{})[2];
     const n1=(r.vacNeum||{})[1],n2=(r.vacNeum||{})[2];
     const dtA=dti.dtApplied,dtT=dti.modo==='completo'?5:3;
     return`<tr style="background:${bg}">
-      <td style="${td}border:${BG};text-align:center;font-weight:800;font-size:.75rem">${String(i+1).padStart(2,'0')}</td>
-      <td style="${td}border:${BG};font-weight:700;font-size:.78rem;white-space:nowrap">${escHtml(r.nombre||'—')}${dti.modo==='completo'?'<span style="font-size:.55rem;background:#e3f2fd;color:#1565c0;border-radius:3px;padding:1px 3px;margin-left:3px;font-weight:800">5R</span>':''}</td>
-      <td style="${td}border:${BG};text-align:center;font-size:.72rem">${r.nacimiento?new Date(r.nacimiento+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—'}</td>
-      <td style="${td}border:${BG};text-align:center;font-size:.75rem">${r.edad||'—'}</td>
+      <td style="${td}border:${BG};text-align:center;font-weight:800;font-size:1rem">${String(i+1).padStart(2,'0')}</td>
+      <td style="${td}border:${BG};font-weight:700;font-size:1rem;white-space:nowrap">${escHtml(r.nombre||'—')}${dti.modo==='completo'?'<span style="font-size:.72rem;background:#e3f2fd;color:#1565c0;border-radius:3px;padding:1px 3px;margin-left:3px;font-weight:800">5R</span>':''}</td>
+      <td style="${td}border:${BG};text-align:center;font-size:1rem">${r.nacimiento?new Date(r.nacimiento+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'numeric'}):'—'}</td>
+      <td style="${td}border:${BG};text-align:center;font-size:1rem">${r.edad||'—'}</td>
       ${iCell}
       ${cell(d1,BV)}${cell(d2,BV)}${stCell(d1,false,d2?'✓ +R':'✓',BV)}
       ${dtCell(r,1)}${dtCell(r,2)}${dtCell(r,3)}${dtCell(r,4)}${dtCell(r,5)}${stCell(dti.completo,dtA>0,dti.completo?`✓ (${dtA}d)`:`${dtA}/${dtT}`,BDT)}
@@ -3422,8 +3560,8 @@ function _renderVacTable(){
     </tr>`;
   }).join('');
 
-  const s1=`position:sticky;top:0;z-index:4;padding:.38rem .35rem;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center;`;
-  const s2=`position:sticky;z-index:4;padding:.28rem .3rem;font-size:.58rem;font-weight:800;text-transform:uppercase;text-align:center;`;
+  const s1=`position:sticky;top:0;z-index:4;padding:.5rem .45rem;font-size:.9rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;text-align:center;`;
+  const s2=`position:sticky;z-index:4;padding:.4rem .42rem;font-size:.85rem;font-weight:800;text-transform:uppercase;text-align:center;`;
 
   document.getElementById('vacpreview-thead').innerHTML=`
     <tr>
@@ -3695,11 +3833,11 @@ const HIST_TIPO_LABELS = {
 };
 const HIST_TIPO_TAG = {
   pf:'tag-pf', pap:'tag-pap', vph:'tag-vph', arr:'tag-pf',
-  preventiva:'tag-general', vacuna:'tag-vph', ent:'tag-general', general:'tag-general'
+  preventiva:'tag-general', vacuna:'tag-vacuna', ent:'tag-general', general:'tag-general'
 };
 const HIST_DOT_CLS = {
   pf:'pf', pap:'pap', vph:'vph', arr:'pf',
-  preventiva:'general', vacuna:'vph', ent:'general', general:'general'
+  preventiva:'general', vacuna:'pf', ent:'general', general:'general'
 };
 
 /* Crea entradas de historial automáticas al guardar la ficha.
@@ -3719,13 +3857,14 @@ function _buildHistSnapshot(rec, prevRec){
   const hist     = prevRec ? (prevRec.historial||[]) : [];
 
   // ── Helpers ──────────────────────────────────────────────────────────────
-  // ¿Ya existe entrada auto de ese tipo con esa fecha Y ese detalle?
+  // ¿Ya existe entrada (auto O manual) de ese tipo con esa fecha Y ese detalle?
   const yaExiste = (tipo, campoVal, detalleContiene) =>
-    hist.some(e => e.auto && e.tipo === tipo && e.fecha === campoVal
+    hist.some(e => e.tipo === tipo && e.fecha === campoVal
       && (!detalleContiene || (e.detalle||'').includes(detalleContiene)));
 
+  let _mkSeq = 0; // contador para evitar colisión de IDs en loops síncronos
   const mk = (sufijo, tipo, fecha, detalle, proxCita, obs) => ({
-    id: Date.now().toString(36)+'_'+sufijo,
+    id: Date.now().toString(36)+'_'+(++_mkSeq)+'_'+sufijo,
     fecha, tipo, detalle: detalle||'', proxCita: proxCita||'',
     obs: obs||'', personal, auto: true, ts: new Date().toISOString()
   });
@@ -3780,22 +3919,38 @@ function _buildHistSnapshot(rec, prevRec){
     // VPH dosis por dosis
     [1,2].forEach(i=>{
       const fd = (rec.vacVph||{})[i];
-      if(fd) entries.push(mk('vac-vph-'+i,'vacuna', fd,
-        (i===1?'VPH Dosis 1':'VPH Dosis 2 (Refuerzo)')+' aplicada', ''));
+      if(fd){
+        const prox = i===1 ? (rec.vacVph[2]||addYears(fd,5)) : '';
+        entries.push(mk('vac-vph-'+i,'vacuna', fd,
+          (i===1?'VPH Dosis 1':'VPH Dosis 2 (Refuerzo)')+' aplicada', prox));
+      }
     });
 
     // DT dosis por dosis
     [1,2,3,4,5].forEach(i=>{
       const fd = (rec.vacDt||{})[i];
-      if(fd) entries.push(mk('vac-dt-'+i,'vacuna', fd,
-        'DT Adulto · '+(dtLblsNew[i-1]||'Dosis '+i)+' aplicada', ''));
+      if(fd){
+        let prox = '';
+        if(rec.vacInfantil==='completo'){
+          prox = i<5 ? (rec.vacDt[i+1]||addYears(fd,10)) : '';
+        } else {
+          if(i===1)      prox = rec.vacDt[2]||addDays(fd,30);
+          else if(i===2) prox = rec.vacDt[3]||addYears(fd,1);
+          else if(i<5)   prox = rec.vacDt[i+1]||addYears(fd,10);
+        }
+        entries.push(mk('vac-dt-'+i,'vacuna', fd,
+          'DT Adulto · '+(dtLblsNew[i-1]||'Dosis '+i)+' aplicada', prox));
+      }
     });
 
     // Neumococo dosis por dosis
     [1,2].forEach(i=>{
       const fd = (rec.vacNeum||{})[i];
-      if(fd) entries.push(mk('vac-neum-'+i,'vacuna', fd,
-        (i===1?'Neumococo 23V Dosis inicial':'Neumococo 23V Refuerzo (5 años)')+' aplicada', ''));
+      if(fd){
+        const prox = i===1 ? (rec.vacNeum[2]||addYears(fd,5)) : '';
+        entries.push(mk('vac-neum-'+i,'vacuna', fd,
+          (i===1?'Neumococo 23V Dosis inicial':'Neumococo 23V Refuerzo (5 años)')+' aplicada', prox));
+      }
     });
 
     return entries;
@@ -3814,11 +3969,17 @@ function _buildHistSnapshot(rec, prevRec){
   }
 
   // SEGUIMIENTO PF — solo cambió la próxima cita sin cambiar método ni inicio
+  // Usar fechaHoy (= rec.fecha si está seteado, o hoy) como fecha de la atención real
   if(changed('nextDate') && rec.nextDate && rec.metodo && rec.metodo!=='ninguno'
      && !changedAny('metodo','inicioOral','inicioInject','inicioAnual','blisters')){
     const detSeg = 'Seguimiento PF · '+(METODO_LABELS[rec.metodo]||rec.metodo);
-    if(!yaExiste('pf', fechaAhora, detSeg)){
-      entries.push(mk('seg-pf','pf', fechaAhora, detSeg, rec.nextDate));
+    const fechaSeg = fechaHoy; // fecha de registro/visita, no necesariamente hoy
+    // Revisar también las entradas que ya se acumularon en esta misma llamada
+    const allHistSeg = hist.concat(entries);
+    const yaExisteSeg = allHistSeg.some(e => e.tipo==='pf' && e.fecha===fechaSeg
+      && (e.detalle||'').includes(detSeg));
+    if(!yaExisteSeg){
+      entries.push(mk('seg-pf','pf', fechaSeg, detSeg, rec.nextDate));
     }
   }
 
@@ -3864,14 +4025,21 @@ function _buildHistSnapshot(rec, prevRec){
   const dtiRec = getDtInfoForRecord(rec);
   const dtLbls = dtiRec.labels; // ['1ª Dosis (contacto)', '2ª Dosis (30 días)', ...]
 
+  // Helper vacunas: compara tipo+fecha+detalle, revisando hist previo Y entries acumuladas
+  // yaExiste solo compara fecha → falla si dos vacunas caen el mismo día
+  const yaExisteVac = (fechaDosis, detalleDosis) =>
+    hist.concat(entries).some(e => e.tipo === 'vacuna' && e.fecha === fechaDosis
+      && (e.detalle||'').includes(detalleDosis));
+
   // VPH: cada dosis que apareció nueva
   [1,2].forEach(i=>{
     const fechaDosis = (rec.vacVph||{})[i];
     const fecAntes   = (prevRec.vacVph||{})[i];
     if(fechaDosis && fechaDosis !== fecAntes){
-      const lbl = i===1 ? 'VPH Dosis 1' : 'VPH Dosis 2 (Refuerzo)';
-      if(!yaExiste('vacuna', fechaDosis))
-        entries.push(mk('vac-vph-'+i,'vacuna', fechaDosis, lbl+' aplicada', ''));
+      const lbl  = i===1 ? 'VPH Dosis 1' : 'VPH Dosis 2 (Refuerzo)';
+      const prox = i===1 ? ((rec.vacVph||{})[2]||addYears(fechaDosis,5)) : '';
+      if(!yaExisteVac(fechaDosis, lbl))
+        entries.push(mk('vac-vph-'+i,'vacuna', fechaDosis, lbl+' aplicada', prox));
     }
   });
 
@@ -3881,8 +4049,17 @@ function _buildHistSnapshot(rec, prevRec){
     const fecAntes   = (prevRec.vacDt||{})[i];
     if(fechaDosis && fechaDosis !== fecAntes){
       const lbl = dtLbls[i-1] || ('DT Dosis '+i);
-      if(!yaExiste('vacuna', fechaDosis))
-        entries.push(mk('vac-dt-'+i,'vacuna', fechaDosis, 'DT Adulto · '+lbl+' aplicada', ''));
+      const det = 'DT Adulto · '+lbl+' aplicada';
+      let prox = '';
+      if(rec.vacInfantil==='completo'){
+        prox = i<5 ? ((rec.vacDt||{})[i+1]||addYears(fechaDosis,10)) : '';
+      } else {
+        if(i===1)      prox = (rec.vacDt||{})[2]||addDays(fechaDosis,30);
+        else if(i===2) prox = (rec.vacDt||{})[3]||addYears(fechaDosis,1);
+        else if(i<5)   prox = (rec.vacDt||{})[i+1]||addYears(fechaDosis,10);
+      }
+      if(!yaExisteVac(fechaDosis, det))
+        entries.push(mk('vac-dt-'+i,'vacuna', fechaDosis, det, prox));
     }
   });
 
@@ -3891,9 +4068,10 @@ function _buildHistSnapshot(rec, prevRec){
     const fechaDosis = (rec.vacNeum||{})[i];
     const fecAntes   = (prevRec.vacNeum||{})[i];
     if(fechaDosis && fechaDosis !== fecAntes){
-      const lbl = i===1 ? 'Neumococo 23V Dosis inicial' : 'Neumococo 23V Refuerzo (5 años)';
-      if(!yaExiste('vacuna', fechaDosis))
-        entries.push(mk('vac-neum-'+i,'vacuna', fechaDosis, lbl+' aplicada', ''));
+      const lbl  = i===1 ? 'Neumococo 23V Dosis inicial' : 'Neumococo 23V Refuerzo (5 años)';
+      const prox = i===1 ? ((rec.vacNeum||{})[2]||addYears(fechaDosis,5)) : '';
+      if(!yaExisteVac(fechaDosis, lbl))
+        entries.push(mk('vac-neum-'+i,'vacuna', fechaDosis, lbl+' aplicada', prox));
     }
   });
 
@@ -3913,6 +4091,15 @@ function renderHistAcc(histArr){
   const badge = document.getElementById('hist-badge');
   const lbl   = document.getElementById('hist-count-lbl');
   if(!cont) return;
+
+  // Sanear IDs duplicados en el array (entradas guardadas antes del fix de _mkSeq)
+  const seenIds = new Set();
+  (histArr||[]).forEach((e,i) => {
+    if(!e.id || seenIds.has(e.id)){
+      e.id = Date.now().toString(36)+'_fix_'+i+'_'+Math.random().toString(36).slice(2,6);
+    }
+    seenIds.add(e.id);
+  });
 
   const total = (histArr||[]).length;
   if(badge){ badge.textContent = total; badge.style.display = total>0 ? '' : 'none'; }
@@ -4055,7 +4242,8 @@ function hmRecalc(){
         proxVal = bl>0 ? addDays(fecha, bl*28) : '';
       } else if(m==='inject-m')  proxVal = addMonths(fecha,1);
       else if(m==='inject-t')    proxVal = addMonths(fecha,3);
-      else if(m==='diu'||m==='implante'||m==='esteril') proxVal = addYears(fecha,1);
+      else if(m==='diu'||m==='implante') proxVal = addYears(fecha,1);
+      // esteril: permanente, sin próxima cita automática
     } else if(tipo==='pap')       proxVal = addYears(fecha,1);
     else if(tipo==='vph')         proxVal = addYears(fecha,5);
     else if(tipo==='preventiva')  proxVal = addYears(fecha,1);
@@ -4065,10 +4253,10 @@ function hmRecalc(){
 
   // Actualizar texto del chip ctx con fecha calculada
   if(ctx.style.display==='none') return;
-  const fmtd = proxVal ? ' → próx: <strong>'+proxVal+'</strong>' : '';
+  const fmtd = proxVal ? ' → próx: <strong>'+proxVal+'</strong>' : (m==='esteril' ? ' → <strong>Permanente</strong>' : '');
   if(tipo==='pf'){
     const mLabel = METODO_LABELS[m]||m||'Sin método';
-    const icon   = m==='oral'?'💊':m.startsWith('inject')?'💉':'🔵';
+    const icon   = m==='oral'?'💊':m.startsWith('inject')?'💉':m==='esteril'?'✅':'🔵';
     const blTxt  = m==='oral'
       ? ' · '+(parseInt(document.getElementById('hm-blisters').value)||0)+' blisters'
       : '';
@@ -4120,8 +4308,10 @@ function hmAdaptModal(){
       ctx.style.display='block';ctx.style.background='#f3e5f5';ctx.style.color='#7b1fa2';
     } else if(m==='inject-t'){
       ctx.style.display='block';ctx.style.background='#ede7f6';ctx.style.color='#512da8';
-    } else if(m==='diu'||m==='implante'||m==='esteril'){
+    } else if(m==='diu'||m==='implante'){
       ctx.style.display='block';ctx.style.background='#e8f5e9';ctx.style.color='#2e7d32';
+    } else if(m==='esteril'){
+      ctx.style.display='block';ctx.style.background='#fff3e0';ctx.style.color='#e65100';
     } else {
       ctx.style.display='block';ctx.style.background='#f5f5f5';ctx.style.color='#555';
     }
@@ -4181,12 +4371,36 @@ function hmAdaptModal(){
         {id:'neum-2', label:'Neumococo Refuerzo', grupo:'Neumococo', color:'#6a35a0',bg:'#f5eeff'},
       ];
       const selVal = document.getElementById('hm-vacuna-sel').value;
-      vacChips.innerHTML = VACUNAS.map(v =>
-        `<span class="hcv-vac-chip${selVal===v.id?' selected':''}"
-          data-id="${v.id}" data-label="${v.label}"
-          style="${selVal===v.id?'background:'+v.bg+';color:'+v.color+';border-color:'+v.color:''}"
-          onclick="hmSelVacuna('${v.id}','${v.label}','${v.color}','${v.bg}')">${v.label}</span>`
-      ).join('');
+      // Dosis ya aplicadas en el record activo
+      const _vph  = _recActivo?.vacVph  || {};
+      const _dt   = _recActivo?.vacDt   || {};
+      const _neum = _recActivo?.vacNeum  || {};
+      const _dosisAplicadas = {
+        'vph-1': _vph[1], 'vph-2': _vph[2],
+        'dt-1':_dt[1],'dt-2':_dt[2],'dt-3':_dt[3],'dt-4':_dt[4],'dt-5':_dt[5],
+        'neum-1':_neum[1],'neum-2':_neum[2],
+      };
+      const fmtChip = ds => ds ? new Date(ds+'T12:00:00').toLocaleDateString('es-SV',{day:'2-digit',month:'2-digit',year:'2-digit'}) : '';
+      vacChips.innerHTML = VACUNAS.map(v => {
+        const aplicada = _dosisAplicadas[v.id];
+        const isSelected = selVal === v.id;
+        let chipStyle = '', chipClass = 'hcv-vac-chip';
+        if(isSelected){
+          chipStyle = `background:${v.bg};color:${v.color};border-color:${v.color};`;
+          chipClass += ' selected';
+        } else if(aplicada){
+          // Dosis ya aplicada: fondo suave del color del grupo + tachado visual
+          chipStyle = `background:${v.bg};color:${v.color};border-color:${v.color};opacity:.72;`;
+        }
+        const badge = aplicada
+          ? `<span style="font-size:.58rem;margin-left:.35rem;background:rgba(0,0,0,.1);border-radius:8px;padding:1px 5px">✓ ${fmtChip(aplicada)}</span>`
+          : '';
+        return `<span class="${chipClass}" data-id="${v.id}" data-label="${v.label}"
+          style="${chipStyle}"
+          onclick="hmSelVacuna('${v.id}','${v.label}','${v.color}','${v.bg}')"
+          title="${aplicada ? 'Ya aplicada: '+fmtChip(aplicada)+' — clic para actualizar' : 'Pendiente'}"
+          >${v.label}${badge}</span>`;
+      }).join('');
     }
   } else {
     detLbl.textContent  = 'Detalle / resultado';
@@ -4224,7 +4438,8 @@ function saveHistEntry(){
     if(mUsado==='oral')                                    proxCalc = blistersV>0 ? addDays(fecha, blistersV*28) : '';
     else if(mUsado==='inject-m')                           proxCalc = addMonths(fecha, 1);
     else if(mUsado==='inject-t')                           proxCalc = addMonths(fecha, 3);
-    else if(['diu','implante','esteril'].includes(mUsado)) proxCalc = addYears(fecha, 1);
+    else if(['diu','implante'].includes(mUsado)) proxCalc = addYears(fecha, 1);
+    // esteril: permanente, sin próxima cita automática
   } else if(tipo==='pap')      proxCalc = addYears(fecha, 1);
   else if(tipo==='vph')        proxCalc = addYears(fecha, 5);
   else if(tipo==='preventiva') proxCalc = addYears(fecha, 1);
@@ -4246,11 +4461,11 @@ function saveHistEntry(){
   }
   const proxCita = proxInput || proxCalc;
 
-  // Para vacuna: obtener el label legible desde el chip seleccionado
+  // Para vacuna: obtener el label legible desde el atributo data-label (evita incluir badge HTML)
   let vacLabel = vacSel;
   if(tipo === 'vacuna' && vacSel){
     const selChip = document.querySelector('#hm-vacuna-chips .hcv-vac-chip.selected');
-    if(selChip) vacLabel = selChip.textContent.trim();
+    if(selChip) vacLabel = selChip.dataset.label || selChip.textContent.trim().split('✓')[0].trim();
   }
   const entry = {
     id: Date.now().toString(36)+'_man',
@@ -4273,22 +4488,27 @@ function saveHistEntry(){
   if(tipo === 'pf'){
     if(mUsado && mUsado !== r.metodo){
       r.metodo = mUsado;
-      camposActualizados.push('m\u00e9todo \u2192 '+(METODO_LABELS[mUsado]||mUsado));
+      camposActualizados.push('método → '+(METODO_LABELS[mUsado]||mUsado));
     }
     if(mUsado === 'oral'){
       r.inicioOral = fecha;
       if(blistersV>0) r.blisters = String(blistersV);
       const bl = parseInt(r.blisters)||0;
-      if(bl>0) r.nextDate = addDays(fecha, bl*28);
+      if(bl>0){ r.nextDate = addDays(fecha, bl*28); }
+      else if(proxCita){ r.nextDate = proxCita; }  // próxima manual si no hay blisters
       camposActualizados.push('inicio oral'+(blistersV>0?', '+blistersV+' blisters':''));
     } else if(mUsado==='inject-m'||mUsado==='inject-t'){
       r.inicioInject = fecha; r.nextDate = proxCalc;
-      camposActualizados.push('inicio inyectable, pr\u00f3x. cita');
-    } else if(['diu','implante','esteril'].includes(mUsado)){
+      camposActualizados.push('inicio inyectable, próx. cita');
+    } else if(['diu','implante'].includes(mUsado)){
       r.inicioAnual = fecha; r.nextDate = proxCalc;
-      camposActualizados.push('inicio '+mUsado+', pr\u00f3x. cita');
+      camposActualizados.push('inicio '+mUsado+', próx. cita');
+    } else if(mUsado === 'esteril'){
+      r.inicioAnual = fecha;
+      // Esterilización permanente — no se actualiza nextDate
+      camposActualizados.push('control esterilización registrado');
     } else if(proxCita){
-      r.nextDate = proxCita; camposActualizados.push('pr\u00f3x. cita PF');
+      r.nextDate = proxCita; camposActualizados.push('próx. cita PF');
     }
   } else if(tipo === 'pap'){
     r.papFecha = fecha; r.papNext = addYears(fecha,1);
@@ -4299,7 +4519,7 @@ function saveHistEntry(){
     camposActualizados.push('fecha VPH');
   } else if(tipo === 'preventiva'){
     r.atencionPreventiva = fecha;
-    camposActualizados.push('atenci\u00f3n preventiva');
+    camposActualizados.push('atención preventiva');
   } else if(tipo === 'ent'){
     r.fechaEnt = fecha;
     if(detalle && r.ent==='si') r.entEspecifica = detalle;
@@ -4312,7 +4532,12 @@ function saveHistEntry(){
     if(vacSel.startsWith('neum') && vacNum)  r.vacNeum = {...(r.vacNeum||{}), [vacNum]: fecha};
     camposActualizados.push('vacuna: '+(detalle||vacSel));
   } else if(tipo === 'arr'){
-    camposActualizados.push('ARR registrado');
+    // Sincronizar flag ARR en el record
+    if(r.arr !== 'si'){ r.arr = 'si'; camposActualizados.push('ARR activado'); }
+    else camposActualizados.push('ARR registrado');
+  } else if(tipo === 'general'){
+    // Nota general — solo queda en historial, sin sincronizar campos del record
+    if(detalle) camposActualizados.push('nota registrada');
   }
 
   // ── Guardar y recargar formulario completo ──
@@ -4325,11 +4550,25 @@ function saveHistEntry(){
   document.getElementById('hist-section').classList.add('open');
   renderHistAcc(r.historial);
   const msg = camposActualizados.length
-    ? '\u2713 Seguimiento registrado \u00b7 Actualizado: ' + camposActualizados.join(', ')
-    : '\u2713 Seguimiento registrado en historial';
-  showToast(msg, 'success');
+    ? '✓ Seguimiento registrado · Actualizado: ' + camposActualizados.join(', ')
+    : '✓ Seguimiento registrado en historial';
+  _showPostSeguimientoModal(msg, r.id);
 }
 
+
+/* ── Post-guardado: opción de ver ficha ── */
+function _showPostSeguimientoModal(msg, recId){
+  const bg = document.getElementById('post-seg-modal-bg');
+  document.getElementById('post-seg-msg').textContent = msg;
+  document.getElementById('post-seg-btn-ver').onclick = () => {
+    bg.style.display = 'none';
+    openRecord(recId);
+  };
+  bg.style.display = 'flex';
+}
+function _closePostSegModal(){
+  document.getElementById('post-seg-modal-bg').style.display = 'none';
+}
 
 /* ═══ HISTORIAL POR CATEGORÍA ═══ */
 // Mapeo: clave de carpeta → tipos de historial correspondientes
@@ -4530,7 +4769,7 @@ function printHistorialCategorias(){
 const HIST_CATS_PACIENTE = [
   {key:'pf',        label:'Planificación Familiar',       tipos:['pf'],          color:'#880e4f'},
   {key:'pap',       label:'Citología PAP',                tipos:['pap'],         color:'#283593'},
-  {key:'vph',       label:'VPH',                          tipos:['vph'],         color:'#00695c'},
+  {key:'vph',       label:'Prueba VPH (tamizaje)',         tipos:['vph'],         color:'#00695c'},
   {key:'preventiva',label:'Atención Preventiva',          tipos:['preventiva'],  color:'#4a148c'},
   {key:'vacuna',    label:'Vacunación',                   tipos:['vacuna'],      color:'#1565c0'},
   {key:'arr',       label:'Alto Riesgo Reproductivo',     tipos:['arr'],         color:'#b71c1c'},
@@ -4836,6 +5075,45 @@ function saveEditHistEntry(entryId){
   entry.vacuna    = tipo==='vacuna' ? vacSel : undefined;
   entry.editedAt  = new Date().toISOString();
 
+  // ── Sincronizar campos del record para mantener consistencia ──
+  // Solo sincroniza si esta entrada es la más reciente de su tipo
+  const r = found.rec;
+  const mismoTipo = r.historial.filter(e => e.tipo === tipo);
+  const esMasReciente = mismoTipo.every(e => e.id === entry.id || (e.fecha||'') <= fecha);
+
+  if(esMasReciente){
+    if(tipo === 'pf'){
+      if(proxInput) r.nextDate = proxInput;
+      if(mUsado){
+        r.metodo = mUsado;
+        if(mUsado==='oral')       { r.inicioOral   = fecha; }
+        else if(mUsado==='inject-m'||mUsado==='inject-t') { r.inicioInject = fecha; if(proxInput) r.nextDate=proxInput; }
+        else if(['diu','implante'].includes(mUsado)) { r.inicioAnual = fecha; if(proxInput) r.nextDate=proxInput; }
+        else if(mUsado==='esteril') { r.inicioAnual = fecha; } // Permanente — sin nextDate
+      }
+    } else if(tipo === 'pap'){
+      r.papFecha = fecha;
+      r.papNext  = proxInput || addYears(fecha,1);
+      if(detalle) r.papResultado = detalle;
+    } else if(tipo === 'vph'){
+      r.vphFecha = fecha;
+      r.vphNext  = proxInput || addYears(fecha,5);
+    } else if(tipo === 'preventiva'){
+      r.atencionPreventiva = fecha;
+    } else if(tipo === 'ent'){
+      r.fechaEnt = fecha;
+      if(detalle && r.ent==='si') r.entEspecifica = detalle;
+    } else if(tipo === 'vacuna'){
+      const vacNum = vacSel.match(/-(\d+)$/)?.[1];
+      if(vacSel.startsWith('vph')  && vacNum) r.vacVph  = {...(r.vacVph||{}),  [vacNum]: fecha};
+      if(vacSel.startsWith('dt')   && vacNum) r.vacDt   = {...(r.vacDt||{}),   [vacNum]: fecha};
+      if(vacSel.startsWith('neum') && vacNum) r.vacNeum = {...(r.vacNeum||{}), [vacNum]: fecha};
+    }
+    r.updatedAt = new Date().toISOString();
+    // Si la ficha está abierta en pantalla, refrescar el formulario
+    if(editingId && editingId === r.id) loadFormFromRecord(r);
+  }
+
   saveRecords();
   closeHistModal();
 
@@ -4856,6 +5134,7 @@ function saveEditHistEntry(entryId){
 
 /* ═══ INIT ═══ */
 loadRecords();
+actualizarEdades();
 window.records=records;
 window.updateHomeStats=updateHomeStats;
 window.renderList=renderList;
@@ -4864,6 +5143,7 @@ window.renderList=renderList;
 window.reloadFromStorage=function(){
   try{ records=JSON.parse(localStorage.getItem(LS_KEY))||[]; }catch(e){ records=[]; }
   window.records=records;
+  actualizarEdades();
   updateHomeStats();
   if(currentScreen==='screen-list') renderList();
   if(currentScreen==='screen-alerts') renderAlerts();
@@ -5204,5 +5484,47 @@ function setCSBtns(d){['btn-upload','btn-download'].forEach(id=>{const b=documen
 window.confirmUpload=function(){const p=window.loadProfile?window.loadProfile():{};if(!p.nombre){window.showModal&&window.showModal('Perfil sin configurar','Configura tu nombre primero.',null);return;}let lr=[];try{lr=JSON.parse(localStorage.getItem('minsal_pf_v2'))||[];}catch(e){}if(!lr.length){window.showModal&&window.showModal('Sin datos','No hay fichas guardadas.',null);return;}const k=userKey(p.nombre);window.showModal&&window.showModal('Subir a la nube',`Se subirán <strong>${lr.length} fichas</strong> de <strong>${p.nombre}</strong>.<br><br>¿Continuar?`,async()=>{setCSBtns(true);setCS('<span class="cspin">↻</span>&nbsp;Subiendo…','loading');try{await setDoc(doc(db,'usuarios_pf',k),{records:lr,nombre:p.nombre,cargo:p.cargo||'',ucsf:p.ucsf||'',updatedAt:new Date().toISOString(),count:lr.length});setCS('✓ '+lr.length+' fichas subidas · '+new Date().toLocaleTimeString('es-SV'),'ok');window.showToast&&window.showToast('✓ '+lr.length+' fichas subidas','success');}catch(err){setCS('✗ Error: '+(err.message||'sin conexión'),'err');window.showToast&&window.showToast('✗ Error al subir','error');}finally{setCSBtns(false);}});};
 window.confirmDownload=function(){const p=window.loadProfile?window.loadProfile():{};if(!p.nombre){window.showModal&&window.showModal('Perfil sin configurar','Configura tu nombre primero.',null);return;}let lr=[];try{lr=JSON.parse(localStorage.getItem('minsal_pf_v2'))||[];}catch(e){}const k=userKey(p.nombre);const lm=lr.length>0?'Este dispositivo tiene <strong>'+lr.length+' fichas locales</strong> que serán reemplazadas.':'El dispositivo está vacío.';window.showModal&&window.showModal('Bajar de la nube','Espacio: <em>usuarios_pf/'+k+'</em><br><br>'+lm+'<br><br>¿Continuar?',async()=>{setCSBtns(true);setCS('<span class="cspin">↻</span>&nbsp;Descargando…','loading');try{const snap=await getDoc(doc(db,'usuarios_pf',k));if(!snap.exists()){setCS('⚠ No encontré tus datos en la nube.','err');window.showToast&&window.showToast('⚠ Sin datos en la nube','error');setCSBtns(false);return;}const data=snap.data();const cr=data.records||[];if(!cr.length){setCS('⚠ Nube vacía.','err');setCSBtns(false);return;}localStorage.setItem('minsal_pf_v2',JSON.stringify(cr));if(window.reloadFromStorage)window.reloadFromStorage();const ua=data.updatedAt?new Date(data.updatedAt).toLocaleString('es-SV'):'—';setCS('✓ '+cr.length+' fichas descargadas · Subido: '+ua,'ok');window.showToast&&window.showToast('✓ '+cr.length+' fichas descargadas','success');}catch(err){setCS('✗ Error: '+(err.message||'sin conexión'),'err');window.showToast&&window.showToast('✗ Error al bajar','error');}finally{setCSBtns(false);}});};
 </script>
+
+<!-- ════ MODAL POST-SEGUIMIENTO ════ -->
+<div id="post-seg-modal-bg" onclick="if(event.target===this)_closePostSegModal()"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9900;align-items:flex-end;justify-content:center;">
+  <div style="
+    background:#fff;border-radius:22px 22px 0 0;padding:1.4rem 1.2rem 2rem;
+    width:100%;max-width:480px;box-shadow:0 -6px 32px rgba(0,0,0,.18);
+    animation:slideUp .25s ease">
+    <div style="display:flex;justify-content:center;margin-bottom:.9rem">
+      <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#388e3c,#66bb6a);
+        display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(56,142,60,.35)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" style="width:24px;height:24px">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:1rem;font-weight:900;color:#2e7d32;margin-bottom:.4rem">
+      Seguimiento guardado
+    </div>
+    <div id="post-seg-msg" style="text-align:center;font-size:.75rem;color:#6a1b9a;font-weight:600;
+      margin-bottom:1.2rem;line-height:1.5;padding:0 .5rem"></div>
+    <div style="display:flex;flex-direction:column;gap:.6rem">
+      <button id="post-seg-btn-ver"
+        style="display:flex;align-items:center;justify-content:center;gap:.55rem;
+          width:100%;padding:.82rem;border-radius:14px;border:none;cursor:pointer;
+          font-family:inherit;font-size:.92rem;font-weight:800;
+          background:linear-gradient(135deg,#6a1b9a,#ab47bc);color:#fff;
+          box-shadow:0 4px 16px rgba(106,27,154,.3)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" style="width:18px;height:18px">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        Ver ficha de la paciente
+      </button>
+      <button onclick="_closePostSegModal()"
+        style="width:100%;padding:.72rem;border-radius:14px;border:2px solid #e1bee7;
+          background:#fff;color:#8e6fa0;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
