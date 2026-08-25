@@ -3,7 +3,7 @@
 //  Versión: 2.0
 // ══════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'mef-minsal-v2';
+const CACHE_NAME = 'mef-minsal-v3';
 const CACHE_DURATION_DAYS = 7;
 
 // Archivos que se guardan en caché al instalar
